@@ -2,11 +2,17 @@ import { Button, Grid, Paper, useTheme } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 import axios from 'axios';
 import React from 'react';
+import { useHistory } from 'react-router-dom';
 import * as yup from 'yup';
+import useAuth from '../../hooks/useAuth';
 import useForm from '../../hooks/useForm';
 import CustomInput from '../CustomInput';
 
 const Login = () => {
+  const history = useHistory();
+  const auth = useAuth();
+  auth.guestOnly();
+
   const form = useForm({
     email: '',
     password: '',
@@ -34,7 +40,8 @@ const Login = () => {
           email: form.values.email,
           password: form.values.password,
         });
-        console.log(res.headers.jwt);
+        auth.login(res.headers.jwt);
+        history.push('/home');
       } catch (error) {
         console.log(error);
       }
@@ -68,8 +75,6 @@ const Login = () => {
       backgroundColor: `${theme.palette.success.main}`,
     },
   });
-
-  console.log(theme);
 
   const classes = useStyles();
 

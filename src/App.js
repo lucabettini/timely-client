@@ -3,6 +3,7 @@ import React from 'react';
 import { Route, BrowserRouter as Router, Switch } from 'react-router-dom';
 import './App.css';
 import Login from './components/auth/Login';
+import HomeScreen from './components/HomeScreen';
 
 const theme = createTheme({
   palette: {
@@ -24,6 +25,10 @@ function App() {
           </Route>
           <Route exact path='/login'>
             <Login />
+          </Route>
+
+          <Route exact path='/home'>
+            <HomeScreen />
           </Route>
         </Switch>
       </Router>
