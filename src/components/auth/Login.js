@@ -1,4 +1,5 @@
 import { Button, Grid, Paper, useTheme } from '@material-ui/core';
+import Alert from '@material-ui/lab/Alert';
 import { makeStyles } from '@material-ui/styles';
 import axios from 'axios';
 import React, { useState } from 'react';
@@ -78,6 +79,11 @@ const Login = () => {
       padding: '5%',
       backgroundColor: `${theme.palette.success.main}`,
     },
+    alert: {
+      cursor: 'pointer',
+      width: '100%',
+      color: theme.palette.text.primary,
+    },
   });
 
   const classes = useStyles();
@@ -95,6 +101,18 @@ const Login = () => {
           <form noValidate autoComplete='off' onSubmit={handleSubmit}>
             <Paper className={classes.form}>
               <Grid container direction='column' spacing={3}>
+                <Grid item container justifyContent='space-between' xs={12}>
+                  <Alert
+                    variant='filled'
+                    severity='info'
+                    className={classes.alert}
+                    onClick={() => {
+                      history.push('/register');
+                    }}
+                  >
+                    Need an account? Sign up
+                  </Alert>
+                </Grid>
                 {status === 'error' && (
                   <Grid item xs={12}>
                     <FormError>
