@@ -1,17 +1,21 @@
 import { Button, Grid, Paper, useTheme } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 import axios from 'axios';
-import React from 'react';
+import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import * as yup from 'yup';
 import useAuth from '../../hooks/useAuth';
 import useForm from '../../hooks/useForm';
 import CustomInput from '../CustomInput';
+import FormError from '../FormError';
+import Loader from '../Loader';
 
 const Login = () => {
   const history = useHistory();
   const auth = useAuth();
   auth.guestOnly();
+
+  const [status, setStatus] = useState(null);
 
   const form = useForm({
     email: '',
@@ -31,11 +35,11 @@ const Login = () => {
     e.preventDefault();
 
     // Set as touched and run validation on all inputs
-    form.onSubmit(schema);
+    const canSubmit = await form.onSubmit(schema);
 
-    if (form.canSubmit()) {
-      console.log('Loading...');
+    if (canSubmit) {
       try {
+        setStatus('loading');
         const res = await axios.post('/api/login', {
           email: form.values.email,
           password: form.values.password,
@@ -43,7 +47,7 @@ const Login = () => {
         auth.login(res.headers.jwt);
         history.push('/home');
       } catch (error) {
-        console.log(error);
+        setStatus('error');
       }
     }
   };
@@ -79,46 +83,57 @@ const Login = () => {
   const classes = useStyles();
 
   return (
-    <Grid
-      container
-      alignItems='center'
-      justifyContent='center'
-      className={classes.container}
-    >
-      <Grid item xs={10} sm={6} lg={3} className={classes.item}>
-        <form noValidate autoComplete='off' onSubmit={handleSubmit}>
-          <Paper className={classes.form}>
-            <Grid container direction='column' spacing={3}>
-              <Grid item xs={12}>
-                <CustomInput
-                  schema={schema.email}
-                  style={{ width: '100%' }}
-                  {...inputProps('email')}
-                />
+    <>
+      {status === 'loading' && <Loader />}
+      <Grid
+        container
+        alignItems='center'
+        justifyContent='center'
+        className={classes.container}
+      >
+        <Grid item xs={10} sm={6} lg={3} className={classes.item}>
+          <form noValidate autoComplete='off' onSubmit={handleSubmit}>
+            <Paper className={classes.form}>
+              <Grid container direction='column' spacing={3}>
+                {status === 'error' && (
+                  <Grid item xs={12}>
+                    <FormError>
+                      Login failed, bad username or password.
+                    </FormError>
+                  </Grid>
+                )}
+
+                <Grid item xs={12}>
+                  <CustomInput
+                    schema={schema.email}
+                    style={{ width: '100%' }}
+                    {...inputProps('email')}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <CustomInput
+                    schema={schema.password}
+                    type='password'
+                    style={{ width: '100%' }}
+                    {...inputProps('password')}
+                  />
+                </Grid>
+                <Grid container item xs={12} justifyContent='center'>
+                  <Button
+                    type='submit'
+                    variant='contained'
+                    color='primary'
+                    size='large'
+                  >
+                    LOGIN
+                  </Button>
+                </Grid>
               </Grid>
-              <Grid item xs={12}>
-                <CustomInput
-                  schema={schema.password}
-                  type='password'
-                  style={{ width: '100%' }}
-                  {...inputProps('password')}
-                />
-              </Grid>
-              <Grid container item xs={12} justifyContent='center'>
-                <Button
-                  type='submit'
-                  variant='contained'
-                  color='primary'
-                  size='large'
-                >
-                  LOGIN
-                </Button>
-              </Grid>
-            </Grid>
-          </Paper>
-        </form>
+            </Paper>
+          </form>
+        </Grid>
       </Grid>
-    </Grid>
+    </>
   );
 };
 

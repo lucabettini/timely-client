@@ -4,13 +4,16 @@ export default function useForm(initialValues) {
   // Initial state
   const [fields, setFields] = useState(initialValues);
 
-  const touchedAndInvalid = {};
-  Object.keys(initialValues).forEach((key) => {
-    touchedAndInvalid[key] = false;
-  });
+  const init = (boolean) => {
+    let object = {};
+    Object.keys(initialValues).forEach((key) => {
+      object[key] = boolean;
+    });
+    return object;
+  };
 
-  const [touched, setTouched] = useState(touchedAndInvalid);
-  const [invalid, setInvalid] = useState(touchedAndInvalid);
+  const [touched, setTouched] = useState(init(false));
+  const [invalid, setInvalid] = useState(init(true));
 
   // Validate field
   const checkField = async (name, value, schema) => {
@@ -54,15 +57,13 @@ export default function useForm(initialValues) {
   };
 
   // Set all touched and run validation on submit
-  const onSubmit = (validationSchema) => {
-    Object.keys(fields).forEach((fieldName) => {
+  const onSubmit = async (validationSchema) => {
+    Object.keys(fields).forEach(async (fieldName) => {
       const value = fields[fieldName];
       const schema = validationSchema[fieldName];
-      onBlur(fieldName, value, schema);
+      await onBlur(fieldName, value, schema);
     });
-  };
 
-  const canSubmit = () => {
     let validity = true;
     Object.keys(invalid).forEach((field) => {
       if (invalid[field]) validity = false;
@@ -75,7 +76,6 @@ export default function useForm(initialValues) {
     onBlur,
     isValid,
     onSubmit,
-    canSubmit,
     values: fields,
   };
 }
