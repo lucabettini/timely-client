@@ -1,10 +1,13 @@
 import { CssBaseline, createTheme, ThemeProvider } from '@material-ui/core';
+import { Provider } from 'react-redux';
 import React from 'react';
 import { Route, BrowserRouter as Router, Switch } from 'react-router-dom';
 import './App.css';
+import store from './redux/store';
 import Login from './components/auth/Login';
 import Register from './components/auth/Register';
 import HomeScreen from './components/HomeScreen';
+import BaseScreen from './components/navigation/BaseScreen';
 
 const theme = createTheme({
   palette: {
@@ -18,26 +21,30 @@ const theme = createTheme({
 
 function App() {
   return (
-    <ThemeProvider theme={theme}>
-      <Router>
-        <CssBaseline />
-        <Switch>
-          <Route exact path='/'>
-            <div>Slash</div>
-          </Route>
-          <Route exact path='/login'>
-            <Login />
-          </Route>
-          <Route exact path='/register'>
-            <Register />
-          </Route>
+    <Provider store={store}>
+      <ThemeProvider theme={theme}>
+        <Router>
+          <CssBaseline />
+          <Switch>
+            <Route exact path='/'>
+              <div>Slash</div>
+            </Route>
+            <Route exact path='/login'>
+              <Login />
+            </Route>
+            <Route exact path='/register'>
+              <Register />
+            </Route>
 
-          <Route exact path='/home'>
-            <HomeScreen />
-          </Route>
-        </Switch>
-      </Router>
-    </ThemeProvider>
+            <Route exact path='/home'>
+              <BaseScreen>
+                <HomeScreen />
+              </BaseScreen>
+            </Route>
+          </Switch>
+        </Router>
+      </ThemeProvider>
+    </Provider>
   );
 }
 
