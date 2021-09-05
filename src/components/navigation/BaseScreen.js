@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-
 import {
   AppBar,
   Drawer,
@@ -54,7 +53,6 @@ function BaseScreen(props) {
             classes={{
               paper: classes.drawerPaper,
             }}
-            // PaperProps={{ elevation: 3 }}
             ModalProps={{
               keepMounted: true, // Better open performance on mobile.
             }}
@@ -86,9 +84,9 @@ function BaseScreen(props) {
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
-  // necessary for content to be on the left of
-  // sidenav when open
   root: {
+    // necessary for content to be on the left of
+    // sidenav when open
     display: 'flex',
   },
   drawer: {

@@ -1,5 +1,4 @@
-import { Button, Grid, Paper, useTheme } from '@material-ui/core';
-import Alert from '@material-ui/lab/Alert';
+import { Button, Grid, Paper } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 import axios from 'axios';
 import React, { useState } from 'react';
@@ -12,6 +11,8 @@ import FormError from '../FormError';
 import Loader from '../Loader';
 
 const Login = () => {
+  const classes = useStyles();
+
   const history = useHistory();
   const auth = useAuth();
   auth.guestOnly();
@@ -65,29 +66,6 @@ const Login = () => {
     };
   };
 
-  // CSS STYLING
-  const theme = useTheme();
-
-  const useStyles = makeStyles({
-    container: {
-      minHeight: '100vh',
-      paddingBottom: '20vh',
-      flexGrow: 1,
-    },
-    form: {
-      border: `1px solid ${theme.palette.primary.main}`,
-      padding: '5%',
-      backgroundColor: `${theme.palette.success.main}`,
-    },
-    alert: {
-      cursor: 'pointer',
-      width: '100%',
-      color: theme.palette.text.primary,
-    },
-  });
-
-  const classes = useStyles();
-
   return (
     <>
       {status === 'loading' && <Loader />}
@@ -101,18 +79,6 @@ const Login = () => {
           <form noValidate autoComplete='off' onSubmit={handleSubmit}>
             <Paper className={classes.form}>
               <Grid container direction='column' spacing={3}>
-                <Grid item container justifyContent='space-between' xs={12}>
-                  <Alert
-                    variant='filled'
-                    severity='info'
-                    className={classes.alert}
-                    onClick={() => {
-                      history.push('/register');
-                    }}
-                  >
-                    Need an account? Sign up
-                  </Alert>
-                </Grid>
                 {status === 'error' && (
                   <Grid item xs={12}>
                     <FormError>
@@ -147,6 +113,11 @@ const Login = () => {
                   </Button>
                 </Grid>
               </Grid>
+              <Grid container item xs={12} justifyContent='center'>
+                <a href='/register' className={classes.sign_up}>
+                  Create account
+                </a>
+              </Grid>
             </Paper>
           </form>
         </Grid>
@@ -154,5 +125,26 @@ const Login = () => {
     </>
   );
 };
+
+const useStyles = makeStyles((theme) => ({
+  container: {
+    minHeight: '100vh',
+    paddingBottom: '20vh',
+    flexGrow: 1,
+  },
+  form: {
+    border: `1px solid ${theme.palette.primary.main}`,
+    padding: '5%',
+    backgroundColor: `${theme.palette.success.main}`,
+  },
+  sign_up: {
+    cursor: 'pointer',
+    display: 'block',
+    textDecoration: 'none',
+    color: theme.palette.primary.main,
+    paddingTop: '25px',
+    fontWeight: '500',
+  },
+}));
 
 export default Login;

@@ -1,5 +1,4 @@
-import { Button, Grid, Paper, useTheme } from '@material-ui/core';
-import Alert from '@material-ui/lab/Alert';
+import { Button, Grid, Paper } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 import axios from 'axios';
 import React, { useState } from 'react';
@@ -11,6 +10,8 @@ import CustomInput from '../CustomInput';
 import Loader from '../Loader';
 
 const Register = () => {
+  const classes = useStyles();
+
   const history = useHistory();
   const auth = useAuth();
   auth.guestOnly();
@@ -74,36 +75,6 @@ const Register = () => {
     };
   };
 
-  // CSS STYLING
-  const theme = useTheme();
-
-  const useStyles = makeStyles({
-    container: {
-      minHeight: '100vh',
-      paddingBottom: '20vh',
-      flexGrow: 1,
-    },
-    form: {
-      border: `1px solid ${theme.palette.primary.main}`,
-      padding: '5%',
-      backgroundColor: `${theme.palette.success.main}`,
-    },
-    forgot_password: {
-      textDecoration: 'none',
-      color: theme.palette.primary.main,
-      marginRight: '0px',
-      paddingTop: '5px',
-      alignSelf: 'end',
-    },
-    alert: {
-      cursor: 'pointer',
-      width: '100%',
-      color: theme.palette.text.primary,
-    },
-  });
-
-  const classes = useStyles();
-
   return (
     <>
       {status === 'loading' && <Loader />}
@@ -113,22 +84,10 @@ const Register = () => {
         justifyContent='center'
         className={classes.container}
       >
-        <Grid item xs={10} sm={6} lg={3} className={classes.item}>
+        <Grid item xs={10} sm={6} lg={3}>
           <form noValidate autoComplete='off' onSubmit={handleSubmit}>
             <Paper className={classes.form}>
               <Grid container direction='column' spacing={3}>
-                <Grid item container justifyContent='space-between' xs={12}>
-                  <Alert
-                    variant='filled'
-                    severity='info'
-                    className={classes.alert}
-                    onClick={() => {
-                      history.push('/login');
-                    }}
-                  >
-                    Already have an account? Sign in
-                  </Alert>
-                </Grid>
                 <Grid item xs={12}>
                   <CustomInput
                     schema={schema.username}
@@ -151,7 +110,6 @@ const Register = () => {
                     {...inputProps('password')}
                   />
                 </Grid>
-                {/* <Grid item xs={12}></Grid> */}
                 <Grid item xs={12} container direction='column'>
                   <CustomInput
                     schema={schema.password_confirmation}
@@ -177,6 +135,11 @@ const Register = () => {
                   </Button>
                 </Grid>
               </Grid>
+              <Grid container item xs={12} justifyContent='center'>
+                <a href='/login' className={classes.sign_in}>
+                  Sign in with your account
+                </a>
+              </Grid>
             </Paper>
           </form>
         </Grid>
@@ -184,5 +147,34 @@ const Register = () => {
     </>
   );
 };
+
+const useStyles = makeStyles((theme) => ({
+  container: {
+    minHeight: '100vh',
+    paddingBottom: '20vh',
+    flexGrow: 1,
+  },
+  form: {
+    border: `1px solid ${theme.palette.primary.main}`,
+    padding: '5%',
+    backgroundColor: `${theme.palette.success.main}`,
+  },
+  forgot_password: {
+    textDecoration: 'none',
+    color: theme.palette.primary.main,
+    marginRight: '0px',
+    paddingTop: '5px',
+    alignSelf: 'end',
+    fontWeight: '500',
+  },
+  sign_in: {
+    cursor: 'pointer',
+    display: 'block',
+    textDecoration: 'none',
+    color: theme.palette.primary.main,
+    paddingTop: '25px',
+    fontWeight: '500',
+  },
+}));
 
 export default Register;

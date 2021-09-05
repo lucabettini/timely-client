@@ -71,7 +71,7 @@ const normalizeString = (string) => {
 
 const useStyles = makeStyles((theme) => ({
   icons: {
-    color: theme.palette.primary.dark,
+    color: theme.palette.common.white,
     marginLeft: '5px',
     marginRight: '10px',
   },
