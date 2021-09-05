@@ -135,7 +135,7 @@ const useStyles = makeStyles((theme) => ({
   form: {
     border: `1px solid ${theme.palette.primary.main}`,
     padding: '5%',
-    backgroundColor: `${theme.palette.success.main}`,
+    // backgroundColor: `${theme.palette.primary.light}`,
   },
   sign_up: {
     cursor: 'pointer',

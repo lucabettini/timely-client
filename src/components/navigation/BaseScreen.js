@@ -1,16 +1,9 @@
 import React, { useState } from 'react';
-import {
-  AppBar,
-  Drawer,
-  Hidden,
-  IconButton,
-  Toolbar,
-  Typography,
-} from '@material-ui/core';
+import { Drawer, Hidden } from '@material-ui/core';
 
-import MenuIcon from '@material-ui/icons/Menu';
 import { makeStyles } from '@material-ui/core/styles';
 import SideNav from './SideNav';
+import Navbar from './Navbar';
 
 function BaseScreen(props) {
   const { window } = props;
@@ -26,22 +19,7 @@ function BaseScreen(props) {
 
   return (
     <div className={classes.root}>
-      <AppBar position='fixed' className={classes.appBar}>
-        <Toolbar>
-          <IconButton
-            color='inherit'
-            aria-label='open drawer'
-            edge='start'
-            onClick={handleDrawerToggle}
-            className={classes.menuButton}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography variant='h6' noWrap>
-            TIMELY
-          </Typography>
-        </Toolbar>
-      </AppBar>
+      <Navbar handleDrawerToggle={handleDrawerToggle} drawerWidth={240} />
       <nav className={classes.drawer} aria-label='mailbox folders'>
         <Hidden smUp implementation='css'>
           <Drawer
@@ -53,6 +31,7 @@ function BaseScreen(props) {
             classes={{
               paper: classes.drawerPaper,
             }}
+            elevation={3}
             ModalProps={{
               keepMounted: true, // Better open performance on mobile.
             }}
@@ -85,7 +64,7 @@ const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    // necessary for content to be on the left of
+    // Necessary for content to be on the left of
     // sidenav when open
     display: 'flex',
   },
@@ -95,23 +74,11 @@ const useStyles = makeStyles((theme) => ({
       flexShrink: 0,
     },
   },
-  appBar: {
-    [theme.breakpoints.up('sm')]: {
-      width: `calc(100% - ${drawerWidth}px)`,
-      marginLeft: drawerWidth,
-    },
-  },
-  menuButton: {
-    marginRight: theme.spacing(2),
-    [theme.breakpoints.up('sm')]: {
-      display: 'none',
-    },
-  },
-  // necessary for content to be below app bar
+  // Necessary for content to be below app bar
   toolbar: theme.mixins.toolbar,
   drawerPaper: {
     width: drawerWidth,
-    backgroundColor: theme.palette.primary.light,
+    backgroundColor: theme.palette.primary.main,
   },
   content: {
     flexGrow: 1,

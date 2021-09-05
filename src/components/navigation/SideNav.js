@@ -10,19 +10,31 @@ import { useState } from 'react';
 import Loader from '../Loader';
 import { makeStyles } from '@material-ui/styles';
 import { selectAreas, setAreas } from '../../redux/tasksSlice';
+import axios from 'axios';
+import useAuth from '../../hooks/useAuth';
 
 const SideNav = (props) => {
   const dispatch = useDispatch();
+  const token = useAuth().getToken();
   const [loading, setLoading] = useState(true);
 
   const classes = useStyles();
 
   useEffect(() => {
-    // Await axios
-    const areas = ['Gran progetto', 'Piccolo PROGETTO', 'proggetONE'];
-    dispatch(setAreas(areas));
-    setLoading(false);
-  }, [dispatch]);
+    const fetchData = async () => {
+      try {
+        const { data } = await axios.get('/api/areas', {
+          headers: { jwt: token },
+        });
+        console.log(data);
+        dispatch(setAreas(data.areas));
+        setLoading(false);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchData();
+  }, [token, dispatch]);
 
   const areas = useSelector(selectAreas);
 
@@ -71,7 +83,7 @@ const normalizeString = (string) => {
 
 const useStyles = makeStyles((theme) => ({
   icons: {
-    color: theme.palette.common.white,
+    color: theme.palette.secondary.dark,
     marginLeft: '5px',
     marginRight: '10px',
   },

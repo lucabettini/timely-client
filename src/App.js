@@ -11,11 +11,12 @@ import BaseScreen from './components/navigation/BaseScreen';
 
 const theme = createTheme({
   palette: {
-    error: { main: '#FF773D' },
-    success: { main: '#DDFFD9' },
-    warning: { main: '#FDC31D' },
-    primary: { main: '#28b5f4' },
+    primary: { main: '#68ba9f' },
+    secondary: { main: '#0b486c' },
+    error: { main: '#e7c68e' },
+    warning: { main: '#d6444d' },
     info: { main: '#28b5f4' },
+    // background: { default: '#d3e1c2' },
   },
 });
 
