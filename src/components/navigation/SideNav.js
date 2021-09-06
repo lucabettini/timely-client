@@ -26,7 +26,6 @@ const SideNav = (props) => {
         const { data } = await axios.get('/api/areas', {
           headers: { jwt: token },
         });
-        console.log(data);
         dispatch(setAreas(data.areas));
         setLoading(false);
       } catch (error) {
@@ -62,7 +61,7 @@ const SideNav = (props) => {
         <Divider />
         {areas.map((area) => {
           return (
-            <ListItem button component='a'>
+            <ListItem button component='a' key={area}>
               <CategoryRoundedIcon className={classes.icons} />
               <ListItemText
                 primary={normalizeString(area)}

@@ -45,11 +45,10 @@ const TaskForm = (props) => {
     const canSubmit = await form.onSubmit(schema);
 
     if (canSubmit) {
-      console.log(canSubmit);
       props.handleSubmit({
         ...form.values,
         color: selectedColor,
-        scheduled_for: selectedDate,
+        scheduled_for: selectedDate.toISOString(),
         description: description,
       });
     }
@@ -147,7 +146,7 @@ const TaskForm = (props) => {
                   disableAlpha
                   hideTextfield
                   value={selectedColor}
-                  onChange={(e) => setSelectedColor(e.css.backgroundColor)}
+                  onChange={(e) => setSelectedColor(e.hex)}
                 />
               </Grid>
               <Grid
