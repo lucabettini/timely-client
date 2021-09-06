@@ -157,7 +157,6 @@ const useStyles = makeStyles((theme) => ({
   form: {
     border: `1px solid ${theme.palette.primary.main}`,
     padding: '5%',
-    backgroundColor: `${theme.palette.success.main}`,
   },
   forgot_password: {
     textDecoration: 'none',
