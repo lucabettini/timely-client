@@ -8,6 +8,7 @@ import Login from './components/auth/Login';
 import Register from './components/auth/Register';
 import HomeScreen from './components/HomeScreen';
 import BaseScreen from './components/navigation/BaseScreen';
+import AddTaskForm from './components/task/AddTaskForm';
 
 const theme = createTheme({
   palette: {
@@ -41,6 +42,9 @@ function App() {
               <BaseScreen>
                 <HomeScreen />
               </BaseScreen>
+            </Route>
+            <Route exact path='/addTask'>
+              <AddTaskForm />
             </Route>
           </Switch>
         </Router>

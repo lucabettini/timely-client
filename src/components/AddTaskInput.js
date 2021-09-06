@@ -7,6 +7,9 @@ import {
 } from '@material-ui/core';
 import LibraryAddIcon from '@material-ui/icons/LibraryAdd';
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { useHistory } from 'react-router';
+import { setNewTaskName } from '../redux/tasksSlice';
 
 const useStyles = makeStyles((theme) => ({
   textField: {
@@ -19,7 +22,9 @@ const useStyles = makeStyles((theme) => ({
 
 function AddTaskInput() {
   const classes = useStyles();
+  const history = useHistory();
   const [value, setValue] = useState('');
+  const dispatch = useDispatch();
 
   const handleChange = (e) => {
     setValue(e.target.value);
@@ -27,6 +32,8 @@ function AddTaskInput() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    dispatch(setNewTaskName(value));
+    history.push('/addTask');
   };
 
   return (
