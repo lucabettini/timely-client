@@ -47,7 +47,7 @@ const TaskForm = (props) => {
     if (canSubmit) {
       props.handleSubmit({
         ...form.values,
-        color: selectedColor,
+        color: selectedColor.hex,
         scheduled_for: selectedDate.toISOString(),
         description: description,
       });
@@ -145,8 +145,8 @@ const TaskForm = (props) => {
                 <ColorPicker
                   disableAlpha
                   hideTextfield
-                  value={selectedColor}
-                  onChange={(e) => setSelectedColor(e.hex)}
+                  value={selectedColor.value}
+                  onChange={(e) => setSelectedColor(e)}
                 />
               </Grid>
               <Grid

@@ -26,8 +26,9 @@ const SideNav = (props) => {
         const { data } = await axios.get('/api/areas', {
           headers: { jwt: token },
         });
-        dispatch(setAreas(data.areas));
+        dispatch(setAreas(data.data));
         setLoading(false);
+        // console.log(data);
       } catch (error) {
         console.log(error);
       }
@@ -59,7 +60,7 @@ const SideNav = (props) => {
           <ListItemText primary='Today' className={classes.text} />
         </ListItem>
         <Divider />
-        {areas.map((area) => {
+        {Object.keys(areas).map((area) => {
           return (
             <ListItem button component='a' key={area}>
               <CategoryRoundedIcon className={classes.icons} />

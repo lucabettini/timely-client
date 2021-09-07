@@ -33,7 +33,7 @@ const Navbar = (props) => {
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
-    [theme.breakpoints.up('sm')]: {
+    [theme.breakpoints.up('md')]: {
       width: `calc(100% - 240px)`,
       marginLeft: 240,
     },

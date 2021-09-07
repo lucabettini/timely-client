@@ -21,7 +21,7 @@ function BaseScreen(props) {
     <div className={classes.root}>
       <Navbar handleDrawerToggle={handleDrawerToggle} drawerWidth={240} />
       <nav className={classes.drawer} aria-label='mailbox folders'>
-        <Hidden smUp implementation='css'>
+        <Hidden mdUp implementation='css'>
           <Drawer
             container={container}
             variant='temporary'
@@ -39,7 +39,7 @@ function BaseScreen(props) {
             <SideNav classes={classes.toolbar} />
           </Drawer>
         </Hidden>
-        <Hidden xsDown implementation='css'>
+        <Hidden smDown implementation='css'>
           <Drawer
             classes={{
               paper: classes.drawerPaper,
@@ -69,7 +69,7 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
   },
   drawer: {
-    [theme.breakpoints.up('sm')]: {
+    [theme.breakpoints.up('md')]: {
       width: drawerWidth,
       flexShrink: 0,
     },
