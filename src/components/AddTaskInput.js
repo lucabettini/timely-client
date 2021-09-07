@@ -59,7 +59,6 @@ function AddTaskInput() {
           onChange={handleChange}
           color='primary'
           error={error}
-          helperText={error && 'Name must be maximum 40 letters long'}
           endAdornment={
             <InputAdornment position='end'>
               <LibraryAddIcon

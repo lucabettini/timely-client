@@ -7,7 +7,14 @@ import { selectNewTaskName } from '../../redux/tasksSlice';
 import useForm from '../../hooks/useForm';
 import CustomInput from '../CustomInput';
 
-import { Button, Grid, Paper, TextField } from '@material-ui/core';
+import {
+  Button,
+  Checkbox,
+  FormControlLabel,
+  Grid,
+  Paper,
+  TextField,
+} from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 import 'date-fns';
 import DateFnsUtils from '@date-io/date-fns';
@@ -16,15 +23,13 @@ import {
   KeyboardDatePicker,
 } from '@material-ui/pickers';
 import { ColorPicker } from 'material-ui-color';
+import RecurringTaskForm from './RecurringTaskForm';
 
 const TaskForm = (props) => {
   const classes = useStyles();
   const history = useHistory();
 
-  const [description, setDescription] = useState('');
-  const [selectedDate, setSelectedDate] = useState(new Date());
-  const [selectedColor, setSelectedColor] = useState('#ffff');
-
+  // FIELDS THAT NEED VALIDATION OR ARE REQUIRED
   const inputName = useSelector(selectNewTaskName);
   const initialValues = props.initialValues ?? {
     name: inputName,
@@ -40,21 +45,7 @@ const TaskForm = (props) => {
     area: yup.string().trim().lowercase().max(20).required(),
   };
 
-  const handleSubmit = async () => {
-    // Set as touched and run validation on all inputs
-    const canSubmit = await form.onSubmit(schema);
-
-    if (canSubmit) {
-      props.handleSubmit({
-        ...form.values,
-        color: selectedColor.hex,
-        scheduled_for: selectedDate.toISOString(),
-        description: description,
-      });
-    }
-  };
-
-  // INPUT PROPS
+  // Custom input props
   const inputProps = (name) => {
     return {
       name,
@@ -64,6 +55,88 @@ const TaskForm = (props) => {
       isValid: form.isValid(name),
       value: form.values[name],
     };
+  };
+
+  // OPTIONAL FIELDS OR FIELDS THAT ALWAYS HAVE A VALID VALUE
+  const [fields, setFields] = useState({
+    description: '',
+    date: new Date(),
+    color: '',
+    tracked: true,
+    repeat: true,
+  });
+
+  const handleFieldsChange = (name, value) => {
+    setFields({
+      ...fields,
+      [name]: value,
+    });
+  };
+
+  // RECURRING TAKS FIELDS (PASSED DOWN AS PROPS)
+  const [choice, setChoice] = useState('forever');
+  const [date, setDate] = useState(new Date());
+  const [frequency, setFrequency] = useState('day');
+
+  const [recurringFields, setRecurringFields] = useState({
+    interval: 1,
+    occurrences: 5,
+  });
+
+  const [error, setError] = useState({
+    interval: false,
+    occurrences: false,
+  });
+
+  const handleRecurringFieldsChange = (e) => {
+    const selectedNumber = parseInt(e.target.value, 10);
+    if (
+      isNaN(selectedNumber) ||
+      !Number.isInteger(selectedNumber) ||
+      selectedNumber <= 0
+    ) {
+      setError({
+        ...error,
+        [e.target.name]: true,
+      });
+    } else {
+      setRecurringFields({
+        ...fields,
+        [e.target.name]: e.target.value,
+      });
+    }
+  };
+
+  // SUBMIT FUNCTION
+  const handleSubmit = async () => {
+    // Set as touched and run validation on all inputs
+    // that need validation
+    const canSubmit = await form.onSubmit(schema);
+    if (!canSubmit) return;
+
+    // Check if there are errors in recurring fields
+    if (fields.repeat && (error.interval || error.occurrences)) return;
+
+    const values = {
+      task: {
+        ...form.values,
+        // undefined is user did not select anything,
+        // default to primary theme color server-side
+        color: fields.color.hex,
+        scheduled_for: fields.date,
+        description: fields.description,
+        tracked: fields.tracked,
+      },
+    };
+    if (fields.repeat) {
+      values.recurring = {
+        ...recurringFields,
+        date,
+        frequency,
+        choice,
+      };
+    }
+    props.handleSubmit(values);
   };
 
   return (
@@ -115,9 +188,11 @@ const TaskForm = (props) => {
                       format='dd/MM/yyyy'
                       margin='normal'
                       label='Date'
-                      value={selectedDate}
+                      value={fields.date}
                       style={{ width: '100%' }}
-                      onChange={(date) => setSelectedDate(date)}
+                      onChange={(date) =>
+                        handleFieldsChange('date', date.toISOString())
+                      }
                       KeyboardButtonProps={{
                         'aria-label': 'change date',
                       }}
@@ -131,7 +206,9 @@ const TaskForm = (props) => {
                   multiline
                   inputProps={{ className: classes.textarea }}
                   label='Description (optional)'
-                  onChange={(e) => setDescription(e.target.value)}
+                  onChange={(e) =>
+                    handleFieldsChange('description', e.target.value)
+                  }
                 />
               </Grid>
               <Grid
@@ -145,10 +222,55 @@ const TaskForm = (props) => {
                 <ColorPicker
                   disableAlpha
                   hideTextfield
-                  value={selectedColor.value}
-                  onChange={(e) => setSelectedColor(e)}
+                  value={fields.color.value}
+                  onChange={(e) => handleFieldsChange('color', e)}
                 />
               </Grid>
+              <Grid item xs={12}>
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={fields.tracked}
+                      onChange={() =>
+                        handleFieldsChange('tracked', !fields.tracked)
+                      }
+                      name='tracked'
+                      color='secondary'
+                    />
+                  }
+                  label='Track the time of this task'
+                  className={!fields.tracked && classes.trackedLabelOn}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={fields.repeat}
+                      onChange={() =>
+                        handleFieldsChange('repeat', !fields.repeat)
+                      }
+                      name='tracked'
+                      color='secondary'
+                    />
+                  }
+                  label='Repeat this task'
+                  className={!fields.repeat && classes.trackedLabelOn}
+                />
+              </Grid>
+              {fields.repeat && (
+                <RecurringTaskForm
+                  choice={choice}
+                  setChoice={setChoice}
+                  frequency={frequency}
+                  setFrequency={setFrequency}
+                  setDate={setDate}
+                  fields={recurringFields}
+                  handleChange={handleRecurringFieldsChange}
+                  error={error}
+                />
+              )}
+
               <Grid
                 container
                 item
@@ -184,8 +306,9 @@ const TaskForm = (props) => {
 const useStyles = makeStyles((theme) => ({
   container: {
     minHeight: '100vh',
-    paddingBottom: '20vh',
+    paddingBottom: '10vh',
     flexGrow: 1,
+    marginTop: '10vh',
   },
   form: {
     border: `1px solid ${theme.palette.primary.main}`,
@@ -204,6 +327,9 @@ const useStyles = makeStyles((theme) => ({
   },
   colorPicker: {
     marginBottom: 0,
+  },
+  trackedLabelOn: {
+    color: theme.palette.grey[600],
   },
 }));
 

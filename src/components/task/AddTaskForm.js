@@ -14,13 +14,28 @@ const AddTaskForm = () => {
 
   const [status, setStatus] = useState(null);
 
+  const handleRecurringSubmit = async (data, id) => {
+    const values = {
+      interval: data.interval,
+      frequency: data.frequency,
+    };
+    if (data.choice === 'occurrences') values.occurrences = data.occurrences;
+    if (data.choice === 'end_date') values.end_date = data.end_date;
+
+    await axios.post(`/api/tasks/${id}/recurring`, values, {
+      headers: { jwt: token },
+    });
+  };
+
   const handleSubmit = async (data) => {
     try {
       setStatus('loading');
-      const res = await axios.post('/api/tasks', data, {
+      const res = await axios.post('/api/tasks', data.task, {
         headers: { jwt: token },
       });
       console.log(res);
+
+      if (data.recurring) handleRecurringSubmit(data.recurring, res.data.id);
       history.push('/home');
     } catch (error) {
       console.log(error);

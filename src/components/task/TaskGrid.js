@@ -99,11 +99,11 @@ const TaskGrid = ({ task }) => {
           >
             <Grid item xs={1} container alignItems='center'>
               <Checkbox
-                checked={true}
+                checked={task.completed}
                 className={classes.checkbox}
                 inputProps={{ 'aria-label': 'complete task' }}
               />
-              {<LoopIcon className={classes.loopLg} />}
+              {task.recurring && <LoopIcon className={classes.loopLg} />}
             </Grid>
             <Grid item xs={4}>
               <Typography variant='body1' className={classes.name}>
@@ -152,7 +152,7 @@ const TaskGrid = ({ task }) => {
           >
             <Grid item xs={2}>
               <Checkbox
-                checked={true}
+                checked={task.completed}
                 className={classes.checkbox}
                 inputProps={{ 'aria-label': 'complete task' }}
               />
@@ -163,7 +163,7 @@ const TaskGrid = ({ task }) => {
               </Typography>
             </Grid>
             <Grid item xs={2}>
-              {<LoopIcon className={classes.loop} />}
+              {task.recurring && <LoopIcon className={classes.loop} />}
             </Grid>
             <Grid item xs={5}>
               <Typography variant='body2' className={classes.bucket}>
@@ -184,11 +184,7 @@ const TaskGrid = ({ task }) => {
                   </IconButton>
                 </Grid>
                 <Grid item xs={5}>
-                  <Typography
-                    variant='body2'
-                    textAlign='right'
-                    className={classes.duration}
-                  >
+                  <Typography variant='body2' className={classes.duration}>
                     {getDuration(task.duration)}
                   </Typography>
                 </Grid>
