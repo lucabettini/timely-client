@@ -46,6 +46,10 @@ const TaskGrid = ({ task }) => {
       paddingLeft: '12px',
       fontWeight: 500,
     },
+    duration: {
+      paddingTop: '5px',
+      fontWeight: 500,
+    },
     bucket: {
       padding: '2px 5px 0 5px',
       marginBottom: 0,
@@ -85,7 +89,7 @@ const TaskGrid = ({ task }) => {
 
   return (
     <>
-      <Hidden xsDown>
+      <Hidden mdDown>
         <Paper className={classes.paper} variant='outlined'>
           <Grid
             container
@@ -127,11 +131,7 @@ const TaskGrid = ({ task }) => {
                   </Grid>
 
                   <Grid item xs={5}>
-                    <Typography
-                      variant='body2'
-                      textAlign='right'
-                      className={classes.duration}
-                    >
+                    <Typography variant='body2' className={classes.duration}>
                       {getDuration(task.duration)}
                     </Typography>
                   </Grid>
@@ -142,7 +142,7 @@ const TaskGrid = ({ task }) => {
         </Paper>
       </Hidden>
 
-      <Hidden smUp>
+      <Hidden lgUp>
         <Paper className={classes.paper} variant='outlined'>
           <Grid
             container

@@ -33,7 +33,7 @@ const Navbar = (props) => {
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
-    [theme.breakpoints.up('md')]: {
+    [theme.breakpoints.up('lg')]: {
       width: `calc(100% - 240px)`,
       marginLeft: 240,
     },
@@ -41,7 +41,7 @@ const useStyles = makeStyles((theme) => ({
   },
   menuButton: {
     marginRight: theme.spacing(2),
-    [theme.breakpoints.up('sm')]: {
+    [theme.breakpoints.up('lg')]: {
       display: 'none',
     },
   },
