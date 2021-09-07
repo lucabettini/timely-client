@@ -40,9 +40,13 @@ const HomeScreen = () => {
     <>
       <AddTaskInput />
       <div className={classes.container}>
-        {tasks.map((task) => {
-          return <TaskGrid task={task} key={task.id} />;
-        })}
+        {tasks
+          .sort((a, b) => {
+            return a.completed ? 1 : -1;
+          })
+          .map((task) => {
+            return <TaskGrid task={task} key={task.id} />;
+          })}
       </div>
     </>
   );

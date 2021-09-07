@@ -1,5 +1,6 @@
 import {
   Checkbox,
+  CircularProgress,
   Grid,
   Hidden,
   IconButton,
@@ -9,82 +10,57 @@ import {
 import { makeStyles } from '@material-ui/styles';
 import PlayCircleFilledIcon from '@material-ui/icons/PlayCircleFilled';
 import LoopIcon from '@material-ui/icons/Loop';
-import React from 'react';
+import React, { useState } from 'react';
+import axios from 'axios';
+import useAuth from '../../hooks/useAuth';
+
+const getDate = (date) => {
+  return Intl.DateTimeFormat('en', {
+    weekday: 'long',
+    month: 'short',
+    day: 'numeric',
+  }).format(new Date(date));
+};
+
+const getDuration = (totalSeconds) => {
+  let hours = Math.floor(totalSeconds / 3600);
+  let minutes = Math.floor((totalSeconds % 3600) / 60);
+  let seconds = Math.floor(totalSeconds % 60);
+
+  if (hours < 10) {
+    hours = '0' + hours;
+  }
+  if (minutes < 10) {
+    minutes = '0' + minutes;
+  }
+  if (seconds < 10) {
+    seconds = '0' + seconds;
+  }
+  return hours + ':' + minutes + ':' + seconds;
+};
 
 const TaskGrid = ({ task }) => {
-  const useStyles = makeStyles((theme) => ({
-    paper: {
-      cursor: 'pointer',
-      marginTop: theme.spacing(1),
-      border: `1px solid #${task.color}`,
-    },
-    container: {
-      width: '100%',
-      padding: theme.spacing(1),
-    },
-    checkbox: {
-      color: `#${task.color} !important`,
-      '&checked': {
-        color: `#${task.color} !important`,
-      },
-    },
-    icon: {
-      padding: '10px',
-    },
-    loop: {
-      marginLeft: '9px',
-      color: theme.palette.secondary.main,
-    },
-    loopLg: {
-      color: theme.palette.secondary.main,
-    },
-    name: {
-      fontWeight: 500,
-    },
-    date: {
-      paddingTop: '4px',
-      paddingLeft: '12px',
-      fontWeight: 500,
-    },
-    duration: {
-      paddingTop: '5px',
-      fontWeight: 500,
-    },
-    bucket: {
-      padding: '2px 5px 0 5px',
-      marginBottom: 0,
-      borderRadius: '5px',
-      backgroundColor: theme.palette.secondary.main,
-      color: '#ffff',
-      display: 'inline',
-    },
-  }));
+  const token = useAuth().getToken();
 
-  const classes = useStyles();
+  const [completed, setCompleted] = useState(task.completed);
+  const [loading, setLoading] = useState(false);
 
-  const getDate = (date) => {
-    return Intl.DateTimeFormat('en', {
-      weekday: 'long',
-      month: 'short',
-      day: 'numeric',
-    }).format(new Date(date));
-  };
+  const classes = useStyles({ color: task.color, completed: completed });
 
-  const getDuration = (totalSeconds) => {
-    let hours = Math.floor(totalSeconds / 3600);
-    let minutes = Math.floor((totalSeconds % 3600) / 60);
-    let seconds = Math.floor(totalSeconds % 60);
-
-    if (hours < 10) {
-      hours = '0' + hours;
+  const handleComplete = async () => {
+    setLoading(true);
+    const url = completed
+      ? `/api/tasks/${task.id}/incomplete`
+      : `/api/tasks/${task.id}/complete`;
+    try {
+      await axios.patch(url, null, {
+        headers: { jwt: token },
+      });
+      setCompleted(!completed);
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
     }
-    if (minutes < 10) {
-      minutes = '0' + minutes;
-    }
-    if (seconds < 10) {
-      seconds = '0' + seconds;
-    }
-    return hours + ':' + minutes + ':' + seconds;
   };
 
   return (
@@ -98,11 +74,16 @@ const TaskGrid = ({ task }) => {
             alignItems='center'
           >
             <Grid item xs={1} container alignItems='center'>
-              <Checkbox
-                checked={task.completed}
-                className={classes.checkbox}
-                inputProps={{ 'aria-label': 'complete task' }}
-              />
+              {loading ? (
+                <CircularProgress className={classes.loader} />
+              ) : (
+                <Checkbox
+                  checked={completed}
+                  onChange={handleComplete}
+                  className={classes.checkbox}
+                  inputProps={{ 'aria-label': 'complete task' }}
+                />
+              )}
               {task.recurring && <LoopIcon className={classes.loopLg} />}
             </Grid>
             <Grid item xs={4}>
@@ -151,11 +132,16 @@ const TaskGrid = ({ task }) => {
             alignItems='center'
           >
             <Grid item xs={2}>
-              <Checkbox
-                checked={task.completed}
-                className={classes.checkbox}
-                inputProps={{ 'aria-label': 'complete task' }}
-              />
+              {loading ? (
+                <CircularProgress className={classes.loader} />
+              ) : (
+                <Checkbox
+                  checked={completed}
+                  onChange={handleComplete}
+                  className={classes.checkbox}
+                  inputProps={{ 'aria-label': 'complete task' }}
+                />
+              )}
             </Grid>
             <Grid item xs={10}>
               <Typography variant='body1' className={classes.name}>
@@ -196,5 +182,60 @@ const TaskGrid = ({ task }) => {
     </>
   );
 };
+
+const useStyles = makeStyles((theme) => ({
+  paper: {
+    cursor: 'pointer',
+    marginTop: theme.spacing(1),
+    backgroundColor: (props) => props.completed && theme.palette.grey[200],
+    border: (props) => `1px solid #${props.color}`,
+  },
+  container: {
+    width: '100%',
+    padding: theme.spacing(1),
+  },
+  checkbox: {
+    color: (props) => `#${props.color} !important`,
+    '&checked': {
+      color: (props) => `#${props.color} !important`,
+    },
+  },
+  icon: {
+    padding: '10px',
+  },
+  loop: {
+    marginLeft: '9px',
+    color: theme.palette.secondary.main,
+  },
+  loopLg: {
+    color: theme.palette.secondary.main,
+  },
+  name: {
+    fontWeight: 500,
+  },
+  date: {
+    paddingTop: '4px',
+    paddingLeft: '12px',
+    fontWeight: 500,
+  },
+  duration: {
+    paddingTop: '5px',
+    fontWeight: 500,
+  },
+  bucket: {
+    padding: '2px 5px 0 5px',
+    marginBottom: 0,
+    borderRadius: '5px',
+    backgroundColor: theme.palette.secondary.main,
+    color: '#ffff',
+    display: 'inline',
+  },
+  loader: {
+    width: '20px !important',
+    height: '20px !important',
+    marginLeft: '12px',
+    marginTop: '9px',
+  },
+}));
 
 export default TaskGrid;
