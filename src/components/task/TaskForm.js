@@ -35,9 +35,9 @@ const TaskForm = (props) => {
 
   // Validation schema
   const schema = {
-    name: yup.string().trim().required(),
-    bucket: yup.string().trim().lowercase().required(),
-    area: yup.string().trim().lowercase().required(),
+    name: yup.string().trim().max(40).required(),
+    bucket: yup.string().trim().lowercase().max(20).required(),
+    area: yup.string().trim().lowercase().max(20).required(),
   };
 
   const handleSubmit = async () => {

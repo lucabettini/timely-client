@@ -8,6 +8,8 @@ export default function useForm(initialValues) {
     let object = {};
     Object.keys(initialValues).forEach((key) => {
       object[key] = boolean;
+      // If values are already present, set as touched and valid
+      if (initialValues[key] !== '') object[key] = !boolean;
     });
     return object;
   };
