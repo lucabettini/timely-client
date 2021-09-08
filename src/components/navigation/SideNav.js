@@ -6,39 +6,27 @@ import BallotIcon from '@material-ui/icons/Ballot';
 import WarningRoundedIcon from '@material-ui/icons/WarningRounded';
 import HomeRoundedIcon from '@material-ui/icons/HomeRounded';
 import CategoryRoundedIcon from '@material-ui/icons/CategoryRounded';
-import { useState } from 'react';
 import Loader from '../Loader';
 import { makeStyles } from '@material-ui/styles';
-import { selectAreas, setAreas } from '../../redux/tasksSlice';
-import axios from 'axios';
+import { selectAreas, selectStatus, fetchAreas } from '../../redux/tasksSlice';
 import useAuth from '../../hooks/useAuth';
 
 const SideNav = (props) => {
   const dispatch = useDispatch();
-  const token = useAuth().getToken();
-  const [loading, setLoading] = useState(true);
+  const status = useSelector(selectStatus);
+
+  const auth = useAuth();
+  const token = auth.getToken();
 
   const classes = useStyles();
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const { data } = await axios.get('/api/areas', {
-          headers: { jwt: token },
-        });
-        dispatch(setAreas(data.data));
-        setLoading(false);
-        console.log(data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    fetchData();
-  }, [token, dispatch]);
+    dispatch(fetchAreas(token));
+  }, [dispatch, token]);
 
   const areas = useSelector(selectAreas);
 
-  if (loading) return <Loader />;
+  if (status !== 'succeeded') return <Loader />;
 
   return (
     <div>

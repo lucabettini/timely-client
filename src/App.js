@@ -10,6 +10,7 @@ import HomeScreen from './components/HomeScreen';
 import BaseScreen from './components/navigation/BaseScreen';
 import AddTaskForm from './components/task/AddTaskForm';
 import BucketScreen from './components/BucketScreen';
+import AreaScreen from './components/AreaScreen';
 
 const theme = createTheme({
   palette: {
@@ -44,7 +45,12 @@ function App() {
                 <HomeScreen />
               </BaseScreen>
             </Route>
-            <Route path='/bucket/:area/:bucket'>
+            <Route exact path='/area/:area'>
+              <BaseScreen>
+                <AreaScreen />
+              </BaseScreen>
+            </Route>
+            <Route exact path='/bucket/:area/:bucket'>
               <BaseScreen>
                 <BucketScreen />
               </BaseScreen>

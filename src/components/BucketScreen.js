@@ -43,8 +43,6 @@ const BucketScreen = () => {
     fetchData();
   }, [params.area, params.bucket, token]);
 
-  if (loading) return <Loader />;
-
   const handleChoice = (e, value) => {
     if (value !== null) setChoice(value);
   };
@@ -63,6 +61,8 @@ const BucketScreen = () => {
         return tasks;
     }
   };
+
+  if (loading) return <Loader />;
 
   return (
     <>
