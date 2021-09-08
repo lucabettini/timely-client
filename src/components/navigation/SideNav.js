@@ -28,7 +28,7 @@ const SideNav = (props) => {
         });
         dispatch(setAreas(data.data));
         setLoading(false);
-        // console.log(data);
+        console.log(data);
       } catch (error) {
         console.log(error);
       }

@@ -23,7 +23,7 @@ const HomeScreen = () => {
         const { data } = await axios.get('/api/tasks/week', {
           headers: { jwt: token },
         });
-        console.log(data);
+        // console.log(data);
         setTasks(data.data);
         setLoading(false);
       } catch (error) {

@@ -10,7 +10,7 @@ import {
 import { makeStyles } from '@material-ui/styles';
 import PlayCircleFilledIcon from '@material-ui/icons/PlayCircleFilled';
 import LoopIcon from '@material-ui/icons/Loop';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import useAuth from '../../hooks/useAuth';
 
@@ -39,24 +39,41 @@ const getDuration = (totalSeconds) => {
   return hours + ':' + minutes + ':' + seconds;
 };
 
-const TaskGrid = ({ task }) => {
+const TaskGrid = ({ task, ...props }) => {
   const token = useAuth().getToken();
 
   const [completed, setCompleted] = useState(task.completed);
   const [loading, setLoading] = useState(false);
 
+  useEffect(() => {
+    setCompleted(task.completed);
+  }, [task.completed]);
+
   const classes = useStyles({ color: task.color, completed: completed });
 
   const handleComplete = async () => {
     setLoading(true);
+
     const url = completed
       ? `/api/tasks/${task.id}/incomplete`
       : `/api/tasks/${task.id}/complete`;
     try {
-      await axios.patch(url, null, {
-        headers: { jwt: token },
-      });
-      setCompleted(!completed);
+      if (task.recurring) {
+        await axios.patch(`/api/tasks/${task.id}/recurring/complete`, null, {
+          headers: { jwt: token },
+        });
+        task.recurring = null;
+      } else {
+        await axios.patch(url, null, {
+          headers: { jwt: token },
+        });
+      }
+      if (props.setCompletedOnParent !== undefined) {
+        props.setCompletedOnParent(task.id, !completed);
+      } else {
+        setCompleted(!completed);
+      }
+
       setLoading(false);
     } catch (error) {
       console.log(error);
