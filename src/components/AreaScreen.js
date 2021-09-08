@@ -49,6 +49,7 @@ const AreaScreen = () => {
               elevation={2}
               className={classes.paper}
               onClick={() => handleClick(bucketName)}
+              key={bucketName}
             >
               <Card variant='outlined' className={classes.card}>
                 <CardContent className={classes.content}>

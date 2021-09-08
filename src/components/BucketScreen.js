@@ -14,12 +14,12 @@ const BucketScreen = () => {
 
   const params = useParams();
   const auth = useAuth();
+  auth.authOnly();
   const token = auth.getToken();
 
   const [tasks, setTasks] = useState(null);
   const [loading, setLoading] = useState(true);
   const [choice, setChoice] = useState('notCompleted');
-  // const [childWasChanged, setChildWasChanged] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -101,6 +101,7 @@ const BucketScreen = () => {
       {getTasks(choice).map((task) => (
         <TaskGrid
           task={task}
+          key={task.id}
           setCompletedOnParent={(id, value) => {
             setTasks((tasks) =>
               tasks.map((task) => {

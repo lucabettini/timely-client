@@ -10,8 +10,10 @@ import Loader from '../Loader';
 import { makeStyles } from '@material-ui/styles';
 import { selectAreas, selectStatus, fetchAreas } from '../../redux/tasksSlice';
 import useAuth from '../../hooks/useAuth';
+import { useHistory } from 'react-router';
 
 const SideNav = (props) => {
+  const history = useHistory();
   const dispatch = useDispatch();
   const status = useSelector(selectStatus);
 
@@ -43,14 +45,19 @@ const SideNav = (props) => {
         </ListItem>
 
         <Divider />
-        <ListItem button component='a'>
+        <ListItem button component='a' onClick={() => history.push('/home')}>
           <HomeRoundedIcon className={classes.icons} />
-          <ListItemText primary='Today' className={classes.text} />
+          <ListItemText primary='This week' className={classes.text} />
         </ListItem>
         <Divider />
         {Object.keys(areas).map((area) => {
           return (
-            <ListItem button component='a' key={area}>
+            <ListItem
+              button
+              component='a'
+              key={area}
+              onClick={() => history.push(`/area/${area}`)}
+            >
               <CategoryRoundedIcon className={classes.icons} />
               <ListItemText
                 primary={normalizeString(area)}
