@@ -1,9 +1,17 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Redirect, useHistory, useParams } from 'react-router';
 
-import { Card, CardContent, Grid, Paper, Typography } from '@material-ui/core';
+import {
+  Card,
+  CardContent,
+  Grid,
+  IconButton,
+  Paper,
+  Typography,
+} from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
+import EditIcon from '@material-ui/icons/Edit';
 
 import useAuth from '../../../hooks/useAuth';
 import {
@@ -12,6 +20,7 @@ import {
   fetchAreas,
 } from '../../../redux/tasksSlice';
 import Loader from '../../global/Loader';
+import EditDialog from './global/EditDialog';
 
 const AreaScreen = () => {
   const classes = useStyles();
@@ -25,6 +34,8 @@ const AreaScreen = () => {
   const params = useParams();
   const areas = useSelector(selectAreas);
   const status = useSelector(selectStatus);
+
+  const [openDialog, setOpenDialog] = useState(false);
 
   useEffect(() => {
     dispatch(fetchAreas(token));
@@ -43,7 +54,10 @@ const AreaScreen = () => {
     <>
       <Grid container justifyContent='center'>
         <Typography variant='h2' color='secondary' className={classes.root}>
-          {params.area.toUpperCase()}
+          {params.area.toUpperCase()}{' '}
+          <IconButton size='small' onClick={() => setOpenDialog(true)}>
+            <EditIcon color='secondary' className={classes.edit} />
+          </IconButton>
         </Typography>
       </Grid>
 
@@ -89,6 +103,7 @@ const AreaScreen = () => {
           );
         })}
       </Grid>
+      <EditDialog open={openDialog} setOpen={setOpenDialog} name='area' />
     </>
   );
 };

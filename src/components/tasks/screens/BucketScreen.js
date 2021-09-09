@@ -1,15 +1,17 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router';
+import { Redirect, useParams } from 'react-router';
 
-import { Grid, Typography } from '@material-ui/core';
+import { Grid, IconButton, Typography } from '@material-ui/core';
 import { ToggleButton, ToggleButtonGroup } from '@material-ui/lab';
+import EditIcon from '@material-ui/icons/Edit';
 import { makeStyles } from '@material-ui/styles';
 
 import useAuth from '../../../hooks/useAuth';
 import AddTaskInput from './global/AddTaskInput';
 import Loader from '../../global/Loader';
 import TaskGrid from './global/TaskGrid';
+import EditDialog from './global/EditDialog';
 
 const BucketScreen = () => {
   const classes = useStyles();
@@ -22,6 +24,7 @@ const BucketScreen = () => {
   const [tasks, setTasks] = useState(null);
   const [loading, setLoading] = useState(true);
   const [choice, setChoice] = useState('notCompleted');
+  const [openDialog, setOpenDialog] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -66,12 +69,17 @@ const BucketScreen = () => {
 
   if (loading) return <Loader />;
 
+  if (!loading && !params.area) return <Redirect to='/home' push />;
+
   return (
     <>
       <AddTaskInput />
       <Grid container direction='column' alignItems='center'>
         <Typography variant='h2' className={classes.name} color='secondary'>
-          {params.bucket.toUpperCase()}
+          {params.bucket.toUpperCase()}{' '}
+          <IconButton size='small' onClick={() => setOpenDialog(true)}>
+            <EditIcon color='secondary' className={classes.edit} />
+          </IconButton>
         </Typography>
         <ToggleButtonGroup
           className={classes.buttonGroup}
@@ -116,6 +124,12 @@ const BucketScreen = () => {
           }}
         />
       ))}
+      <EditDialog
+        open={openDialog}
+        setOpen={setOpenDialog}
+        name='bucket'
+        delete={true}
+      />
     </>
   );
 };
@@ -131,6 +145,12 @@ const useStyles = makeStyles((theme) => ({
   },
   button: {
     color: '#fafafa !important',
+  },
+  edit: {
+    opacity: '0.5',
+    '&:hover': {
+      opacity: 1,
+    },
   },
 }));
 

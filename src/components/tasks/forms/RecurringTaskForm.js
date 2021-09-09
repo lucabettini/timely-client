@@ -50,7 +50,7 @@ const RecurringTaskForm = ({
             name='frequency'
             aria-label='frequency'
             value={frequency}
-            onChange={(e) => setFrequency(e.target.value)}
+            onChange={(e) => setFrequency()}
             displayEmpty
             className={classes.selectEmpty}
           >
