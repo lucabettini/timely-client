@@ -1,8 +1,9 @@
 import axios from 'axios';
 import React, { useState } from 'react';
 import { useHistory } from 'react-router';
-import useAuth from '../../hooks/useAuth';
-import Loader from '../Loader';
+
+import useAuth from '../../../hooks/useAuth';
+import Loader from '../../global/Loader';
 import TaskForm from './TaskForm';
 
 const AddTaskForm = () => {

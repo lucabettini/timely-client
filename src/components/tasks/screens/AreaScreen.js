@@ -1,12 +1,17 @@
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Redirect, useHistory, useParams } from 'react-router';
+
 import { Card, CardContent, Grid, Paper, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
-import React, { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
-import { useSelector } from 'react-redux';
-import { Redirect, useHistory, useParams } from 'react-router';
-import useAuth from '../hooks/useAuth';
-import { selectAreas, selectStatus, fetchAreas } from '../redux/tasksSlice';
-import Loader from './Loader';
+
+import useAuth from '../../../hooks/useAuth';
+import {
+  selectAreas,
+  selectStatus,
+  fetchAreas,
+} from '../../../redux/tasksSlice';
+import Loader from '../../global/Loader';
 
 const AreaScreen = () => {
   const classes = useStyles();

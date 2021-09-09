@@ -1,3 +1,5 @@
+import React from 'react';
+
 import {
   AppBar,
   IconButton,
@@ -6,7 +8,6 @@ import {
   Typography,
 } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
-import React from 'react';
 
 const Navbar = (props) => {
   const classes = useStyles();

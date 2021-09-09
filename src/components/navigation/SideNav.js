@@ -1,16 +1,17 @@
 import React, { useEffect } from 'react';
-
 import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router';
+
 import { Divider, List, ListItem, ListItemText } from '@material-ui/core';
 import BallotIcon from '@material-ui/icons/Ballot';
 import WarningRoundedIcon from '@material-ui/icons/WarningRounded';
 import HomeRoundedIcon from '@material-ui/icons/HomeRounded';
 import CategoryRoundedIcon from '@material-ui/icons/CategoryRounded';
-import Loader from '../Loader';
 import { makeStyles } from '@material-ui/styles';
+
 import { selectAreas, selectStatus, fetchAreas } from '../../redux/tasksSlice';
 import useAuth from '../../hooks/useAuth';
-import { useHistory } from 'react-router';
+import Loader from '../global/Loader';
 
 const SideNav = (props) => {
   const history = useHistory();

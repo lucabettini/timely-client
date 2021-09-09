@@ -2,10 +2,10 @@ import { makeStyles } from '@material-ui/styles';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 
-import useAuth from '../hooks/useAuth';
-import AddTaskInput from './AddTaskInput';
-import Loader from './Loader';
-import TaskGrid from './task/TaskGrid';
+import useAuth from '../../../hooks/useAuth';
+import AddTaskInput from './global/AddTaskInput';
+import Loader from '../../global/Loader';
+import TaskGrid from './global/TaskGrid';
 
 const HomeScreen = () => {
   const classes = useStyles();

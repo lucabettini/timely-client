@@ -1,14 +1,16 @@
-import { Button, Grid, Paper } from '@material-ui/core';
-import { makeStyles } from '@material-ui/styles';
 import axios from 'axios';
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import * as yup from 'yup';
-import useAuth from '../../hooks/useAuth';
-import useForm from '../../hooks/useForm';
-import CustomInput from '../CustomInput';
-import FormError from '../FormError';
-import Loader from '../Loader';
+
+import { Button, Grid, Paper } from '@material-ui/core';
+import { makeStyles } from '@material-ui/styles';
+
+import useAuth from '../../../hooks/useAuth';
+import useValidation from '../../../hooks/useValidation';
+import CustomInput from '../../global/CustomInput';
+import FormError from '../../global/FormError';
+import Loader from '../../global/Loader';
 
 const Login = () => {
   const classes = useStyles();
@@ -19,7 +21,7 @@ const Login = () => {
 
   const [status, setStatus] = useState(null);
 
-  const form = useForm({
+  const form = useValidation({
     email: '',
     password: '',
   });

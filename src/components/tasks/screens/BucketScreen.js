@@ -1,13 +1,15 @@
-import { Grid, Typography } from '@material-ui/core';
-import { ToggleButton, ToggleButtonGroup } from '@material-ui/lab';
-import { makeStyles } from '@material-ui/styles';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
-import useAuth from '../hooks/useAuth';
-import AddTaskInput from './AddTaskInput';
-import Loader from './Loader';
-import TaskGrid from './task/TaskGrid';
+
+import { Grid, Typography } from '@material-ui/core';
+import { ToggleButton, ToggleButtonGroup } from '@material-ui/lab';
+import { makeStyles } from '@material-ui/styles';
+
+import useAuth from '../../../hooks/useAuth';
+import AddTaskInput from './global/AddTaskInput';
+import Loader from '../../global/Loader';
+import TaskGrid from './global/TaskGrid';
 
 const BucketScreen = () => {
   const classes = useStyles();

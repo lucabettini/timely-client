@@ -4,13 +4,13 @@ import React from 'react';
 import { Route, BrowserRouter as Router, Switch } from 'react-router-dom';
 import './App.css';
 import store from './redux/store';
-import Login from './components/auth/Login';
-import Register from './components/auth/Register';
-import HomeScreen from './components/HomeScreen';
+import Login from './components/users/forms/Login';
+import Register from './components/users/forms/Register';
 import BaseScreen from './components/navigation/BaseScreen';
-import AddTaskForm from './components/task/AddTaskForm';
-import BucketScreen from './components/BucketScreen';
-import AreaScreen from './components/AreaScreen';
+import AddTaskForm from './components/tasks/forms/AddTaskForm';
+import HomeScreen from './components/tasks/screens/HomeScreen';
+import BucketScreen from './components/tasks/screens/BucketScreen';
+import AreaScreen from './components/tasks/screens/AreaScreen';
 
 const theme = createTheme({
   palette: {

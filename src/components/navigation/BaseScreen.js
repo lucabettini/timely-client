@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { Drawer, Hidden } from '@material-ui/core';
 
+import { Drawer, Hidden } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+
 import SideNav from './SideNav';
 import Navbar from './Navbar';
 

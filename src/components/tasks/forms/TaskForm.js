@@ -3,10 +3,6 @@ import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import * as yup from 'yup';
 
-import { selectNewTaskName } from '../../redux/tasksSlice';
-import useForm from '../../hooks/useForm';
-import CustomInput from '../CustomInput';
-
 import {
   Button,
   Checkbox,
@@ -23,6 +19,10 @@ import {
   KeyboardDatePicker,
 } from '@material-ui/pickers';
 import { ColorPicker } from 'material-ui-color';
+
+import { selectNewTaskName } from '../../../redux/tasksSlice';
+import useValidation from '../../../hooks/useValidation';
+import CustomInput from '../../global/CustomInput';
 import RecurringTaskForm from './RecurringTaskForm';
 
 const TaskForm = (props) => {
@@ -36,7 +36,7 @@ const TaskForm = (props) => {
     bucket: '',
     area: '',
   };
-  const form = useForm(initialValues);
+  const form = useValidation(initialValues);
 
   // Validation schema
   const schema = {

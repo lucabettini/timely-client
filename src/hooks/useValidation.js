@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-export default function useForm(initialValues) {
+export default function useValidation(initialValues) {
   // Initial state
   const [fields, setFields] = useState(initialValues);
 

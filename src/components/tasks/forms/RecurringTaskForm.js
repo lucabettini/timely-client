@@ -1,3 +1,6 @@
+import React from 'react';
+import 'date-fns';
+
 import {
   FormControl,
   FormControlLabel,
@@ -10,13 +13,11 @@ import {
   TextField,
   Typography,
 } from '@material-ui/core';
-import 'date-fns';
 import DateFnsUtils from '@date-io/date-fns';
 import {
   KeyboardDatePicker,
   MuiPickersUtilsProvider,
 } from '@material-ui/pickers';
-import React from 'react';
 
 const RecurringTaskForm = ({
   choice,
