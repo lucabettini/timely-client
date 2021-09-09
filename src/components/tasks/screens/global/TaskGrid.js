@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useHistory } from 'react-router';
 import axios from 'axios';
 
 import {
@@ -15,34 +16,11 @@ import PlayCircleFilledIcon from '@material-ui/icons/PlayCircleFilled';
 import LoopIcon from '@material-ui/icons/Loop';
 
 import useAuth from '../../../../hooks/useAuth';
-
-const getDate = (date) => {
-  return Intl.DateTimeFormat('en', {
-    weekday: 'long',
-    month: 'short',
-    day: 'numeric',
-  }).format(new Date(date));
-};
-
-const getDuration = (totalSeconds) => {
-  let hours = Math.floor(totalSeconds / 3600);
-  let minutes = Math.floor((totalSeconds % 3600) / 60);
-  let seconds = Math.floor(totalSeconds % 60);
-
-  if (hours < 10) {
-    hours = '0' + hours;
-  }
-  if (minutes < 10) {
-    minutes = '0' + minutes;
-  }
-  if (seconds < 10) {
-    seconds = '0' + seconds;
-  }
-  return hours + ':' + minutes + ':' + seconds;
-};
+import { getDate, getDuration } from '../../../../utils';
 
 const TaskGrid = ({ task, ...props }) => {
   const token = useAuth().getToken();
+  const history = useHistory();
 
   const [completed, setCompleted] = useState(task.completed);
   const [loading, setLoading] = useState(false);
@@ -84,14 +62,60 @@ const TaskGrid = ({ task, ...props }) => {
 
   return (
     <>
-      <Hidden mdDown>
-        <Paper className={classes.paper} variant='outlined'>
-          <Grid
-            container
-            item
-            className={classes.container}
-            alignItems='center'
-          >
+      <Paper className={classes.paper} variant='outlined'>
+        <Grid container item className={classes.container} alignItems='center'>
+          <Hidden lgUp>
+            <Grid item xs={2}>
+              {loading ? (
+                <CircularProgress className={classes.loader} />
+              ) : (
+                <Checkbox
+                  checked={completed}
+                  onChange={handleComplete}
+                  className={classes.checkbox}
+                  inputProps={{ 'aria-label': 'complete task' }}
+                />
+              )}
+            </Grid>
+            <Grid item xs={10}>
+              <Typography
+                variant='body1'
+                className={classes.name}
+                onClick={() => history.push(`/tasks/${task.id}`)}
+              >
+                {task.name}
+              </Typography>
+            </Grid>
+            <Grid item xs={2}>
+              {task.recurring && <LoopIcon className={classes.loop} />}
+            </Grid>
+            <Grid item xs={5}>
+              <Typography variant='body2' className={classes.bucket}>
+                {task.bucket}
+              </Typography>
+            </Grid>
+            <Grid item xs={5}>
+              <Typography variant='body2' className={classes.date}>
+                {getDate(task.scheduled_for)}
+              </Typography>
+            </Grid>
+            {task.tracked && (
+              <>
+                <Grid item xs={2}>
+                  <IconButton className={classes.icon}>
+                    <PlayCircleFilledIcon color='primary' />
+                  </IconButton>
+                </Grid>
+                <Grid item xs={5}>
+                  <Typography variant='body2' className={classes.duration}>
+                    {getDuration(task.duration)}
+                  </Typography>
+                </Grid>
+              </>
+            )}
+          </Hidden>
+
+          <Hidden mdDown>
             <Grid item xs={1} container alignItems='center'>
               {loading ? (
                 <CircularProgress className={classes.loader} />
@@ -106,11 +130,14 @@ const TaskGrid = ({ task, ...props }) => {
               {task.recurring && <LoopIcon className={classes.loopLg} />}
             </Grid>
             <Grid item xs={4}>
-              <Typography variant='body1' className={classes.name}>
+              <Typography
+                variant='body1'
+                className={classes.name}
+                onClick={() => history.push(`/tasks/${task.id}`)}
+              >
                 {task.name}
               </Typography>
             </Grid>
-
             <Grid item xs={2}>
               <Typography variant='body2' className={classes.bucket}>
                 {task.bucket}
@@ -138,73 +165,15 @@ const TaskGrid = ({ task, ...props }) => {
                 </Grid>
               </>
             )}
-          </Grid>
-        </Paper>
-      </Hidden>
-
-      <Hidden lgUp>
-        <Paper className={classes.paper} variant='outlined'>
-          <Grid
-            container
-            item
-            className={classes.container}
-            alignItems='center'
-          >
-            <Grid item xs={2}>
-              {loading ? (
-                <CircularProgress className={classes.loader} />
-              ) : (
-                <Checkbox
-                  checked={completed}
-                  onChange={handleComplete}
-                  className={classes.checkbox}
-                  inputProps={{ 'aria-label': 'complete task' }}
-                />
-              )}
-            </Grid>
-            <Grid item xs={10}>
-              <Typography variant='body1' className={classes.name}>
-                {task.name}
-              </Typography>
-            </Grid>
-            <Grid item xs={2}>
-              {task.recurring && <LoopIcon className={classes.loop} />}
-            </Grid>
-            <Grid item xs={5}>
-              <Typography variant='body2' className={classes.bucket}>
-                {task.bucket}
-              </Typography>
-            </Grid>
-            <Grid item xs={5}>
-              <Typography variant='body2' className={classes.date}>
-                {getDate(task.scheduled_for)}
-              </Typography>
-            </Grid>
-
-            {task.tracked && (
-              <>
-                <Grid item xs={2}>
-                  <IconButton className={classes.icon}>
-                    <PlayCircleFilledIcon color='primary' />
-                  </IconButton>
-                </Grid>
-                <Grid item xs={5}>
-                  <Typography variant='body2' className={classes.duration}>
-                    {getDuration(task.duration)}
-                  </Typography>
-                </Grid>
-              </>
-            )}
-          </Grid>
-        </Paper>
-      </Hidden>
+          </Hidden>
+        </Grid>
+      </Paper>
     </>
   );
 };
 
 const useStyles = makeStyles((theme) => ({
   paper: {
-    cursor: 'pointer',
     marginTop: theme.spacing(1),
     backgroundColor: (props) => props.completed && theme.palette.grey[200],
     border: (props) => `1px solid #${props.color}`,
@@ -231,6 +200,7 @@ const useStyles = makeStyles((theme) => ({
   },
   name: {
     fontWeight: 500,
+    cursor: 'pointer',
   },
   date: {
     paddingTop: '4px',

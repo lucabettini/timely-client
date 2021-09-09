@@ -22,8 +22,7 @@ import { useDispatch } from 'react-redux';
 import { fetchAreas } from '../../../../redux/tasksSlice';
 
 const EditDialog = ({ open, setOpen, ...props }) => {
-  const auth = useAuth();
-  const token = auth.getToken();
+  const token = useAuth().getToken();
 
   const params = useParams();
   const history = useHistory();

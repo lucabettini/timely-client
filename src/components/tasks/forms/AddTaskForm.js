@@ -20,7 +20,8 @@ const AddTaskForm = () => {
       interval: data.interval,
       frequency: data.frequency,
     };
-    if (data.choice === 'occurrences') values.occurrences = data.occurrences;
+    if (data.choice === 'occurrences')
+      values.occurrences_left = data.occurrences;
     if (data.choice === 'end_date') values.end_date = data.end_date;
 
     await axios.post(`/api/tasks/${id}/recurring`, values, {

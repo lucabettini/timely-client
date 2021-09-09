@@ -18,8 +18,7 @@ const SideNav = (props) => {
   const dispatch = useDispatch();
   const status = useSelector(selectStatus);
 
-  const auth = useAuth();
-  const token = auth.getToken();
+  const token = useAuth().getToken();
 
   const classes = useStyles();
 
