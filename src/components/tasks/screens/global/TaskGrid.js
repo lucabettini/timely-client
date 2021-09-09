@@ -29,7 +29,7 @@ const TaskGrid = ({ task, ...props }) => {
     setCompleted(task.completed);
   }, [task.completed]);
 
-  const classes = useStyles({ color: task.color, completed: completed });
+  const classes = useStyles({ completed: completed });
 
   const handleComplete = async () => {
     setLoading(true);
@@ -176,16 +176,15 @@ const useStyles = makeStyles((theme) => ({
   paper: {
     marginTop: theme.spacing(1),
     backgroundColor: (props) => props.completed && theme.palette.grey[200],
-    border: (props) => `1px solid #${props.color}`,
   },
   container: {
     width: '100%',
     padding: theme.spacing(1),
   },
   checkbox: {
-    color: (props) => `#${props.color} !important`,
+    color: `${theme.palette.primary.main} !important`,
     '&checked': {
-      color: (props) => `#${props.color} !important`,
+      color: `${theme.palette.primary.main} !important`,
     },
   },
   icon: {

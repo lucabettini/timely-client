@@ -18,7 +18,6 @@ import {
   MuiPickersUtilsProvider,
   KeyboardDatePicker,
 } from '@material-ui/pickers';
-import { ColorPicker } from 'material-ui-color';
 
 import { selectNewTaskName } from '../../../redux/tasksSlice';
 import useValidation from '../../../hooks/useValidation';
@@ -61,7 +60,6 @@ const TaskForm = (props) => {
   const [fields, setFields] = useState({
     description: props.initialValues?.description ?? '',
     date: props.initialValues?.scheduled_for ?? new Date(),
-    color: '',
     tracked: props.initialValues?.tracked ?? true,
     repeat:
       props.initialValues && props.initialValues?.recurring === null
@@ -137,9 +135,6 @@ const TaskForm = (props) => {
     const values = {
       task: {
         ...form.values,
-        // undefined is user did not select anything,
-        // default to primary theme color server-side
-        color: fields.color.hex,
         scheduled_for: fields.date,
         description: fields.description,
         tracked: fields.tracked,
@@ -226,21 +221,6 @@ const TaskForm = (props) => {
                   onChange={(e) =>
                     handleFieldsChange('description', e.target.value)
                   }
-                />
-              </Grid>
-              <Grid
-                item
-                container
-                xs={12}
-                justifyContent='space-between'
-                alignItems='flex-end'
-              >
-                <p className={classes.text}>Color (optional)</p>
-                <ColorPicker
-                  disableAlpha
-                  hideTextfield
-                  value={fields.color.value}
-                  onChange={(e) => handleFieldsChange('color', e)}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -341,9 +321,6 @@ const useStyles = makeStyles((theme) => ({
     fontSize: '1.2em',
     color: theme.palette.grey[600],
     marginBottom: '2px',
-  },
-  colorPicker: {
-    marginBottom: 0,
   },
   trackedLabelOn: {
     color: theme.palette.grey[600],
