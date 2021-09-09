@@ -12,6 +12,7 @@ import HomeScreen from './components/tasks/screens/HomeScreen';
 import BucketScreen from './components/tasks/screens/BucketScreen';
 import AreaScreen from './components/tasks/screens/AreaScreen';
 import TaskScreen from './components/tasks/screens/TaskScreen';
+import EditTaskForm from './components/tasks/forms/EditTaskForm';
 
 const theme = createTheme({
   palette: {
@@ -30,6 +31,7 @@ function App() {
       <ThemeProvider theme={theme}>
         <Router>
           <CssBaseline />
+          {/* GUESTS ROUTES */}
           <Switch>
             <Route exact path='/'>
               <div>Slash</div>
@@ -40,7 +42,8 @@ function App() {
             <Route exact path='/register'>
               <Register />
             </Route>
-
+            {/* PROTECTED ROUTES */}
+            {/* SCREENS */}
             <Route exact path='/home'>
               <BaseScreen>
                 <HomeScreen />
@@ -61,8 +64,13 @@ function App() {
                 <TaskScreen />
               </BaseScreen>
             </Route>
+
+            {/* FORMS */}
             <Route exact path='/addTask'>
               <AddTaskForm />
+            </Route>
+            <Route exact path='/tasks/:id/edit'>
+              <EditTaskForm />
             </Route>
           </Switch>
         </Router>

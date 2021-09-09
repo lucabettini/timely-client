@@ -31,10 +31,10 @@ const TaskForm = (props) => {
 
   // FIELDS THAT NEED VALIDATION OR ARE REQUIRED
   const inputName = useSelector(selectNewTaskName);
-  const initialValues = props.initialValues ?? {
-    name: inputName,
-    bucket: '',
-    area: '',
+  const initialValues = {
+    name: props.initialValues?.name ?? inputName,
+    bucket: props.initialValues?.bucket ?? '',
+    area: props.initialValues?.area ?? '',
   };
   const form = useValidation(initialValues);
 
@@ -59,11 +59,14 @@ const TaskForm = (props) => {
 
   // OPTIONAL FIELDS OR FIELDS THAT ALWAYS HAVE A VALID VALUE
   const [fields, setFields] = useState({
-    description: '',
-    date: new Date(),
+    description: props.initialValues?.description ?? '',
+    date: props.initialValues?.scheduled_for ?? new Date(),
     color: '',
-    tracked: true,
-    repeat: true,
+    tracked: props.initialValues?.tracked ?? true,
+    repeat:
+      props.initialValues && props.initialValues?.recurring === null
+        ? false
+        : true,
   });
 
   const handleFieldsChange = (name, value) => {
@@ -74,13 +77,27 @@ const TaskForm = (props) => {
   };
 
   // RECURRING TAKS FIELDS (PASSED DOWN AS PROPS)
-  const [choice, setChoice] = useState('forever');
-  const [date, setDate] = useState(new Date());
-  const [frequency, setFrequency] = useState('day');
+  const getChoice = () => {
+    if (props.initialValues?.recurring?.end_date) {
+      return 'end_date';
+    } else if (props.initialValues?.recurring?.occurrences_left) {
+      return 'occurrences';
+    } else {
+      return 'forever';
+    }
+  };
+
+  const [choice, setChoice] = useState(getChoice());
+  const [date, setDate] = useState(
+    props.initialValues?.recurring?.end_date ?? new Date()
+  );
+  const [frequency, setFrequency] = useState(
+    props.initialValues?.recurring?.frequency ?? 'day'
+  );
 
   const [recurringFields, setRecurringFields] = useState({
-    interval: 1,
-    occurrences: 5,
+    interval: props.initialValues?.recurring?.interval ?? 1,
+    occurrences: props.initialValues?.recurring?.occurrences_left ?? 5,
   });
 
   const [error, setError] = useState({
@@ -292,7 +309,7 @@ const TaskForm = (props) => {
                   color='primary'
                   size='large'
                 >
-                  ADD TASK
+                  {props.initialValues ? 'EDIT TASK' : 'ADD TASK'}
                 </Button>
               </Grid>
             </Grid>

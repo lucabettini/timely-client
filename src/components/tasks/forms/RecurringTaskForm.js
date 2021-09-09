@@ -64,8 +64,8 @@ const RecurringTaskForm = ({
       <Grid item container xs={12}>
         <FormControl component='fieldset'>
           <RadioGroup
-            aria-label='gender'
-            name='gender1'
+            aria-label='choice'
+            name='choice'
             onChange={(e) => setChoice(e.target.value)}
             value={choice}
           >

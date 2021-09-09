@@ -13,7 +13,7 @@ const AddTaskForm = () => {
   auth.authOnly();
   const token = auth.getToken();
 
-  const [status, setStatus] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const handleRecurringSubmit = async (data, id) => {
     const values = {
@@ -31,7 +31,7 @@ const AddTaskForm = () => {
 
   const handleSubmit = async (data) => {
     try {
-      setStatus('loading');
+      setLoading(true);
       const res = await axios.post('/api/tasks', data.task, {
         headers: { jwt: token },
       });
@@ -44,7 +44,7 @@ const AddTaskForm = () => {
     }
   };
 
-  if (status === 'loading') return <Loader />;
+  if (loading) return <Loader />;
 
   return <TaskForm handleSubmit={handleSubmit} />;
 };
