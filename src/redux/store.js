@@ -1,10 +1,14 @@
 import { configureStore } from '@reduxjs/toolkit';
 import tasksReducer from './tasksSlice';
-import timeUnitsReducer from './timeUnitsSlice';
+import { timelyApi } from './timely';
+import timeUnitReducer from './timeUnitSlice';
 
 export default configureStore({
   reducer: {
     tasks: tasksReducer,
-    timeUnits: timeUnitsReducer,
+    timeUnit: timeUnitReducer,
+    [timelyApi.reducerPath]: timelyApi.reducer,
   },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(timelyApi.middleware),
 });

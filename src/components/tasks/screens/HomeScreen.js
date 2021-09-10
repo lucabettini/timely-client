@@ -6,6 +6,11 @@ import useAuth from '../../../hooks/useAuth';
 import AddTaskInput from './global/AddTaskInput';
 import Loader from '../../global/Loader';
 import TaskGrid from './global/TaskGrid';
+import {
+  useGetActiveTimeUnitQuery,
+  useStartTimeUnitMutation,
+  useStopTimeUnitMutation,
+} from '../../../redux/timely';
 
 const HomeScreen = () => {
   const classes = useStyles();
@@ -16,7 +21,32 @@ const HomeScreen = () => {
 
   const [loading, setLoading] = useState(true);
   const [tasks, setTasks] = useState(null);
-  const [refresh, setRefresh] = useState(0);
+
+  const { data, isLoading } = useGetActiveTimeUnitQuery();
+  const [startTimeUnit] = useStartTimeUnitMutation();
+  const [stopTimeUnit] = useStopTimeUnitMutation();
+
+  const handleTimeUnit = async (taskId) => {
+    const now = new Date();
+    if (!data?.task_id) {
+      await startTimeUnit({ taskId, startTime: now.toISOString() });
+    } else if (data.task_id === taskId) {
+      await stopTimeUnit({
+        id: data.id,
+        startTime: data.start_time,
+        endTime: now.toISOString(),
+      });
+    } else {
+      // Another task was started while one was being tracked,
+      // stop the first before starting the second
+      await stopTimeUnit({
+        id: data.id,
+        startTime: data.start_time,
+        endTime: now.toISOString(),
+      });
+      await startTimeUnit({ taskId, startTime: now.toISOString() });
+    }
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -25,16 +55,15 @@ const HomeScreen = () => {
           headers: { jwt: token },
         });
         setTasks(data.data);
-        console.log(data.data);
         setLoading(false);
       } catch (error) {
         console.log(error);
       }
     };
     fetchData();
-  }, [token, refresh]);
+  }, [token, data]);
 
-  if (loading) return <Loader />;
+  if (loading || isLoading) return <Loader />;
 
   return (
     <>
@@ -49,7 +78,9 @@ const HomeScreen = () => {
               <TaskGrid
                 task={task}
                 key={task.id}
-                refresh={() => setRefresh((refresh) => refresh + 1)}
+                // refresh={() => setRefresh((refresh) => refresh + 1)}
+                timeUnit={data?.task_id === task.id ? data : null}
+                handleTimeUnit={handleTimeUnit}
               />
             );
           })}

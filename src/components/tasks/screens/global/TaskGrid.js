@@ -18,76 +18,52 @@ import LoopIcon from '@material-ui/icons/Loop';
 
 import useAuth from '../../../../hooks/useAuth';
 import { getDate, getDuration } from '../../../../utils';
-import { useSelector } from 'react-redux';
-import {
-  fetchTimeUnit,
-  selectTimeUnit,
-  selectTimeUnitStatus,
-  startTimeUnit,
-  stopTimeUnit,
-} from '../../../../redux/timeUnitsSlice';
-import { useDispatch } from 'react-redux';
 
-const TaskGrid = ({ task, ...props }) => {
+const TaskGrid = ({ task, timeUnit, ...props }) => {
   const token = useAuth().getToken();
   const history = useHistory();
 
-  const [now, setNow] = useState(Date.now() / 1000);
+  const [count, setCount] = useState(
+    timeUnit ? Date.now() / 1000 - Date.parse(timeUnit.start_time) / 1000 : 0
+  );
   const [completed, setCompleted] = useState(task.completed);
   const [loading, setLoading] = useState(false);
-
-  const dispatch = useDispatch();
-  const timeUnit = useSelector((state) => selectTimeUnit(state, task.id));
-  const status = useSelector((state) => selectTimeUnitStatus(state, task.id));
+  const [stop, setStop] = useState(false);
 
   useEffect(() => {
     setCompleted(task.completed);
-    dispatch(fetchTimeUnit(token));
-    console.log('done');
-  }, [task.completed, dispatch, token]);
+  }, [task.completed]);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setNow(Date.now() / 1000);
-    });
-    return () => {
-      clearInterval(interval);
-    };
-  }, []);
+    if (timeUnit && !stop) {
+      const interval = setInterval(() => {
+        setCount((count) => count + 1);
+      }, 1000);
+      return () => {
+        clearInterval(interval);
+      };
+    }
+  }, [timeUnit, stop]);
+
+  useEffect(() => {}, [count]);
+
+  useEffect(() => {
+    setCount(0);
+    setStop(false);
+  }, [task.duration]);
+
+  const handleTimeUnit = () => {
+    if (timeUnit) {
+      setStop(true);
+    }
+    props.handleTimeUnit(task.id);
+  };
 
   const getTime = () => {
-    switch (status) {
-      // case 'off':
-      //   return getDuration(
-      //     task.duration +
-      //       Date.parse(timeUnit.endTime) / 1000 -
-      //       Date.parse(timeUnit.startTime) / 1000
-      //   );
-      case 'on':
-        return getDuration(
-          task.duration + now - Date.parse(timeUnit.startTime) / 1000
-        );
-      default:
-        return getDuration(task.duration);
-    }
+    return getDuration(task.duration + count);
   };
 
   const classes = useStyles({ completed: completed });
-
-  const handleTimeUnit = () => {
-    if (status === 'on') {
-      dispatch(
-        stopTimeUnit({
-          token: token,
-          id: timeUnit.id,
-          startTime: timeUnit.startTime,
-        })
-      );
-      props.refresh();
-    } else {
-      dispatch(startTimeUnit({ token: token, taskId: task.id }));
-    }
-  };
 
   const handleComplete = async () => {
     setLoading(true);
@@ -161,7 +137,7 @@ const TaskGrid = ({ task, ...props }) => {
               <>
                 <Grid item xs={2}>
                   <IconButton className={classes.icon} onClick={handleTimeUnit}>
-                    {status === 'on' ? (
+                    {timeUnit ? (
                       <PauseCircleFilledIcon color='secondary' />
                     ) : (
                       <PlayCircleFilledIcon color='primary' />
@@ -218,7 +194,7 @@ const TaskGrid = ({ task, ...props }) => {
                       className={classes.icon}
                       onClick={handleTimeUnit}
                     >
-                      {status === 'on' ? (
+                      {timeUnit ? (
                         <PauseCircleFilledIcon color='secondary' />
                       ) : (
                         <PlayCircleFilledIcon color='primary' />
