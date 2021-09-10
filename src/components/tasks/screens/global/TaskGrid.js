@@ -13,23 +13,81 @@ import {
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 import PlayCircleFilledIcon from '@material-ui/icons/PlayCircleFilled';
+import PauseCircleFilledIcon from '@material-ui/icons/PauseCircleFilled';
 import LoopIcon from '@material-ui/icons/Loop';
 
 import useAuth from '../../../../hooks/useAuth';
 import { getDate, getDuration } from '../../../../utils';
+import { useSelector } from 'react-redux';
+import {
+  fetchTimeUnit,
+  selectTimeUnit,
+  selectTimeUnitStatus,
+  startTimeUnit,
+  stopTimeUnit,
+} from '../../../../redux/timeUnitsSlice';
+import { useDispatch } from 'react-redux';
 
 const TaskGrid = ({ task, ...props }) => {
   const token = useAuth().getToken();
   const history = useHistory();
 
+  const [now, setNow] = useState(Date.now() / 1000);
   const [completed, setCompleted] = useState(task.completed);
   const [loading, setLoading] = useState(false);
 
+  const dispatch = useDispatch();
+  const timeUnit = useSelector((state) => selectTimeUnit(state, task.id));
+  const status = useSelector((state) => selectTimeUnitStatus(state, task.id));
+
   useEffect(() => {
     setCompleted(task.completed);
-  }, [task.completed]);
+    dispatch(fetchTimeUnit(token));
+    console.log('done');
+  }, [task.completed, dispatch, token]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setNow(Date.now() / 1000);
+    });
+    return () => {
+      clearInterval(interval);
+    };
+  }, []);
+
+  const getTime = () => {
+    switch (status) {
+      // case 'off':
+      //   return getDuration(
+      //     task.duration +
+      //       Date.parse(timeUnit.endTime) / 1000 -
+      //       Date.parse(timeUnit.startTime) / 1000
+      //   );
+      case 'on':
+        return getDuration(
+          task.duration + now - Date.parse(timeUnit.startTime) / 1000
+        );
+      default:
+        return getDuration(task.duration);
+    }
+  };
 
   const classes = useStyles({ completed: completed });
+
+  const handleTimeUnit = () => {
+    if (status === 'on') {
+      dispatch(
+        stopTimeUnit({
+          token: token,
+          id: timeUnit.id,
+          startTime: timeUnit.startTime,
+        })
+      );
+      props.refresh();
+    } else {
+      dispatch(startTimeUnit({ token: token, taskId: task.id }));
+    }
+  };
 
   const handleComplete = async () => {
     setLoading(true);
@@ -102,13 +160,17 @@ const TaskGrid = ({ task, ...props }) => {
             {task.tracked && (
               <>
                 <Grid item xs={2}>
-                  <IconButton className={classes.icon}>
-                    <PlayCircleFilledIcon color='primary' />
+                  <IconButton className={classes.icon} onClick={handleTimeUnit}>
+                    {status === 'on' ? (
+                      <PauseCircleFilledIcon color='secondary' />
+                    ) : (
+                      <PlayCircleFilledIcon color='primary' />
+                    )}
                   </IconButton>
                 </Grid>
                 <Grid item xs={5}>
                   <Typography variant='body2' className={classes.duration}>
-                    {getDuration(task.duration)}
+                    {getTime()}
                   </Typography>
                 </Grid>
               </>
@@ -152,14 +214,21 @@ const TaskGrid = ({ task, ...props }) => {
               <>
                 <Grid item container alignItems='center' xs={3}>
                   <Grid item xs={2}>
-                    <IconButton className={classes.icon}>
-                      <PlayCircleFilledIcon color='primary' />
+                    <IconButton
+                      className={classes.icon}
+                      onClick={handleTimeUnit}
+                    >
+                      {status === 'on' ? (
+                        <PauseCircleFilledIcon color='secondary' />
+                      ) : (
+                        <PlayCircleFilledIcon color='primary' />
+                      )}
                     </IconButton>
                   </Grid>
 
                   <Grid item xs={5}>
                     <Typography variant='body2' className={classes.duration}>
-                      {getDuration(task.duration)}
+                      {getTime()}
                     </Typography>
                   </Grid>
                 </Grid>

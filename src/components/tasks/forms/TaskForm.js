@@ -252,7 +252,7 @@ const TaskForm = (props) => {
                     />
                   }
                   label='Repeat this task'
-                  className={!fields.repeat && classes.trackedLabelOn}
+                  className={fields.repeat ? null : classes.trackedLabelOn}
                 />
               </Grid>
               {fields.repeat && (

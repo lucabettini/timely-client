@@ -101,7 +101,7 @@ const RecurringTaskForm = ({
                   label='Until'
                 />
               </Grid>
-              <Grid items xs={9}>
+              <Grid item xs={9}>
                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
                   <Grid container justifyContent='space-around'>
                     <KeyboardDatePicker

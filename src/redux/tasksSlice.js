@@ -2,8 +2,10 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 
 const initialState = {
-  areas: [],
-  status: 'idle',
+  areas: {
+    data: [],
+    status: 'idle',
+  },
   error: false,
   newTaskName: '',
 };
@@ -31,16 +33,16 @@ const tasksSlice = createSlice({
   },
   extraReducers: {
     [fetchAreas.pending]: (state, action) => {
-      state.status = 'loading';
+      state.areas.status = 'loading';
     },
     [fetchAreas.fulfilled]: (state, action) => {
-      state.status = 'succeeded';
-      state.areas = action.payload;
+      state.areas.status = 'succeeded';
+      state.areas.data = action.payload;
     },
     [fetchAreas.rejected]: (state, action) => {
-      state.status = 'failed';
+      state.areas.status = 'failed';
       state.error = true;
-      state.areas = [];
+      state.areas.data = [];
     },
   },
 });
@@ -50,6 +52,6 @@ export const { setNewTaskName } = tasksSlice.actions;
 export default tasksSlice.reducer;
 
 // SELECTORS
-export const selectAreas = (state) => state.tasks.areas;
-export const selectStatus = (state) => state.tasks.status;
+export const selectAreas = (state) => state.tasks.areas.data;
+export const selectStatus = (state) => state.tasks.areas.status;
 export const selectNewTaskName = (state) => state.tasks.newTaskName;

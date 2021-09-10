@@ -16,6 +16,7 @@ const HomeScreen = () => {
 
   const [loading, setLoading] = useState(true);
   const [tasks, setTasks] = useState(null);
+  const [refresh, setRefresh] = useState(0);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -23,16 +24,15 @@ const HomeScreen = () => {
         const { data } = await axios.get('/api/tasks/week', {
           headers: { jwt: token },
         });
-        // console.log(data);
         setTasks(data.data);
+        console.log(data.data);
         setLoading(false);
       } catch (error) {
         console.log(error);
       }
     };
-
     fetchData();
-  }, [token]);
+  }, [token, refresh]);
 
   if (loading) return <Loader />;
 
@@ -45,7 +45,13 @@ const HomeScreen = () => {
             return a.completed ? 1 : -1;
           })
           .map((task) => {
-            return <TaskGrid task={task} key={task.id} />;
+            return (
+              <TaskGrid
+                task={task}
+                key={task.id}
+                refresh={() => setRefresh((refresh) => refresh + 1)}
+              />
+            );
           })}
       </div>
     </>

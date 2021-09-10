@@ -60,7 +60,8 @@ const Register = () => {
         history.push('/home');
       } catch (error) {
         // TO DO: integrate with global error handling
-        history.push('/error');
+        // history.push('/error');
+        console.log(error);
       }
     }
   };
