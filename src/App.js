@@ -44,34 +44,28 @@ function App() {
             </Route>
             {/* PROTECTED ROUTES */}
             {/* SCREENS */}
-            <Route exact path='/home'>
-              <BaseScreen>
+            <BaseScreen>
+              <Route exact path='/home'>
                 <HomeScreen />
-              </BaseScreen>
-            </Route>
-            <Route exact path='/area/:area'>
-              <BaseScreen>
+              </Route>
+              <Route exact path='/area/:area'>
                 <AreaScreen />
-              </BaseScreen>
-            </Route>
-            <Route exact path='/bucket/:area/:bucket'>
-              <BaseScreen>
+              </Route>
+              <Route exact path='/bucket/:area/:bucket'>
                 <BucketScreen />
-              </BaseScreen>
-            </Route>
-            <Route exact path='/tasks/:id'>
-              <BaseScreen>
+              </Route>
+              <Route exact path='/tasks/:id'>
                 <TaskScreen />
-              </BaseScreen>
-            </Route>
+              </Route>
+              <Route exact path='/addTask'>
+                <AddTaskForm />
+              </Route>
+              <Route exact path='/tasks/:id/edit'>
+                <EditTaskForm />
+              </Route>
+            </BaseScreen>
 
             {/* FORMS */}
-            <Route exact path='/addTask'>
-              <AddTaskForm />
-            </Route>
-            <Route exact path='/tasks/:id/edit'>
-              <EditTaskForm />
-            </Route>
           </Switch>
         </Router>
       </ThemeProvider>

@@ -18,17 +18,20 @@ import LoopIcon from '@material-ui/icons/Loop';
 
 import useAuth from '../../../../hooks/useAuth';
 import { getDate, getDuration } from '../../../../utils';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectStop, setStop } from '../../../../redux/timeUnitSlice';
 
 const TaskGrid = ({ task, timeUnit, ...props }) => {
   const token = useAuth().getToken();
   const history = useHistory();
+  const dispatch = useDispatch();
 
   const [count, setCount] = useState(
     timeUnit ? Date.now() / 1000 - Date.parse(timeUnit.start_time) / 1000 : 0
   );
   const [completed, setCompleted] = useState(task.completed);
   const [loading, setLoading] = useState(false);
-  const [stop, setStop] = useState(false);
+  const stop = useSelector(selectStop);
 
   useEffect(() => {
     setCompleted(task.completed);
@@ -45,16 +48,14 @@ const TaskGrid = ({ task, timeUnit, ...props }) => {
     }
   }, [timeUnit, stop]);
 
-  useEffect(() => {}, [count]);
-
   useEffect(() => {
     setCount(0);
-    setStop(false);
-  }, [task.duration]);
+    dispatch(setStop(false));
+  }, [task.duration, dispatch]);
 
   const handleTimeUnit = () => {
     if (timeUnit) {
-      setStop(true);
+      dispatch(setStop(true));
     }
     props.handleTimeUnit(task.id);
   };

@@ -1,30 +1,37 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-  status: 'idle',
-  id: null,
-  taskId: null,
-  startTime: null,
-  endTime: null,
-  request: 'idle',
+  stop: false,
+  count: 0,
+  timerId: null,
 };
 
 // SLICE
-
 const timeUnitSlice = createSlice({
   name: 'tasks',
   initialState,
-  reducers: {},
+  reducers: {
+    setStop(state, action) {
+      state.stop = action.payload;
+    },
+    setCount(state, action) {
+      state.count = action.payload;
+    },
+    incrementCount(state) {
+      state.count = state.count + 1;
+    },
+    setTimerId(state, action) {
+      state.timerId = action.payload;
+    },
+  },
 });
+
+export const { setStop, setCount, incrementCount, setTimerId } =
+  timeUnitSlice.actions;
 
 export default timeUnitSlice.reducer;
 
 // SELECTORS
-export const selectTimeUnit = (state, taskId) => {};
-export const selectTimeUnitStatus = (state, taskId) => {
-  if (state.timeUnits.taskId === taskId) return state.timeUnits.status;
-};
-
-export const selectRequestStatus = (state, taskId) => {
-  if (state.timeUnits.taskId === taskId) return state.timeUnits.request;
-};
+export const selectStop = (state) => state.timeUnit.stop;
+export const selectCount = (state) => state.timeUnit.count;
+export const selectTimerId = (state) => state.timeUnit.timerId;

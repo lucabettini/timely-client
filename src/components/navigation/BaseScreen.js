@@ -5,11 +5,15 @@ import { makeStyles } from '@material-ui/core/styles';
 
 import SideNav from './SideNav';
 import Navbar from './Navbar';
+import TimeUnitBar from './TimeUnitBar';
+import { useGetActiveTimeUnitQuery } from '../../redux/timely';
 
 function BaseScreen(props) {
   const { window } = props;
   const classes = useStyles();
   const [mobileOpen, setMobileOpen] = useState(false);
+
+  const { data } = useGetActiveTimeUnitQuery();
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -57,6 +61,11 @@ function BaseScreen(props) {
         <div className={classes.toolbar} />
         {props.children}
       </main>
+      {/* {data.id &&  */}
+      <nav>
+        <TimeUnitBar data={data} />
+      </nav>
+      {/* } */}
     </div>
   );
 }

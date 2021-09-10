@@ -78,7 +78,6 @@ const HomeScreen = () => {
               <TaskGrid
                 task={task}
                 key={task.id}
-                // refresh={() => setRefresh((refresh) => refresh + 1)}
                 timeUnit={data?.task_id === task.id ? data : null}
                 handleTimeUnit={handleTimeUnit}
               />
