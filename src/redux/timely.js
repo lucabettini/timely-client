@@ -12,6 +12,15 @@ export const timelyApi = createApi({
   }),
   tagTypes: ['TimeUnit'],
   endpoints: (builder) => ({
+    getTasksByWeek: builder.query({
+      query: () => '/tasks/week',
+      transformResponse: (response) => response.data,
+      providesTags: ['TimeUnit'],
+    }),
+    getTaskById: builder.query({
+      query: (id) => `/tasks/${id}`,
+      providesTags: ['TimeUnit'],
+    }),
     getActiveTimeUnit: builder.query({
       query: () => '/time_unit',
       transformResponse: (response) => response.data,
@@ -44,6 +53,8 @@ export const timelyApi = createApi({
 });
 
 export const {
+  useGetTasksByWeekQuery,
+  useGetTaskByIdQuery,
   useGetActiveTimeUnitQuery,
   useStartTimeUnitMutation,
   useStopTimeUnitMutation,
