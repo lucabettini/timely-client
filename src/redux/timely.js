@@ -37,7 +37,7 @@ export const timelyApi = createApi({
       transformResponse: (response) => response.data,
       invalidatesTags: ['TimeUnit'],
     }),
-    stopTimeUnit: builder.mutation({
+    editTimeUnit: builder.mutation({
       query: ({ id, startTime, endTime }) => ({
         url: `/time_unit/${id}`,
         method: 'PUT',
@@ -49,6 +49,13 @@ export const timelyApi = createApi({
       transformResponse: (response) => response.data,
       invalidatesTags: ['TimeUnit'],
     }),
+    deleteTimeUnit: builder.mutation({
+      query: (id) => ({
+        url: `/time_unit/${id}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: ['TimeUnit'],
+    }),
   }),
 });
 
@@ -57,5 +64,6 @@ export const {
   useGetTaskByIdQuery,
   useGetActiveTimeUnitQuery,
   useStartTimeUnitMutation,
-  useStopTimeUnitMutation,
+  useEditTimeUnitMutation,
+  useDeleteTimeUnitMutation,
 } = timelyApi;

@@ -20,6 +20,7 @@ import useValidation from '../../../../hooks/useValidation';
 import CustomInput from '../../../global/CustomInput';
 import { useDispatch } from 'react-redux';
 import { fetchAreas } from '../../../../redux/tasksSlice';
+import Loader from '../../../global/Loader';
 
 const EditDialog = ({ open, setOpen, ...props }) => {
   const token = useAuth().getToken();
@@ -31,7 +32,7 @@ const EditDialog = ({ open, setOpen, ...props }) => {
   const classes = useStyles();
 
   const [destroy, setDestroy] = useState(false);
-  const [disableButtons, setDisableButtons] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const editForm = useValidation({
     newName: params[props.name],
@@ -42,7 +43,7 @@ const EditDialog = ({ open, setOpen, ...props }) => {
 
   const handleEdit = async (e) => {
     e.preventDefault();
-    setDisableButtons(true);
+    setLoading(true);
 
     const canSubmit = await editForm.onSubmit(editSchema);
     if (!canSubmit) return;
@@ -76,7 +77,7 @@ const EditDialog = ({ open, setOpen, ...props }) => {
   const handleDelete = async (e) => {
     e.preventDefault();
 
-    setDisableButtons(true);
+    setLoading(true);
     try {
       await axios.delete(
         `/api/${props.name}/?area=${params.area}&bucket=${params.bucket}`,
@@ -89,6 +90,8 @@ const EditDialog = ({ open, setOpen, ...props }) => {
       console.log(error);
     }
   };
+
+  if (loading) return <Loader />;
 
   return (
     <Dialog open={open} onClose={() => setOpen(false)}>
@@ -125,18 +128,10 @@ const EditDialog = ({ open, setOpen, ...props }) => {
             />
           </DialogContent>
           <DialogActions className={classes.buttons}>
-            <Button
-              onClick={() => setOpen(false)}
-              color='secondary'
-              disabled={disableButtons}
-            >
+            <Button onClick={() => setOpen(false)} color='secondary'>
               CANCEL
             </Button>
-            <Button
-              onClick={handleEdit}
-              color='secondary'
-              disabled={disableButtons}
-            >
+            <Button onClick={handleEdit} color='secondary'>
               CHANGE
             </Button>
           </DialogActions>
@@ -151,19 +146,11 @@ const EditDialog = ({ open, setOpen, ...props }) => {
             </DialogContentText>
           </DialogContent>
           <DialogActions className={classes.buttons}>
-            <Button
-              onClick={() => setDestroy(false)}
-              color='secondary'
-              disabled={disableButtons}
-            >
+            <Button onClick={() => setDestroy(false)} color='secondary'>
               CANCEL
             </Button>
             {props.delete && (
-              <Button
-                onClick={handleDelete}
-                color='secondary'
-                disabled={disableButtons}
-              >
+              <Button onClick={handleDelete} color='secondary'>
                 CONFIRM
               </Button>
             )}

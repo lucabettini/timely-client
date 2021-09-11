@@ -9,7 +9,7 @@ import { PauseCircleFilled } from '@material-ui/icons';
 import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
-import { useStopTimeUnitMutation } from '../../redux/timely';
+import { useEditTimeUnitMutation } from '../../redux/timely';
 import {
   incrementCount,
   selectCount,
@@ -23,7 +23,7 @@ const TimeUnitBar = ({ timeUnit }) => {
   const classes = useStyles();
 
   const dispatch = useDispatch();
-  const [stopTimeUnit] = useStopTimeUnitMutation();
+  const [editTimeUnit] = useEditTimeUnitMutation();
   const count = useSelector(selectCount);
   const interval = useSelector(selectTimerId);
 
@@ -43,7 +43,7 @@ const TimeUnitBar = ({ timeUnit }) => {
   const handleStop = async () => {
     clearInterval(interval);
     const now = new Date();
-    await stopTimeUnit({
+    await editTimeUnit({
       id: timeUnit.id,
       startTime: timeUnit.start_time,
       endTime: now.toISOString(),

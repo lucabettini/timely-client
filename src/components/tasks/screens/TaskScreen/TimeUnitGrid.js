@@ -1,13 +1,16 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import { Grid, IconButton, Paper, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 import { getDateAndTime, getDuration } from '../../../../utils';
 
 import EditIcon from '@material-ui/icons/Edit';
+import EditTimeUnitDialog from './EditTimeUnitDialog';
 
 const TimeUnitGrid = ({ timeUnit }) => {
   const classes = useStyles();
+
+  const [openDialog, setOpenDialog] = useState(false);
 
   return (
     <>
@@ -16,7 +19,10 @@ const TimeUnitGrid = ({ timeUnit }) => {
           <Grid item container alignItems='center' xs={2} sm={1}>
             {/* <Grid item xs={2}> */}
 
-            <IconButton className={classes.icon}>
+            <IconButton
+              className={classes.icon}
+              onClick={() => setOpenDialog(true)}
+            >
               <EditIcon color='secondary' />
             </IconButton>
           </Grid>
@@ -46,6 +52,13 @@ const TimeUnitGrid = ({ timeUnit }) => {
           </Grid>
         </Grid>
       </Paper>
+      <EditTimeUnitDialog
+        open={openDialog}
+        setOpen={setOpenDialog}
+        startTime={timeUnit.start_time}
+        endTime={timeUnit.end_time}
+        id={timeUnit.id}
+      />
     </>
   );
 };
