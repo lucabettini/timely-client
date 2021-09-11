@@ -39,9 +39,13 @@ const SideNav = (props) => {
           <WarningRoundedIcon className={classes.icons} />
           <ListItemText primary='Overdue' className={classes.text} />
         </ListItem>
-        <ListItem button component='a'>
+        <ListItem
+          button
+          component='a'
+          onClick={() => history.push('/tracking')}
+        >
           <BallotIcon className={classes.icons} />
-          <ListItemText primary='Open' className={classes.text} />
+          <ListItemText primary='Tracking' className={classes.text} />
         </ListItem>
 
         <Divider />

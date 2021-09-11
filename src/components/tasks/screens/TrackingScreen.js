@@ -4,15 +4,15 @@ import useAuth from '../../../hooks/useAuth';
 import Loader from '../../global/Loader';
 import {
   useGetActiveTimeUnitQuery,
-  useGetTasksByWeekQuery,
+  useGetOpenTasksQuery,
 } from '../../../redux/timely';
 import TasksScreen from './global/TasksScreen';
 
-const HomeScreen = () => {
+const TrackingScreen = () => {
   const auth = useAuth();
   auth.authOnly();
 
-  const { data: tasks, isSuccess: tasksAreLoaded } = useGetTasksByWeekQuery();
+  const { data: tasks, isSuccess: tasksAreLoaded } = useGetOpenTasksQuery();
   const { data: timeUnit, isSuccess: timeUnitIsLoaded } =
     useGetActiveTimeUnitQuery();
 
@@ -22,4 +22,4 @@ const HomeScreen = () => {
   return <Loader />;
 };
 
-export default HomeScreen;
+export default TrackingScreen;

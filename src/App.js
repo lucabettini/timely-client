@@ -13,6 +13,7 @@ import BucketScreen from './components/tasks/screens/BucketScreen';
 import AreaScreen from './components/tasks/screens/AreaScreen';
 import TaskScreen from './components/tasks/screens/TaskScreen';
 import EditTaskForm from './components/tasks/forms/EditTaskForm';
+import TrackingScreen from './components/tasks/screens/TrackingScreen';
 
 const theme = createTheme({
   palette: {
@@ -48,6 +49,9 @@ function App() {
               <Route exact path='/home'>
                 <HomeScreen />
               </Route>
+              <Route exact path='/tracking'>
+                <TrackingScreen />
+              </Route>
               <Route exact path='/area/:area'>
                 <AreaScreen />
               </Route>
@@ -57,6 +61,7 @@ function App() {
               <Route exact path='/tasks/:id'>
                 <TaskScreen />
               </Route>
+              {/* FORMS */}
               <Route exact path='/addTask'>
                 <AddTaskForm />
               </Route>
@@ -64,8 +69,6 @@ function App() {
                 <EditTaskForm />
               </Route>
             </BaseScreen>
-
-            {/* FORMS */}
           </Switch>
         </Router>
       </ThemeProvider>

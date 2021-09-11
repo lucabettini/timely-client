@@ -73,7 +73,6 @@ const TaskGrid = ({ task, timeUnit, ...props }) => {
         await axios.patch(`/api/tasks/${task.id}/recurring/complete`, null, {
           headers: { jwt: token },
         });
-        task.recurring = null;
       } else {
         await axios.patch(url, null, {
           headers: { jwt: token },
