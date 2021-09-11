@@ -19,49 +19,45 @@ import LoopIcon from '@material-ui/icons/Loop';
 import useAuth from '../../../../hooks/useAuth';
 import { getDate, getDuration } from '../../../../utils';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectStop, setStop } from '../../../../redux/timeUnitSlice';
+import {
+  resetCount,
+  selectCount,
+  selectTimerId,
+  selectTaskId,
+} from '../../../../redux/timeUnitSlice';
 
 const TaskGrid = ({ task, timeUnit, ...props }) => {
   const token = useAuth().getToken();
   const history = useHistory();
   const dispatch = useDispatch();
 
-  const [count, setCount] = useState(
-    timeUnit ? Date.now() / 1000 - Date.parse(timeUnit.start_time) / 1000 : 0
-  );
   const [completed, setCompleted] = useState(task.completed);
   const [loading, setLoading] = useState(false);
-  const stop = useSelector(selectStop);
+
+  const count = useSelector(selectCount);
+  const timeUnitTaskId = useSelector(selectTaskId);
+  const interval = useSelector(selectTimerId);
 
   useEffect(() => {
     setCompleted(task.completed);
   }, [task.completed]);
 
   useEffect(() => {
-    if (timeUnit && !stop) {
-      const interval = setInterval(() => {
-        setCount((count) => count + 1);
-      }, 1000);
-      return () => {
-        clearInterval(interval);
-      };
-    }
-  }, [timeUnit, stop]);
-
-  useEffect(() => {
-    setCount(0);
-    dispatch(setStop(false));
+    dispatch(resetCount());
   }, [task.duration, dispatch]);
 
   const handleTimeUnit = () => {
-    if (timeUnit) {
-      dispatch(setStop(true));
+    if (interval) {
+      clearInterval(interval);
     }
     props.handleTimeUnit(task.id);
   };
 
   const getTime = () => {
-    return getDuration(task.duration + count);
+    if (task.id === timeUnitTaskId) {
+      return getDuration(task.duration + count);
+    }
+    return getDuration(task.duration);
   };
 
   const classes = useStyles({ completed: completed });

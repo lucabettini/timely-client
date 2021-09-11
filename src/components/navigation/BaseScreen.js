@@ -61,11 +61,11 @@ function BaseScreen(props) {
         <div className={classes.toolbar} />
         {props.children}
       </main>
-      {/* {data.id &&  */}
-      <nav>
-        <TimeUnitBar data={data} />
-      </nav>
-      {/* } */}
+      {data?.id && (
+        <nav>
+          <TimeUnitBar timeUnit={data} />
+        </nav>
+      )}
     </div>
   );
 }
