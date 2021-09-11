@@ -53,13 +53,20 @@ const EditTimeUnitDialog = ({ open, setOpen, ...props }) => {
   const handleDelete = async (e) => {
     e.preventDefault();
     await deleteTimeUnit(props.id);
+    setDestroy(false);
     setOpen(false);
   };
 
   if (editIsLoading || deleteIsLoading) return <Loader />;
 
   return (
-    <Dialog open={open} onClose={() => setOpen(false)}>
+    <Dialog
+      open={open}
+      onClose={() => {
+        setOpen(false);
+        setDestroy(false);
+      }}
+    >
       {!destroy && (
         <form
           noValidate

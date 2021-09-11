@@ -17,8 +17,6 @@ const TimeUnitGrid = ({ timeUnit }) => {
       <Paper className={classes.paper} variant='outlined'>
         <Grid container className={classes.container}>
           <Grid item container alignItems='center' xs={2} sm={1}>
-            {/* <Grid item xs={2}> */}
-
             <IconButton
               className={classes.icon}
               onClick={() => setOpenDialog(true)}

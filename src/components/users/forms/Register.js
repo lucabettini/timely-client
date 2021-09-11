@@ -10,6 +10,7 @@ import useAuth from '../../../hooks/useAuth';
 import useValidation from '../../../hooks/useValidation';
 import CustomInput from '../../global/CustomInput';
 import Loader from '../../global/Loader';
+import FormError from '../../global/FormError';
 
 const Register = () => {
   const classes = useStyles();
@@ -19,6 +20,7 @@ const Register = () => {
   auth.guestOnly();
 
   const [status, setStatus] = useState(null);
+  const [invalid, setInvalid] = useState(null);
 
   const form = useValidation({
     username: '',
@@ -59,6 +61,14 @@ const Register = () => {
         auth.login(res.headers.jwt);
         history.push('/home');
       } catch (error) {
+        // Name or email already been taken
+        if (error.response?.data?.errors?.name) {
+          setStatus('error');
+          setInvalid('username');
+        } else if (error.response?.data?.errors?.email) {
+          setStatus('error');
+          setInvalid('email');
+        }
         // TO DO: integrate with global error handling
         // history.push('/error');
         console.log(error);
@@ -91,6 +101,12 @@ const Register = () => {
           <form noValidate autoComplete='off' onSubmit={handleSubmit}>
             <Paper className={classes.form}>
               <Grid container direction='column' spacing={3}>
+                (dopo Grid container column)
+                {status === 'error' && (
+                  <Grid item xs={12}>
+                    <FormError>The {invalid} has already been taken</FormError>
+                  </Grid>
+                )}
                 <Grid item xs={12}>
                   <CustomInput
                     schema={schema.username}
@@ -126,7 +142,6 @@ const Register = () => {
                     Forgot password?
                   </a>
                 </Grid>
-
                 <Grid container item xs={12} justifyContent='center'>
                   <Button
                     type='submit'
