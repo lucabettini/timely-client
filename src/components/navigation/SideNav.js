@@ -2,7 +2,13 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
 
-import { Divider, List, ListItem, ListItemText } from '@material-ui/core';
+import {
+  Badge,
+  Divider,
+  List,
+  ListItem,
+  ListItemText,
+} from '@material-ui/core';
 import BallotIcon from '@material-ui/icons/Ballot';
 import WarningRoundedIcon from '@material-ui/icons/WarningRounded';
 import HomeRoundedIcon from '@material-ui/icons/HomeRounded';
@@ -12,6 +18,7 @@ import { makeStyles } from '@material-ui/styles';
 import { selectAreas, selectStatus, fetchAreas } from '../../redux/tasksSlice';
 import useAuth from '../../hooks/useAuth';
 import Loader from '../global/Loader';
+import { useGetOverdueTasksQuery } from '../../redux/timely';
 
 const SideNav = (props) => {
   const history = useHistory();
@@ -27,6 +34,8 @@ const SideNav = (props) => {
   }, [dispatch, token]);
 
   const areas = useSelector(selectAreas);
+  const { data: overdue, isSuccess: overdueAreLoaded } =
+    useGetOverdueTasksQuery();
 
   if (status !== 'succeeded') return <Loader />;
 
@@ -35,8 +44,24 @@ const SideNav = (props) => {
       <div className={props.classes} />
       <Divider />
       <List>
-        <ListItem button component='a'>
-          <WarningRoundedIcon className={classes.icons} />
+        <ListItem button component='a' onClick={() => history.push('/overdue')}>
+          {overdueAreLoaded ? (
+            <Badge
+              badgeContent={overdue.length}
+              max={99}
+              color='error'
+              className={classes.icons}
+              anchorOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
+              }}
+            >
+              <WarningRoundedIcon />
+            </Badge>
+          ) : (
+            <WarningRoundedIcon className={classes.icons} />
+          )}
+
           <ListItemText primary='Overdue' className={classes.text} />
         </ListItem>
         <ListItem

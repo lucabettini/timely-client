@@ -14,6 +14,7 @@ import AreaScreen from './components/tasks/screens/AreaScreen';
 import TaskScreen from './components/tasks/screens/TaskScreen';
 import EditTaskForm from './components/tasks/forms/EditTaskForm';
 import TrackingScreen from './components/tasks/screens/TrackingScreen';
+import OverdueScreen from './components/tasks/screens/OverdueScreen';
 
 const theme = createTheme({
   palette: {
@@ -51,6 +52,9 @@ function App() {
               </Route>
               <Route exact path='/tracking'>
                 <TrackingScreen />
+              </Route>
+              <Route exact path='/overdue'>
+                <OverdueScreen />
               </Route>
               <Route exact path='/area/:area'>
                 <AreaScreen />

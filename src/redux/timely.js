@@ -26,6 +26,11 @@ export const timelyApi = createApi({
       transformResponse: (response) => response.data,
       providesTags: ['TimeUnit'],
     }),
+    getOverdueTasks: builder.query({
+      query: () => '/tasks/overdue',
+      transformResponse: (response) => response.data,
+      providesTags: ['TimeUnit'],
+    }),
     getActiveTimeUnit: builder.query({
       query: () => '/time_unit',
       transformResponse: (response) => response.data,
@@ -68,6 +73,7 @@ export const {
   useGetTasksByWeekQuery,
   useGetTaskByIdQuery,
   useGetOpenTasksQuery,
+  useGetOverdueTasksQuery,
   useGetActiveTimeUnitQuery,
   useStartTimeUnitMutation,
   useEditTimeUnitMutation,

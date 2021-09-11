@@ -31,6 +31,7 @@ const TaskGrid = ({ task, timeUnit, ...props }) => {
   const history = useHistory();
   const dispatch = useDispatch();
 
+  const [recurring, setRecurring] = useState(!!task.recurring);
   const [completed, setCompleted] = useState(task.completed);
   const [loading, setLoading] = useState(false);
 
@@ -69,10 +70,11 @@ const TaskGrid = ({ task, timeUnit, ...props }) => {
       ? `/api/tasks/${task.id}/incomplete`
       : `/api/tasks/${task.id}/complete`;
     try {
-      if (task.recurring) {
+      if (task.recurring && recurring) {
         await axios.patch(`/api/tasks/${task.id}/recurring/complete`, null, {
           headers: { jwt: token },
         });
+        setRecurring(false);
       } else {
         await axios.patch(url, null, {
           headers: { jwt: token },
@@ -117,7 +119,7 @@ const TaskGrid = ({ task, timeUnit, ...props }) => {
               </Typography>
             </Grid>
             <Grid item xs={2}>
-              {task.recurring && <LoopIcon className={classes.loop} />}
+              {recurring && <LoopIcon className={classes.loop} />}
             </Grid>
             <Grid item xs={5}>
               <Typography variant='body2' className={classes.bucket}>
