@@ -2,7 +2,11 @@ import React from 'react';
 import { useHistory, useParams } from 'react-router';
 
 import useAuth from '../../../hooks/useAuth';
-import { useEditRecurringMutation } from '../../../redux/endpoints/editRecurringTasks';
+import {
+  useAddRecurringMutation,
+  useDeleteRecurringMutation,
+  useEditRecurringMutation,
+} from '../../../redux/endpoints/editRecurringTasks';
 import { useEditTaskMutation } from '../../../redux/endpoints/editTasks';
 import { useGetTaskByIdQuery } from '../../../redux/endpoints/getTasks';
 import { setDateToISO } from '../../../utils';
@@ -20,6 +24,9 @@ const EditTaskForm = () => {
   const [editTask, { isLoading }] = useEditTaskMutation();
   const [editRecurring, { editRecurringIsLoading }] =
     useEditRecurringMutation();
+  const [addRecurring, { addRecurringIsLoading }] = useAddRecurringMutation();
+  const [deleteRecurring, { deleteRecurringIsLoading }] =
+    useDeleteRecurringMutation();
 
   const handleRecurringSubmit = async (data, id) => {
     const values = {
@@ -30,16 +37,28 @@ const EditTaskForm = () => {
       values.occurrences_left = data.occurrences;
     if (data.choice === 'end_date') values.end_date = setDateToISO(data.date);
 
-    await editRecurring({ id, values });
+    if (!task.recurring) {
+      await addRecurring({ id, values });
+    } else {
+      await editRecurring({ id, values });
+    }
   };
 
   const handleSubmit = async (data) => {
     await editTask({ id: params.id, values: data.task });
     if (data.recurring) await handleRecurringSubmit(data.recurring, params.id);
-    history.push('/home');
+    if (task.recurring && !data.recurring) await deleteRecurring(params.id);
+    history.goBack();
   };
 
-  if (!isSuccess || isLoading || editRecurringIsLoading) return <Loader />;
+  if (
+    !isSuccess ||
+    isLoading ||
+    editRecurringIsLoading ||
+    addRecurringIsLoading ||
+    deleteRecurringIsLoading
+  )
+    return <Loader />;
 
   return <TaskForm handleSubmit={handleSubmit} initialValues={task} />;
 };

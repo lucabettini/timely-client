@@ -8,7 +8,7 @@ const editTasks = timelyApi.injectEndpoints({
         method: 'POST',
         body: values,
       }),
-      invalidatesTags: ['Tasks'],
+      invalidatesTags: ['Tasks', 'Areas', 'AreaWithBuckets', 'Bucket'],
     }),
 
     editTask: builder.mutation({

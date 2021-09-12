@@ -33,9 +33,9 @@ const getTasks = timelyApi.injectEndpoints({
     }),
     getTasksByBucket: builder.query({
       query: ({ area, bucket }) =>
-        `/bucket/?area=area=${encodeURIComponent(
-          area
-        )}&bucket=${encodeURIComponent(bucket)}`,
+        `/bucket/?area=${encodeURIComponent(area)}&bucket=${encodeURIComponent(
+          bucket
+        )}`,
       transformResponse: (response) => response.data,
       providesTags: ['Bucket', 'Tasks'],
     }),
