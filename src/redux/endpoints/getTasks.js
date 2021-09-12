@@ -5,21 +5,21 @@ const getTasks = timelyApi.injectEndpoints({
     getTasksByWeek: builder.query({
       query: () => '/tasks/week',
       transformResponse: (response) => response.data,
-      providesTags: ['TimeUnit'],
+      providesTags: ['TimeUnit', 'Tasks'],
     }),
     getTaskById: builder.query({
       query: (id) => `/tasks/${id}`,
-      providesTags: ['TimeUnit'],
+      providesTags: ['TimeUnit', 'Tasks'],
     }),
     getOpenTasks: builder.query({
       query: () => '/tasks/open',
       transformResponse: (response) => response.data,
-      providesTags: ['TimeUnit'],
+      providesTags: ['TimeUnit', 'Tasks'],
     }),
     getOverdueTasks: builder.query({
       query: () => '/tasks/overdue',
       transformResponse: (response) => response.data,
-      providesTags: ['TimeUnit'],
+      providesTags: ['TimeUnit', 'Tasks'],
     }),
   }),
   overrideExisting: false,

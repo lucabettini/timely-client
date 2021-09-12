@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
-import axios from 'axios';
 
 import {
   Checkbox,
@@ -16,7 +15,6 @@ import PlayCircleFilledIcon from '@material-ui/icons/PlayCircleFilled';
 import PauseCircleFilledIcon from '@material-ui/icons/PauseCircleFilled';
 import LoopIcon from '@material-ui/icons/Loop';
 
-import useAuth from '../../../../hooks/useAuth';
 import { getDate, getDuration } from '../../../../utils';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -25,15 +23,21 @@ import {
   selectTimerId,
   selectTaskId,
 } from '../../../../redux/timeUnitSlice';
+import {
+  useCompleteRecurringTaskMutation,
+  useToggleCompleteTaskMutation,
+} from '../../../../redux/endpoints/editTasks';
 
 const TaskGrid = ({ task, timeUnit, ...props }) => {
-  const token = useAuth().getToken();
   const history = useHistory();
   const dispatch = useDispatch();
 
-  const [recurring, setRecurring] = useState(!!task.recurring);
   const [completed, setCompleted] = useState(task.completed);
-  const [loading, setLoading] = useState(false);
+
+  const [toggleCompleteTask, { isLoading: toggleIsLoading }] =
+    useToggleCompleteTaskMutation();
+  const [completeRecurringTask, { isLoading: completeRecurringIsLoading }] =
+    useCompleteRecurringTaskMutation();
 
   const count = useSelector(selectCount);
   const timeUnitTaskId = useSelector(selectTaskId);
@@ -64,31 +68,10 @@ const TaskGrid = ({ task, timeUnit, ...props }) => {
   const classes = useStyles({ completed: completed });
 
   const handleComplete = async () => {
-    setLoading(true);
-
-    const url = completed
-      ? `/api/tasks/${task.id}/incomplete`
-      : `/api/tasks/${task.id}/complete`;
-    try {
-      if (task.recurring && recurring) {
-        await axios.patch(`/api/tasks/${task.id}/recurring/complete`, null, {
-          headers: { jwt: token },
-        });
-        setRecurring(false);
-      } else {
-        await axios.patch(url, null, {
-          headers: { jwt: token },
-        });
-      }
-      if (props.setCompletedOnParent !== undefined) {
-        props.setCompletedOnParent(task.id, !completed);
-      } else {
-        setCompleted(!completed);
-      }
-
-      setLoading(false);
-    } catch (error) {
-      console.log(error);
+    if (task.recurring) {
+      await completeRecurringTask(task.id);
+    } else {
+      await toggleCompleteTask({ id: task.id, complete: !completed });
     }
   };
 
@@ -98,7 +81,7 @@ const TaskGrid = ({ task, timeUnit, ...props }) => {
         <Grid container item className={classes.container} alignItems='center'>
           <Hidden lgUp>
             <Grid item xs={2}>
-              {loading ? (
+              {toggleIsLoading || completeRecurringIsLoading ? (
                 <CircularProgress className={classes.loader} />
               ) : (
                 <Checkbox
@@ -119,7 +102,7 @@ const TaskGrid = ({ task, timeUnit, ...props }) => {
               </Typography>
             </Grid>
             <Grid item xs={2}>
-              {recurring && <LoopIcon className={classes.loop} />}
+              {task.recurring && <LoopIcon className={classes.loop} />}
             </Grid>
             <Grid item xs={5}>
               <Typography variant='body2' className={classes.bucket}>
@@ -153,7 +136,7 @@ const TaskGrid = ({ task, timeUnit, ...props }) => {
 
           <Hidden mdDown>
             <Grid item xs={1} container alignItems='center'>
-              {loading ? (
+              {toggleIsLoading || completeRecurringIsLoading ? (
                 <CircularProgress className={classes.loader} />
               ) : (
                 <Checkbox

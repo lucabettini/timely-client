@@ -1,8 +1,11 @@
-import axios from 'axios';
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
 import { useHistory } from 'react-router';
 
 import useAuth from '../../../hooks/useAuth';
+import {
+  useAddRecurringMutation,
+  useAddTaskMutation,
+} from '../../../redux/endpoints/editTasks';
 import Loader from '../../global/Loader';
 import TaskForm from './TaskForm';
 
@@ -11,9 +14,10 @@ const AddTaskForm = () => {
 
   const auth = useAuth();
   auth.authOnly();
-  const token = auth.getToken();
 
-  const [loading, setLoading] = useState(false);
+  const [addTask, { isLoading }] = useAddTaskMutation();
+  const [addRecurring, { isLoading: addRecurringIsLoading }] =
+    useAddRecurringMutation();
 
   const handleRecurringSubmit = async (data, id) => {
     const values = {
@@ -24,27 +28,18 @@ const AddTaskForm = () => {
       values.occurrences_left = data.occurrences;
     if (data.choice === 'end_date') values.end_date = data.end_date;
 
-    await axios.post(`/api/tasks/${id}/recurring`, values, {
-      headers: { jwt: token },
-    });
+    await addRecurring({ id, values });
   };
 
   const handleSubmit = async (data) => {
-    try {
-      setLoading(true);
-      const res = await axios.post('/api/tasks', data.task, {
-        headers: { jwt: token },
-      });
-      console.log(res);
+    const response = await addTask(data.task).unwrap();
 
-      if (data.recurring) handleRecurringSubmit(data.recurring, res.data.id);
-      history.push('/home');
-    } catch (error) {
-      console.log(error);
-    }
+    if (data.recurring)
+      await handleRecurringSubmit(data.recurring, response.id);
+    history.push('/home');
   };
 
-  if (loading) return <Loader />;
+  if (isLoading || addRecurringIsLoading) return <Loader />;
 
   return <TaskForm handleSubmit={handleSubmit} />;
 };

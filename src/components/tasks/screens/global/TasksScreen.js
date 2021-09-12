@@ -6,7 +6,7 @@ import TaskGrid from './TaskGrid';
 import {
   useStartTimeUnitMutation,
   useEditTimeUnitMutation,
-} from '../../../../redux/timely';
+} from '../../../../redux/endpoints/timeUnit';
 
 const TasksScreen = ({ tasks, timeUnit }) => {
   const classes = useStyles();

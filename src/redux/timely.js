@@ -10,6 +10,6 @@ export const timelyApi = createApi({
       return headers;
     },
   }),
-  tagTypes: ['TimeUnit'],
+  tagTypes: ['TimeUnit', 'Tasks'],
   endpoints: (builder) => ({}),
 });

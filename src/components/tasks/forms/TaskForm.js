@@ -60,7 +60,9 @@ const TaskForm = (props) => {
   // OPTIONAL FIELDS OR FIELDS THAT ALWAYS HAVE A VALID VALUE
   const [fields, setFields] = useState({
     description: props.initialValues?.description ?? '',
-    date: props.initialValues?.scheduled_for ?? new Date(),
+    date: props.initialValues?.scheduled_for
+      ? new Date(Date.parse(props.initialValues?.scheduled_for))
+      : new Date(),
     tracked: props.initialValues?.tracked ?? true,
     repeat:
       props.initialValues && props.initialValues?.recurring === null
@@ -88,10 +90,12 @@ const TaskForm = (props) => {
 
   const [choice, setChoice] = useState(getChoice());
   const [date, setDate] = useState(
-    props.initialValues?.recurring?.end_date ?? new Date()
+    props.initialValues?.recurring?.end_date
+      ? new Date(Date.parse(props.initialValues?.recurring?.end_date))
+      : new Date()
   );
   const [frequency, setFrequency] = useState(
-    props.initialValues?.recurring?.frequency ?? 'day'
+    props.initialValues?.recurring?.frequency || 'day'
   );
 
   const [recurringFields, setRecurringFields] = useState({
@@ -144,7 +148,7 @@ const TaskForm = (props) => {
     if (fields.repeat) {
       values.recurring = {
         ...recurringFields,
-        date: setDateToISO(date),
+        date,
         frequency,
         choice,
       };
@@ -235,7 +239,7 @@ const TaskForm = (props) => {
                     />
                   }
                   label='Track the time of this task'
-                  className={fields.tracked ? classes.trackedLabelOn : null}
+                  className={fields.tracked ? null : classes.trackedLabelOff}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -321,7 +325,7 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.grey[600],
     marginBottom: '2px',
   },
-  trackedLabelOn: {
+  trackedLabelOff: {
     color: theme.palette.grey[600],
   },
 }));

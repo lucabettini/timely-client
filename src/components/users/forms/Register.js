@@ -101,7 +101,6 @@ const Register = () => {
           <form noValidate autoComplete='off' onSubmit={handleSubmit}>
             <Paper className={classes.form}>
               <Grid container direction='column' spacing={3}>
-                (dopo Grid container column)
                 {status === 'error' && (
                   <Grid item xs={12}>
                     <FormError>The {invalid} has already been taken</FormError>

@@ -50,14 +50,14 @@ const RecurringTaskForm = ({
             name='frequency'
             aria-label='frequency'
             value={frequency}
-            onChange={(e) => setFrequency()}
+            onChange={(e) => setFrequency(e.target.value)}
             displayEmpty
             className={classes.selectEmpty}
           >
-            <MenuItem value={'day'}>day{fields.interval > 1 && 's'}</MenuItem>
-            <MenuItem value={'week'}>week</MenuItem>
-            <MenuItem value={'month'}>month</MenuItem>
-            <MenuItem value={'year'}>year</MenuItem>
+            <MenuItem value='day'>day{fields.interval > 1 && 's'}</MenuItem>
+            <MenuItem value='week'>week{fields.interval > 1 && 's'}</MenuItem>
+            <MenuItem value='month'>month{fields.interval > 1 && 's'}</MenuItem>
+            <MenuItem value='year'>year{fields.interval > 1 && 's'}</MenuItem>
           </Select>
         </FormControl>
       </Grid>
@@ -111,7 +111,7 @@ const RecurringTaskForm = ({
                       variant='inline'
                       format='dd/MM/yyyy'
                       value={fields.end_date}
-                      onChange={(date) => setDate(date.toISOString())}
+                      onChange={(date) => setDate(date)}
                       KeyboardButtonProps={{
                         'aria-label': 'change date',
                       }}
