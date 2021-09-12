@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { Redirect, useHistory, useParams } from 'react-router';
+import React, { useState } from 'react';
+import { useHistory, useParams } from 'react-router';
 
 import {
   Card,
@@ -14,41 +13,27 @@ import { makeStyles } from '@material-ui/styles';
 import EditIcon from '@material-ui/icons/Edit';
 
 import useAuth from '../../../hooks/useAuth';
-import {
-  selectAreas,
-  selectStatus,
-  fetchAreas,
-} from '../../../redux/tasksSlice';
 import Loader from '../../global/Loader';
 import EditDialog from './global/EditDialog';
+import { useGetAreaWithBucketListQuery } from '../../../redux/endpoints/getTasks';
 
 const AreaScreen = () => {
   const classes = useStyles();
+  const history = useHistory();
+  const params = useParams();
 
   const auth = useAuth();
   auth.authOnly();
-  const token = auth.getToken();
 
-  const history = useHistory();
-  const dispatch = useDispatch();
-  const params = useParams();
-  const areas = useSelector(selectAreas);
-  const status = useSelector(selectStatus);
+  const { data: area, isSuccess } = useGetAreaWithBucketListQuery(params.area);
 
   const [openDialog, setOpenDialog] = useState(false);
-
-  useEffect(() => {
-    dispatch(fetchAreas(token));
-  }, [dispatch, token]);
 
   const handleClick = (bucketName) => {
     history.push(`/bucket/${params.area}/${encodeURIComponent(bucketName)}`);
   };
 
-  if (status !== 'succeeded') return <Loader />;
-
-  if (status === 'succeeded' && !areas[params.area])
-    return <Redirect to='/home' push />;
+  if (!isSuccess) return <Loader />;
 
   return (
     <>
@@ -62,7 +47,7 @@ const AreaScreen = () => {
       </Grid>
 
       <Grid container justifyContent='center' className={classes.root}>
-        {Object.keys(areas[params.area]).map((bucketName) => {
+        {Object.keys(area).map((bucketName) => {
           return (
             <Paper
               elevation={2}
@@ -87,14 +72,14 @@ const AreaScreen = () => {
                       color='secondary'
                       className={classes.count}
                     >
-                      Active: {areas[params.area][bucketName].not_completed}
+                      Active: {area[bucketName].not_completed}
                     </Typography>
                     <Typography
                       variant='body1'
                       color='secondary'
                       className={classes.count}
                     >
-                      Completed: {areas[params.area][bucketName].completed}
+                      Completed: {area[bucketName].completed}
                     </Typography>
                   </Grid>
                 </CardContent>

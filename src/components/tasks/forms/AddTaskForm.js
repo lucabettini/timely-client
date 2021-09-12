@@ -1,11 +1,9 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useHistory } from 'react-router';
 
 import useAuth from '../../../hooks/useAuth';
-import {
-  useAddRecurringMutation,
-  useAddTaskMutation,
-} from '../../../redux/endpoints/editTasks';
+import { useAddRecurringMutation } from '../../../redux/endpoints/editRecurringTasks';
+import { useAddTaskMutation } from '../../../redux/endpoints/editTasks';
 import Loader from '../../global/Loader';
 import TaskForm from './TaskForm';
 
@@ -36,7 +34,7 @@ const AddTaskForm = () => {
 
     if (data.recurring)
       await handleRecurringSubmit(data.recurring, response.id);
-    history.push('/home');
+    history.goBack();
   };
 
   if (isLoading || addRecurringIsLoading) return <Loader />;

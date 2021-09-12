@@ -2,10 +2,8 @@ import React from 'react';
 import { useHistory, useParams } from 'react-router';
 
 import useAuth from '../../../hooks/useAuth';
-import {
-  useEditRecurringMutation,
-  useEditTaskMutation,
-} from '../../../redux/endpoints/editTasks';
+import { useEditRecurringMutation } from '../../../redux/endpoints/editRecurringTasks';
+import { useEditTaskMutation } from '../../../redux/endpoints/editTasks';
 import { useGetTaskByIdQuery } from '../../../redux/endpoints/getTasks';
 import { setDateToISO } from '../../../utils';
 import Loader from '../../global/Loader';

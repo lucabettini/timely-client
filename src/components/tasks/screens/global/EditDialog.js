@@ -1,4 +1,3 @@
-import axios from 'axios';
 import React, { useState } from 'react';
 import { useHistory, useParams } from 'react-router';
 import * as yup from 'yup';
@@ -14,25 +13,29 @@ import {
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 
-import useAuth from '../../../../hooks/useAuth';
 import useValidation from '../../../../hooks/useValidation';
 
 import CustomInput from '../../../global/CustomInput';
-import { useDispatch } from 'react-redux';
-import { fetchAreas } from '../../../../redux/tasksSlice';
 import Loader from '../../../global/Loader';
+import {
+  useDeleteByBucketMutation,
+  useEditAreaNameMutation,
+  useEditBucketNameMutation,
+} from '../../../../redux/endpoints/editTasks';
 
 const EditDialog = ({ open, setOpen, ...props }) => {
-  const token = useAuth().getToken();
-
+  const classes = useStyles();
   const params = useParams();
   const history = useHistory();
-  const dispatch = useDispatch();
 
-  const classes = useStyles();
+  const [editBucketName, { isLoading: isBucketLoading }] =
+    useEditBucketNameMutation();
+  const [editAreaName, { isLoading: isAreaLoading }] =
+    useEditAreaNameMutation();
+  const [deleteByBucket, { isLoading: isDeleteLoading }] =
+    useDeleteByBucketMutation();
 
   const [destroy, setDestroy] = useState(false);
-  const [loading, setLoading] = useState(false);
 
   const editForm = useValidation({
     newName: params[props.name],
@@ -43,55 +46,35 @@ const EditDialog = ({ open, setOpen, ...props }) => {
 
   const handleEdit = async (e) => {
     e.preventDefault();
-    setLoading(true);
 
     const canSubmit = await editForm.onSubmit(editSchema);
     if (!canSubmit) return;
 
-    try {
-      const data = {
-        new_name: editForm.values.newName,
-      };
-      data.old_name = params[props.name];
-      if (params.bucket) data.area = params.area;
-
-      await axios.patch(`/api/${props.name}`, data, {
-        headers: { jwt: token },
-      });
+    const data = {
+      new_name: editForm.values.newName,
+    };
+    data.old_name = params[props.name];
+    if (params.bucket) {
+      data.area = params.area;
+      await editBucketName(data);
       setOpen(false);
-      if (params.bucket) {
-        history.push(
-          `/bucket/${params.area}/${encodeURIComponent(
-            editForm.values.newName
-          )}`
-        );
-      } else {
-        dispatch(fetchAreas(token));
-        history.push(`/area/${encodeURIComponent(editForm.values.newName)}`);
-      }
-    } catch (error) {
-      console.log(error);
+      history.push(
+        `/bucket/${params.area}/${encodeURIComponent(editForm.values.newName)}`
+      );
+    } else {
+      await editAreaName(data);
+      setOpen(false);
+      history.push(`/area/${encodeURIComponent(editForm.values.newName)}`);
     }
   };
 
   const handleDelete = async (e) => {
     e.preventDefault();
-
-    setLoading(true);
-    try {
-      await axios.delete(
-        `/api/${props.name}/?area=${params.area}&bucket=${params.bucket}`,
-        {
-          headers: { jwt: token },
-        }
-      );
-      history.push(`/area/${params.area}`);
-    } catch (error) {
-      console.log(error);
-    }
+    await deleteByBucket({ area: params.area, bucket: params.bucket });
+    history.push(`/area/${params.area}`);
   };
 
-  if (loading) return <Loader />;
+  if (isBucketLoading || isAreaLoading || isDeleteLoading) return <Loader />;
 
   return (
     <Dialog open={open} onClose={() => setOpen(false)}>

@@ -23,10 +23,8 @@ import {
   selectTimerId,
   selectTaskId,
 } from '../../../../redux/timeUnitSlice';
-import {
-  useCompleteRecurringTaskMutation,
-  useToggleCompleteTaskMutation,
-} from '../../../../redux/endpoints/editTasks';
+import { useToggleCompleteTaskMutation } from '../../../../redux/endpoints/editTasks';
+import { useCompleteRecurringTaskMutation } from '../../../../redux/endpoints/editRecurringTasks';
 
 const TaskGrid = ({ task, timeUnit, ...props }) => {
   const history = useHistory();

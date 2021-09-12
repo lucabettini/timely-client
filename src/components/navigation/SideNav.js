@@ -1,5 +1,4 @@
-import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React from 'react';
 import { useHistory } from 'react-router';
 
 import {
@@ -15,29 +14,21 @@ import HomeRoundedIcon from '@material-ui/icons/HomeRounded';
 import CategoryRoundedIcon from '@material-ui/icons/CategoryRounded';
 import { makeStyles } from '@material-ui/styles';
 
-import { selectAreas, selectStatus, fetchAreas } from '../../redux/tasksSlice';
-import useAuth from '../../hooks/useAuth';
 import Loader from '../global/Loader';
-import { useGetOverdueTasksQuery } from '../../redux/endpoints/getTasks';
+import {
+  useGetAreasQuery,
+  useGetOverdueTasksQuery,
+} from '../../redux/endpoints/getTasks';
 
 const SideNav = (props) => {
   const history = useHistory();
-  const dispatch = useDispatch();
-  const status = useSelector(selectStatus);
-
-  const token = useAuth().getToken();
-
   const classes = useStyles();
 
-  useEffect(() => {
-    dispatch(fetchAreas(token));
-  }, [dispatch, token]);
-
-  const areas = useSelector(selectAreas);
+  const { data: areas, isSuccess } = useGetAreasQuery();
   const { data: overdue, isSuccess: overdueAreLoaded } =
     useGetOverdueTasksQuery();
 
-  if (status !== 'succeeded') return <Loader />;
+  if (!isSuccess) return <Loader />;
 
   return (
     <div>
@@ -79,7 +70,7 @@ const SideNav = (props) => {
           <ListItemText primary='This week' className={classes.text} />
         </ListItem>
         <Divider />
-        {Object.keys(areas).map((area) => {
+        {areas.map((area) => {
           return (
             <ListItem
               button

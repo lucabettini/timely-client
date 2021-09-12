@@ -10,69 +10,69 @@ const editTasks = timelyApi.injectEndpoints({
       }),
       invalidatesTags: ['Tasks'],
     }),
-    addRecurring: builder.mutation({
-      query: ({ id, values }) => ({
-        url: `/tasks/${id}/recurring`,
-        method: 'POST',
-        body: values,
-      }),
-      invalidatesTags: ['Tasks'],
-    }),
+
     editTask: builder.mutation({
       query: ({ id, values }) => ({
         url: `/tasks/${id}`,
         method: 'PUT',
         body: values,
       }),
-      invalidatesTags: ['Tasks'],
+      invalidatesTags: ['Tasks', 'Areas', 'AreaWithBuckets', 'Bucket'],
     }),
-    editRecurring: builder.mutation({
-      query: ({ id, values }) => ({
-        url: `/tasks/${id}/recurring`,
-        method: 'PUT',
-        body: values,
-      }),
-      invalidatesTags: ['Tasks'],
-    }),
+
     deleteTask: builder.mutation({
       query: (id) => ({
         url: `/tasks/${id}`,
         method: 'DELETE',
       }),
-      invalidatesTags: ['Tasks'],
+      invalidatesTags: ['Tasks', 'Areas', 'AreaWithBuckets', 'Bucket'],
     }),
-    deleteRecurring: builder.mutation({
-      query: (id) => ({
-        url: `/tasks/${id}/recurring`,
-        method: 'DELETE',
-      }),
-      invalidatesTags: ['Tasks'],
-    }),
+
     toggleCompleteTask: builder.mutation({
       query: ({ id, complete }) => ({
         url: complete ? `/tasks/${id}/complete` : `/tasks/${id}/incomplete`,
         method: 'PATCH',
       }),
-      invalidatesTags: ['Tasks'],
+      invalidatesTags: ['Tasks', 'AreaWithBuckets', 'Bucket'],
     }),
-    completeRecurringTask: builder.mutation({
-      query: (id) => ({
-        url: `/tasks/${id}/recurring/complete`,
+
+    editAreaName: builder.mutation({
+      query: (values) => ({
+        url: '/area',
         method: 'PATCH',
+        body: values,
       }),
-      invalidatesTags: ['Tasks'],
+      invalidatesTags: ['Areas', 'AreaWithBuckets', 'Bucket'],
     }),
+
+    editBucketName: builder.mutation({
+      query: (values) => ({
+        url: '/bucket',
+        method: 'PATCH',
+        body: values,
+      }),
+      invalidatesTags: ['AreaWithBuckets', 'Bucket'],
+    }),
+
+    deleteByBucket: builder.mutation({
+      query: ({ area, bucket }) => ({
+        url: `/bucket/?area=${encodeURIComponent(
+          area
+        )}&bucket=${encodeURIComponent(bucket)}`,
+        method: 'DELETE',
+      }),
+    }),
+    invalidatesTags: ['Areas', 'AreaWithBuckets', 'Bucket'],
   }),
   overrideExisting: false,
 });
 
 export const {
   useAddTaskMutation,
-  useAddRecurringMutation,
   useEditTaskMutation,
-  useEditRecurringMutation,
   useDeleteTaskMutation,
-  useDeleteRecurringMutation,
   useToggleCompleteTaskMutation,
-  useCompleteRecurringTaskMutation,
+  useEditAreaNameMutation,
+  useEditBucketNameMutation,
+  useDeleteByBucketMutation,
 } = editTasks;

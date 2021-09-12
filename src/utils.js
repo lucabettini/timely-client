@@ -1,5 +1,4 @@
 export const getDate = (date) => {
-  console.log(date);
   return Intl.DateTimeFormat('en', {
     weekday: 'long',
     month: 'short',

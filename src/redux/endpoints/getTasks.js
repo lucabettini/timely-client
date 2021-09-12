@@ -21,6 +21,24 @@ const getTasks = timelyApi.injectEndpoints({
       transformResponse: (response) => response.data,
       providesTags: ['TimeUnit', 'Tasks'],
     }),
+    getAreas: builder.query({
+      query: () => '/areas',
+      transformResponse: (response) => response.data,
+      providesTags: ['Areas'],
+    }),
+    getAreaWithBucketList: builder.query({
+      query: (name) => `/area/?area=${encodeURIComponent(name)}`,
+      transformResponse: (response) => response.data,
+      providesTags: ['AreaWithBuckets'],
+    }),
+    getTasksByBucket: builder.query({
+      query: ({ area, bucket }) =>
+        `/bucket/?area=area=${encodeURIComponent(
+          area
+        )}&bucket=${encodeURIComponent(bucket)}`,
+      transformResponse: (response) => response.data,
+      providesTags: ['Bucket', 'Tasks'],
+    }),
   }),
   overrideExisting: false,
 });
@@ -30,4 +48,7 @@ export const {
   useGetTaskByIdQuery,
   useGetOpenTasksQuery,
   useGetOverdueTasksQuery,
+  useGetAreasQuery,
+  useGetAreaWithBucketListQuery,
+  useGetTasksByBucketQuery,
 } = getTasks;

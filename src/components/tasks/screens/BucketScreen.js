@@ -1,6 +1,5 @@
-import axios from 'axios';
-import React, { useEffect, useState } from 'react';
-import { Redirect, useParams } from 'react-router';
+import React, { useState } from 'react';
+import { useParams } from 'react-router';
 
 import { Grid, IconButton, Typography } from '@material-ui/core';
 import { ToggleButton, ToggleButtonGroup } from '@material-ui/lab';
@@ -12,41 +11,22 @@ import AddTaskInput from './global/AddTaskInput';
 import Loader from '../../global/Loader';
 import TaskGrid from './global/TaskGrid';
 import EditDialog from './global/EditDialog';
+import { useGetTasksByBucketQuery } from '../../../redux/endpoints/getTasks';
 
 const BucketScreen = () => {
   const classes = useStyles();
-
   const params = useParams();
+
   const auth = useAuth();
   auth.authOnly();
-  const token = auth.getToken();
 
-  const [tasks, setTasks] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const { data: tasks, isSuccess } = useGetTasksByBucketQuery({
+    area: params.area,
+    bucket: params.bucket,
+  });
+
   const [choice, setChoice] = useState('notCompleted');
   const [openDialog, setOpenDialog] = useState(false);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true);
-        const { data } = await axios.get(
-          `/api/tasks/bucket/?area=${encodeURIComponent(
-            params.area
-          )}&bucket=${encodeURIComponent(params.bucket)}`,
-          {
-            headers: { jwt: token },
-          }
-        );
-        console.log(data);
-        setTasks(data.data);
-        setLoading(false);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    fetchData();
-  }, [params.area, params.bucket, token]);
 
   const handleChoice = (e, value) => {
     if (value !== null) setChoice(value);
@@ -67,9 +47,7 @@ const BucketScreen = () => {
     }
   };
 
-  if (loading) return <Loader />;
-
-  if (!loading && !params.area) return <Redirect to='/home' push />;
+  if (!isSuccess) return <Loader />;
 
   return (
     <>
@@ -109,20 +87,7 @@ const BucketScreen = () => {
         </ToggleButtonGroup>
       </Grid>
       {getTasks(choice).map((task) => (
-        <TaskGrid
-          task={task}
-          key={task.id}
-          setCompletedOnParent={(id, value) => {
-            setTasks((tasks) =>
-              tasks.map((task) => {
-                if (task.id === id) {
-                  task.completed = value;
-                }
-                return task;
-              })
-            );
-          }}
-        />
+        <TaskGrid task={task} key={task.id} />
       ))}
       <EditDialog
         open={openDialog}
