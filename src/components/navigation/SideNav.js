@@ -18,7 +18,7 @@ import { makeStyles } from '@material-ui/styles';
 import { selectAreas, selectStatus, fetchAreas } from '../../redux/tasksSlice';
 import useAuth from '../../hooks/useAuth';
 import Loader from '../global/Loader';
-import { useGetOverdueTasksQuery } from '../../redux/timely';
+import { useGetOverdueTasksQuery } from '../../redux/endpoints/getTasks';
 
 const SideNav = (props) => {
   const history = useHistory();

@@ -2,11 +2,9 @@ import React from 'react';
 
 import useAuth from '../../../hooks/useAuth';
 import Loader from '../../global/Loader';
-import {
-  useGetActiveTimeUnitQuery,
-  useGetTasksByWeekQuery,
-} from '../../../redux/timely';
 import TasksScreen from './global/TasksScreen';
+import { useGetTasksByWeekQuery } from '../../../redux/endpoints/getTasks';
+import { useGetActiveTimeUnitQuery } from '../../../redux/endpoints/timeUnit';
 
 const HomeScreen = () => {
   const auth = useAuth();

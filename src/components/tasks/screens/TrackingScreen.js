@@ -2,11 +2,10 @@ import React from 'react';
 
 import useAuth from '../../../hooks/useAuth';
 import Loader from '../../global/Loader';
-import {
-  useGetActiveTimeUnitQuery,
-  useGetOpenTasksQuery,
-} from '../../../redux/timely';
+
 import TasksScreen from './global/TasksScreen';
+import { useGetOpenTasksQuery } from '../../../redux/endpoints/getTasks';
+import { useGetActiveTimeUnitQuery } from '../../../redux/endpoints/timeUnit';
 
 const TrackingScreen = () => {
   const auth = useAuth();

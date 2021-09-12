@@ -20,12 +20,12 @@ import {
 } from '@material-ui/pickers';
 import 'date-fns';
 import DateFnsUtils from '@date-io/date-fns';
+
+import Loader from '../../../global/Loader';
 import {
   useDeleteTimeUnitMutation,
   useEditTimeUnitMutation,
-} from '../../../../redux/timely';
-
-import Loader from '../../../global/Loader';
+} from '../../../../redux/endpoints/timeUnit';
 
 const EditTimeUnitDialog = ({ open, setOpen, ...props }) => {
   const classes = useStyles();

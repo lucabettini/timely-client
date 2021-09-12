@@ -6,7 +6,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import SideNav from './SideNav';
 import Navbar from './Navbar';
 import TimeUnitBar from './TimeUnitBar';
-import { useGetActiveTimeUnitQuery } from '../../redux/timely';
+import { useGetActiveTimeUnitQuery } from '../../redux/endpoints/timeUnit';
 
 function BaseScreen(props) {
   const { window } = props;

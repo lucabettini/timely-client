@@ -2,11 +2,10 @@ import React from 'react';
 
 import useAuth from '../../../hooks/useAuth';
 import Loader from '../../global/Loader';
-import {
-  useGetActiveTimeUnitQuery,
-  useGetOverdueTasksQuery,
-} from '../../../redux/timely';
 import TasksScreen from './global/TasksScreen';
+
+import { useGetActiveTimeUnitQuery } from '../../../redux/endpoints/timeUnit';
+import { useGetOverdueTasksQuery } from '../../../redux/endpoints/getTasks';
 
 const OverdueScreen = () => {
   const auth = useAuth();

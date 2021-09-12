@@ -6,8 +6,8 @@ import useAuth from '../../../hooks/useAuth';
 import Loader from '../../global/Loader';
 import TaskInfo from './global/TaskInfo';
 import { getDate, getDuration } from '../../../utils';
-import { useGetTaskByIdQuery } from '../../../redux/timely';
 import TimeUnitGrid from './TaskScreen/TimeUnitGrid';
+import { useGetTaskByIdQuery } from '../../../redux/endpoints/getTasks';
 
 const TaskScreen = () => {
   const classes = useStyles();

@@ -9,7 +9,8 @@ import { PauseCircleFilled } from '@material-ui/icons';
 import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
-import { useEditTimeUnitMutation } from '../../redux/timely';
+import { useEditTimeUnitMutation } from '../../redux/endpoints/timeUnit';
+
 import {
   incrementCount,
   selectCount,
