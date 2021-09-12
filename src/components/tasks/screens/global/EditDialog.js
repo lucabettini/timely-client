@@ -32,7 +32,7 @@ const EditDialog = ({ open, setOpen, ...props }) => {
   const classes = useStyles();
 
   const [destroy, setDestroy] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   const editForm = useValidation({
     newName: params[props.name],

@@ -1,4 +1,5 @@
 export const getDate = (date) => {
+  console.log(date);
   return Intl.DateTimeFormat('en', {
     weekday: 'long',
     month: 'short',
@@ -32,4 +33,11 @@ export const getDateAndTime = (date) => {
     minute: '2-digit',
     second: '2-digit',
   }).format(new Date(date));
+};
+
+export const setDateToISO = (date) => {
+  const month = `0${date.getMonth() + 1}`.slice(-2);
+  const day = `0${date.getDate()}`.slice(-2);
+
+  return `${date.getFullYear()}-${month}-${day}T00:00:00.000Z`;
 };

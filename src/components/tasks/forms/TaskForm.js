@@ -23,6 +23,7 @@ import { selectNewTaskName } from '../../../redux/tasksSlice';
 import useValidation from '../../../hooks/useValidation';
 import CustomInput from '../../global/CustomInput';
 import RecurringTaskForm from './RecurringTaskForm';
+import { setDateToISO } from '../../../utils';
 
 const TaskForm = (props) => {
   const classes = useStyles();
@@ -135,7 +136,7 @@ const TaskForm = (props) => {
     const values = {
       task: {
         ...form.values,
-        scheduled_for: fields.date,
+        scheduled_for: setDateToISO(fields.date),
         description: fields.description,
         tracked: fields.tracked,
       },
@@ -143,7 +144,7 @@ const TaskForm = (props) => {
     if (fields.repeat) {
       values.recurring = {
         ...recurringFields,
-        date,
+        date: setDateToISO(date),
         frequency,
         choice,
       };
@@ -202,9 +203,7 @@ const TaskForm = (props) => {
                       label='Date'
                       value={fields.date}
                       style={{ width: '100%' }}
-                      onChange={(date) =>
-                        handleFieldsChange('date', date.toISOString())
-                      }
+                      onChange={(date) => handleFieldsChange('date', date)}
                       KeyboardButtonProps={{
                         'aria-label': 'change date',
                       }}
@@ -236,7 +235,7 @@ const TaskForm = (props) => {
                     />
                   }
                   label='Track the time of this task'
-                  className={!fields.tracked && classes.trackedLabelOn}
+                  className={fields.tracked ? classes.trackedLabelOn : null}
                 />
               </Grid>
               <Grid item xs={12}>

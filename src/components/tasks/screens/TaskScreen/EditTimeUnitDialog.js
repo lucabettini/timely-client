@@ -107,6 +107,7 @@ const EditTimeUnitDialog = ({ open, setOpen, ...props }) => {
                   <KeyboardTimePicker
                     value={startTime}
                     onChange={(date) => setStartTime(date)}
+                    views={['hours', 'minutes', 'seconds']}
                     KeyboardButtonProps={{
                       'aria-label': 'change start time',
                     }}
@@ -135,6 +136,7 @@ const EditTimeUnitDialog = ({ open, setOpen, ...props }) => {
                   <KeyboardTimePicker
                     value={endTime}
                     onChange={(date) => setEndTime(date)}
+                    views={['hours', 'minutes', 'seconds']}
                     KeyboardButtonProps={{
                       'aria-label': 'change end time',
                     }}
