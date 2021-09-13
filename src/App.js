@@ -14,6 +14,8 @@ import TaskScreen from './components/tasks/screens/TaskScreen';
 import EditTaskForm from './components/tasks/forms/EditTaskForm';
 import TrackingScreen from './components/tasks/screens/TrackingScreen';
 import OverdueScreen from './components/tasks/screens/OverdueScreen';
+import ErrorScreen from './components/global/ErrorScreen';
+import ErrorCatcher from './components/global/ErrorCatcher';
 
 const theme = createTheme({
   palette: {
@@ -30,47 +32,52 @@ function App() {
       <ThemeProvider theme={theme}>
         <Router>
           <CssBaseline />
-          {/* GUESTS ROUTES */}
-          <Switch>
-            <Route exact path='/'>
-              <div>Slash</div>
-            </Route>
-            <Route exact path='/login'>
-              <Login />
-            </Route>
-            <Route exact path='/register'>
-              <Register />
-            </Route>
-            {/* PROTECTED ROUTES */}
-            {/* SCREENS */}
-            <BaseScreen>
-              <Route exact path='/home'>
-                <HomeScreen />
+          <ErrorCatcher>
+            <Switch>
+              {/* GUESTS ROUTES */}
+              <Route exact path='/'>
+                <div>Slash</div>
               </Route>
-              <Route exact path='/tracking'>
-                <TrackingScreen />
+              <Route exact path='/login'>
+                <Login />
               </Route>
-              <Route exact path='/overdue'>
-                <OverdueScreen />
+              <Route exact path='/register'>
+                <Register />
               </Route>
-              <Route exact path='/area/:area'>
-                <AreaScreen />
+              <Route exact path='/error'>
+                <ErrorScreen />
               </Route>
-              <Route exact path='/bucket/:area/:bucket'>
-                <BucketScreen />
-              </Route>
-              <Route exact path='/tasks/:id'>
-                <TaskScreen />
-              </Route>
-              {/* FORMS */}
-              <Route exact path='/addTask'>
-                <AddTaskForm />
-              </Route>
-              <Route exact path='/tasks/:id/edit'>
-                <EditTaskForm />
-              </Route>
-            </BaseScreen>
-          </Switch>
+              {/* PROTECTED ROUTES */}
+              {/* SCREENS */}
+              <BaseScreen>
+                <Route exact path='/home'>
+                  <HomeScreen />
+                </Route>
+                <Route exact path='/tracking'>
+                  <TrackingScreen />
+                </Route>
+                <Route exact path='/overdue'>
+                  <OverdueScreen />
+                </Route>
+                <Route exact path='/area/:area'>
+                  <AreaScreen />
+                </Route>
+                <Route exact path='/bucket/:area/:bucket'>
+                  <BucketScreen />
+                </Route>
+                <Route exact path='/tasks/:id'>
+                  <TaskScreen />
+                </Route>
+                {/* FORMS */}
+                <Route exact path='/addTask'>
+                  <AddTaskForm />
+                </Route>
+                <Route exact path='/tasks/:id/edit'>
+                  <EditTaskForm />
+                </Route>
+              </BaseScreen>
+            </Switch>
+          </ErrorCatcher>
         </Router>
       </ThemeProvider>
     </Provider>
