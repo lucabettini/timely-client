@@ -1,19 +1,7 @@
 import { Container, Typography } from '@material-ui/core';
-import React, { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
-import { clearError } from '../../redux/errorsSlice';
+import React from 'react';
 
 const ErrorScreen = () => {
-  const dispatch = useDispatch();
-
-  // Resets global state to error: false after
-  // this screen is rendered.
-  useEffect(() => {
-    return () => {
-      dispatch(clearError());
-    };
-  }, []);
-
   const preventDefault = (event) => event.preventDefault();
 
   return (

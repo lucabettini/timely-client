@@ -11,12 +11,9 @@ import useValidation from '../../../hooks/useValidation';
 import CustomInput from '../../global/CustomInput';
 import Loader from '../../global/Loader';
 import FormError from '../../global/FormError';
-import { useDispatch } from 'react-redux';
-import { throwError } from '../../../redux/errorsSlice';
 
 const Register = () => {
   const classes = useStyles();
-  const dispatch = useDispatch();
   const history = useHistory();
   const auth = useAuth();
   auth.guestOnly();
@@ -71,7 +68,7 @@ const Register = () => {
           setStatus('error');
           setInvalid('email');
         }
-        dispatch(throwError());
+        history.push('/error');
       }
     }
   };
