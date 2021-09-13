@@ -15,6 +15,8 @@ import EditTaskForm from './components/tasks/forms/EditTaskForm';
 import TrackingScreen from './components/tasks/screens/TrackingScreen';
 import OverdueScreen from './components/tasks/screens/OverdueScreen';
 import ErrorScreen from './components/global/ErrorScreen';
+import TomorrowScreen from './components/tasks/screens/TomorrowScreen';
+import WeekScreen from './components/tasks/screens/WeekScreen';
 
 const theme = createTheme({
   palette: {
@@ -50,6 +52,12 @@ function App() {
             <BaseScreen>
               <Route exact path='/home'>
                 <HomeScreen />
+              </Route>
+              <Route exact path='/tomorrow'>
+                <TomorrowScreen />
+              </Route>
+              <Route exact path='/week'>
+                <WeekScreen />
               </Route>
               <Route exact path='/tracking'>
                 <TrackingScreen />

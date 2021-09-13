@@ -1,30 +1,25 @@
 import React from 'react';
 import { Redirect } from 'react-router-dom';
-
 import useAuth from '../../../hooks/useAuth';
 import Loader from '../../global/Loader';
-
 import TasksScreen from './global/TasksScreen';
-import { useGetOpenTasksQuery } from '../../../redux/endpoints/getTasks';
+import { useGetWeekTasksQuery } from '../../../redux/endpoints/getTasks';
 import { useGetActiveTimeUnitQuery } from '../../../redux/endpoints/timeUnit';
 
-const TrackingScreen = () => {
+const WeekScreen = () => {
   const auth = useAuth();
   auth.authOnly();
 
+  const { isSuccess: timeUnitIsLoaded, isError: isTimeUnitError } =
+    useGetActiveTimeUnitQuery();
   const {
     data: tasks,
     isSuccess: tasksAreLoaded,
     isError,
-  } = useGetOpenTasksQuery();
-  const {
-    data: timeUnit,
-    isSuccess: timeUnitIsLoaded,
-    isError: isTimeUnitError,
-  } = useGetActiveTimeUnitQuery();
+  } = useGetWeekTasksQuery();
 
   if (tasksAreLoaded && timeUnitIsLoaded) {
-    return <TasksScreen tasks={tasks} timeUnit={timeUnit} />;
+    return <TasksScreen tasks={tasks} />;
   }
 
   if (isError || isTimeUnitError) return <Redirect push to='/error' />;
@@ -32,4 +27,4 @@ const TrackingScreen = () => {
   return <Loader />;
 };
 
-export default TrackingScreen;
+export default WeekScreen;

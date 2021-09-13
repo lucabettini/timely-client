@@ -11,10 +11,9 @@ const baseQuery = fetchBaseQuery({
 
 const baseQueryWithRedirect = async (args, api, extraOptions) => {
   const result = await baseQuery(args, api, extraOptions);
-  if (result.error && result.error.status === '401') {
+  if (result.error?.status === '401') {
+    console.log(result.error);
     document.location.href = '/login';
-  } else if (result.error) {
-    document.location.href = '/error';
   }
   return result;
 };

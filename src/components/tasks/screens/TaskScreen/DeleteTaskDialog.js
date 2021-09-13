@@ -12,7 +12,7 @@ import { makeStyles } from '@material-ui/styles';
 import Loader from '../../../global/Loader';
 
 import { useDeleteTaskMutation } from '../../../../redux/endpoints/editTasks';
-import { useHistory, useParams } from 'react-router';
+import { useHistory, useParams } from 'react-router-dom';
 
 const DeleteTaskDialog = ({ open, setOpen }) => {
   const classes = useStyles();

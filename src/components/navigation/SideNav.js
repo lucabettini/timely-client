@@ -1,5 +1,5 @@
 import React from 'react';
-import { useHistory } from 'react-router';
+import { useHistory, Redirect } from 'react-router-dom';
 
 import {
   Badge,
@@ -12,6 +12,8 @@ import BallotIcon from '@material-ui/icons/Ballot';
 import WarningRoundedIcon from '@material-ui/icons/WarningRounded';
 import HomeRoundedIcon from '@material-ui/icons/HomeRounded';
 import CategoryRoundedIcon from '@material-ui/icons/CategoryRounded';
+import TodayRoundedIcon from '@material-ui/icons/TodayRounded';
+import NextWeekRoundedIcon from '@material-ui/icons/NextWeekRounded';
 import { makeStyles } from '@material-ui/styles';
 
 import Loader from '../global/Loader';
@@ -24,9 +26,14 @@ const SideNav = (props) => {
   const history = useHistory();
   const classes = useStyles();
 
-  const { data: areas, isSuccess } = useGetAreasQuery();
-  const { data: overdue, isSuccess: overdueAreLoaded } =
-    useGetOverdueTasksQuery();
+  const { data: areas, isSuccess, isError } = useGetAreasQuery();
+  const {
+    data: overdue,
+    isSuccess: overdueAreLoaded,
+    isError: isOverdueError,
+  } = useGetOverdueTasksQuery();
+
+  if (isError || isOverdueError) return <Redirect push to='/error' />;
 
   if (!isSuccess) return <Loader />;
 
@@ -67,6 +74,18 @@ const SideNav = (props) => {
         <Divider />
         <ListItem button component='a' onClick={() => history.push('/home')}>
           <HomeRoundedIcon className={classes.icons} />
+          <ListItemText primary='Today' className={classes.text} />
+        </ListItem>
+        <ListItem
+          button
+          component='a'
+          onClick={() => history.push('/tomorrow')}
+        >
+          <TodayRoundedIcon className={classes.icons} />
+          <ListItemText primary='Tomorrow' className={classes.text} />
+        </ListItem>
+        <ListItem button component='a' onClick={() => history.push('/week')}>
+          <NextWeekRoundedIcon className={classes.icons} />
           <ListItemText primary='This week' className={classes.text} />
         </ListItem>
         <Divider />

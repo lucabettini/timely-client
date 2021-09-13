@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useHistory } from 'react-router';
+import { useHistory, Redirect } from 'react-router-dom';
 
 import {
   Button,
@@ -33,13 +33,13 @@ import {
   useStartTimeUnitMutation,
 } from '../../../../redux/endpoints/timeUnit';
 
-const TaskGrid = ({ task, ...props }) => {
+const TaskGrid = ({ task }) => {
   const history = useHistory();
   const dispatch = useDispatch();
 
   const [completed, setCompleted] = useState(task.completed);
 
-  const { data: timeUnit, isFetching } = useGetActiveTimeUnitQuery();
+  const { data: timeUnit, isFetching, isError } = useGetActiveTimeUnitQuery();
 
   const [toggleCompleteTask, { isLoading: toggleIsLoading }] =
     useToggleCompleteTaskMutation();
@@ -103,6 +103,8 @@ const TaskGrid = ({ task, ...props }) => {
       await toggleCompleteTask({ id: task.id, complete: !completed });
     }
   };
+
+  if (isError) return <Redirect push to='/error' />;
 
   return (
     <>

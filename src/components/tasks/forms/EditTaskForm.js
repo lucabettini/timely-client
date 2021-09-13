@@ -1,5 +1,5 @@
 import React from 'react';
-import { useHistory, useParams } from 'react-router';
+import { useHistory, useParams, Redirect } from 'react-router-dom';
 
 import useAuth from '../../../hooks/useAuth';
 import {
@@ -20,7 +20,7 @@ const EditTaskForm = () => {
   const auth = useAuth();
   auth.authOnly();
 
-  const { data: task, isSuccess } = useGetTaskByIdQuery(params.id);
+  const { data: task, isSuccess, isError } = useGetTaskByIdQuery(params.id);
   const [editTask, { isLoading }] = useEditTaskMutation();
   const [editRecurring, { editRecurringIsLoading }] =
     useEditRecurringMutation();
@@ -59,6 +59,8 @@ const EditTaskForm = () => {
     deleteRecurringIsLoading
   )
     return <Loader />;
+
+  if (isError) return <Redirect push to='/error' />;
 
   return <TaskForm handleSubmit={handleSubmit} initialValues={task} />;
 };

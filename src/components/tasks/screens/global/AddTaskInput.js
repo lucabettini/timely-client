@@ -8,7 +8,7 @@ import {
 import LibraryAddIcon from '@material-ui/icons/LibraryAdd';
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { useHistory } from 'react-router';
+import { useHistory } from 'react-router-dom';
 import { setNewTaskName } from '../../../../redux/tasksSlice';
 import * as yup from 'yup';
 

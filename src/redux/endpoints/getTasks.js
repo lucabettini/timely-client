@@ -2,7 +2,17 @@ import { timelyApi } from '../timely';
 
 const getTasks = timelyApi.injectEndpoints({
   endpoints: (builder) => ({
-    getTasksByWeek: builder.query({
+    getTodayTasks: builder.query({
+      query: () => '/tasks/today',
+      transformResponse: (response) => response.data,
+      providesTags: ['TimeUnit', 'Tasks'],
+    }),
+    getTomorrowTasks: builder.query({
+      query: () => '/tasks/tomorrow',
+      transformResponse: (response) => response.data,
+      providesTags: ['TimeUnit', 'Tasks'],
+    }),
+    getWeekTasks: builder.query({
       query: () => '/tasks/week',
       transformResponse: (response) => response.data,
       providesTags: ['TimeUnit', 'Tasks'],
@@ -44,7 +54,9 @@ const getTasks = timelyApi.injectEndpoints({
 });
 
 export const {
-  useGetTasksByWeekQuery,
+  useGetTodayTasksQuery,
+  useGetTomorrowTasksQuery,
+  useGetWeekTasksQuery,
   useGetTaskByIdQuery,
   useGetOpenTasksQuery,
   useGetOverdueTasksQuery,

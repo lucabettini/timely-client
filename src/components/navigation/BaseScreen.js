@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Redirect } from 'react-router-dom';
 
 import { Drawer, Hidden } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
@@ -13,7 +14,7 @@ function BaseScreen(props) {
   const classes = useStyles();
   const [mobileOpen, setMobileOpen] = useState(false);
 
-  const { data } = useGetActiveTimeUnitQuery();
+  const { data, isError } = useGetActiveTimeUnitQuery();
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -21,6 +22,8 @@ function BaseScreen(props) {
 
   const container =
     window !== undefined ? () => window().document.body : undefined;
+
+  if (isError) return <Redirect push to='/error' />;
 
   return (
     <div className={classes.root}>

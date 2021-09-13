@@ -2,7 +2,7 @@ import { Grid, IconButton, makeStyles, Typography } from '@material-ui/core';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import React, { useState } from 'react';
-import { useHistory, useParams } from 'react-router';
+import { Redirect, useHistory, useParams } from 'react-router-dom';
 import useAuth from '../../../hooks/useAuth';
 import Loader from '../../global/Loader';
 import TaskInfo from './global/TaskInfo';
@@ -19,9 +19,11 @@ const TaskScreen = () => {
   const auth = useAuth();
   auth.authOnly();
 
-  const { data: task, isSuccess: taskIsLoaded } = useGetTaskByIdQuery(
-    params.id
-  );
+  const {
+    data: task,
+    isSuccess: taskIsLoaded,
+    isError,
+  } = useGetTaskByIdQuery(params.id);
 
   const [openDialog, setOpenDialog] = useState(false);
 
@@ -104,6 +106,8 @@ const TaskScreen = () => {
       </>
     );
   }
+
+  if (isError) return <Redirect push to='/error' />;
 
   return <Loader />;
 };

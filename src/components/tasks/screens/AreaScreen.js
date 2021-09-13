@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useHistory, useParams } from 'react-router';
+import { useHistory, useParams, Redirect } from 'react-router-dom';
 
 import {
   Card,
@@ -25,13 +25,19 @@ const AreaScreen = () => {
   const auth = useAuth();
   auth.authOnly();
 
-  const { data: area, isSuccess } = useGetAreaWithBucketListQuery(params.area);
+  const {
+    data: area,
+    isSuccess,
+    isError,
+  } = useGetAreaWithBucketListQuery(params.area);
 
   const [openDialog, setOpenDialog] = useState(false);
 
   const handleClick = (bucketName) => {
     history.push(`/bucket/${params.area}/${encodeURIComponent(bucketName)}`);
   };
+
+  if (isError) return <Redirect push to='/error' />;
 
   if (!isSuccess) return <Loader />;
 

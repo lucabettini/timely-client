@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useParams } from 'react-router';
+import { useParams, Redirect } from 'react-router-dom';
 
 import { Grid, IconButton, Typography } from '@material-ui/core';
 import { ToggleButton, ToggleButtonGroup } from '@material-ui/lab';
@@ -21,11 +21,16 @@ const BucketScreen = () => {
   const auth = useAuth();
   auth.authOnly();
 
-  const { data: tasks, isSuccess } = useGetTasksByBucketQuery({
+  const {
+    data: tasks,
+    isSuccess,
+    isError,
+  } = useGetTasksByBucketQuery({
     area: params.area,
     bucket: params.bucket,
   });
-  const { isSuccess: timeUnitIsLoaded } = useGetActiveTimeUnitQuery();
+  const { isSuccess: timeUnitIsLoaded, isError: isTimeUnitError } =
+    useGetActiveTimeUnitQuery();
 
   const [choice, setChoice] = useState('notCompleted');
   const [openDialog, setOpenDialog] = useState(false);
@@ -48,6 +53,8 @@ const BucketScreen = () => {
         return tasks;
     }
   };
+
+  if (isError || isTimeUnitError) return <Redirect push to='/error' />;
 
   if (!isSuccess || !timeUnitIsLoaded) return <Loader />;
 

@@ -7,8 +7,8 @@ import {
 } from '@material-ui/core';
 import { PauseCircleFilled } from '@material-ui/icons';
 import React, { useEffect } from 'react';
-import { useSelector } from 'react-redux';
-import { useDispatch } from 'react-redux';
+import { Redirect } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
 import { useGetTaskByIdQuery } from '../../redux/endpoints/getTasks';
 import {
   useEditTimeUnitMutation,
@@ -17,7 +17,6 @@ import {
 
 import {
   incrementCount,
-  resetCount,
   selectCount,
   selectTimerId,
   setTimerId,
@@ -33,11 +32,16 @@ const TimeUnitBar = () => {
   const count = useSelector(selectCount);
   const interval = useSelector(selectTimerId);
 
-  const { data: timeUnit, isSuccess: timeUnitIsLoaded } =
-    useGetActiveTimeUnitQuery();
-  const { data: task, isSuccess: taskIsLoaded } = useGetTaskByIdQuery(
-    timeUnit.task_id
-  );
+  const {
+    data: timeUnit,
+    isSuccess: timeUnitIsLoaded,
+    isError,
+  } = useGetActiveTimeUnitQuery();
+  const {
+    data: task,
+    isSuccess: taskIsLoaded,
+    isError: isTaskError,
+  } = useGetTaskByIdQuery(timeUnit.task_id);
 
   useEffect(() => {
     const initialTime =
@@ -61,6 +65,8 @@ const TimeUnitBar = () => {
       endTime: now.toISOString(),
     });
   };
+
+  if (isError || isTaskError) return <Redirect push to='/error' />;
 
   if (!taskIsLoaded || !timeUnitIsLoaded) return null;
 

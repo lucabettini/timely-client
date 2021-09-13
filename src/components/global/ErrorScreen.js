@@ -2,8 +2,6 @@ import { Container, Typography } from '@material-ui/core';
 import React from 'react';
 
 const ErrorScreen = () => {
-  const preventDefault = (event) => event.preventDefault();
-
   return (
     <Container fixed>
       <Typography variant='h2' color='error' style={{ paddingTop: '20%' }}>
@@ -15,7 +13,7 @@ const ErrorScreen = () => {
       </Typography>
       <Typography variant='body1' style={{ paddingTop: '15px' }}>
         While we send our oompa-loompas squad to check, you can{' '}
-        <a href='/home' style={{ color: '#0b486c' }} onClick={preventDefault}>
+        <a href='/home' style={{ color: '#0b486c' }}>
           go back and try something else
         </a>
         .
