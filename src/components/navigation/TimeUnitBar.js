@@ -1,6 +1,5 @@
 import {
   AppBar,
-  Grid,
   IconButton,
   makeStyles,
   Toolbar,
@@ -11,7 +10,10 @@ import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import { useGetTaskByIdQuery } from '../../redux/endpoints/getTasks';
-import { useEditTimeUnitMutation } from '../../redux/endpoints/timeUnit';
+import {
+  useEditTimeUnitMutation,
+  useGetActiveTimeUnitQuery,
+} from '../../redux/endpoints/timeUnit';
 
 import {
   incrementCount,
@@ -23,7 +25,7 @@ import {
 } from '../../redux/timeUnitSlice';
 import { getDuration } from '../../utils';
 
-const TimeUnitBar = ({ timeUnit }) => {
+const TimeUnitBar = () => {
   const classes = useStyles();
 
   const dispatch = useDispatch();
@@ -31,7 +33,11 @@ const TimeUnitBar = ({ timeUnit }) => {
   const count = useSelector(selectCount);
   const interval = useSelector(selectTimerId);
 
-  const { data: task, isSuccess } = useGetTaskByIdQuery(timeUnit.task_id);
+  const { data: timeUnit, isSuccess: timeUnitIsLoaded } =
+    useGetActiveTimeUnitQuery();
+  const { data: task, isSuccess: taskIsLoaded } = useGetTaskByIdQuery(
+    timeUnit.task_id
+  );
 
   useEffect(() => {
     const initialTime =
@@ -54,10 +60,9 @@ const TimeUnitBar = ({ timeUnit }) => {
       startTime: timeUnit.start_time,
       endTime: now.toISOString(),
     });
-    dispatch(resetCount());
   };
 
-  if (!isSuccess) return null;
+  if (!taskIsLoaded || !timeUnitIsLoaded) return null;
 
   return (
     <AppBar position='fixed' color='secondary' className={classes.appBar}>

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
 
 import {
+  Button,
   Checkbox,
   CircularProgress,
   Grid,
@@ -13,6 +14,7 @@ import {
 import { makeStyles } from '@material-ui/styles';
 import PlayCircleFilledIcon from '@material-ui/icons/PlayCircleFilled';
 import PauseCircleFilledIcon from '@material-ui/icons/PauseCircleFilled';
+import InfoIcon from '@material-ui/icons/Info';
 import LoopIcon from '@material-ui/icons/Loop';
 
 import { getDate, getDuration } from '../../../../utils';
@@ -37,7 +39,7 @@ const TaskGrid = ({ task, ...props }) => {
 
   const [completed, setCompleted] = useState(task.completed);
 
-  const { data: timeUnit } = useGetActiveTimeUnitQuery();
+  const { data: timeUnit, isFetching } = useGetActiveTimeUnitQuery();
 
   const [toggleCompleteTask, { isLoading: toggleIsLoading }] =
     useToggleCompleteTaskMutation();
@@ -51,13 +53,14 @@ const TaskGrid = ({ task, ...props }) => {
   const [startTimeUnit] = useStartTimeUnitMutation();
   const [editTimeUnit] = useEditTimeUnitMutation();
 
-  const handleTimeUnit = async (taskId) => {
+  const handleTimeUnit = async () => {
     if (interval) {
       clearInterval(interval);
     }
 
     const now = new Date();
     if (!timeUnit?.task_id) {
+      dispatch(resetCount());
       await startTimeUnit({ taskId: task.id, startTime: now.toISOString() });
     } else if (timeUnit.task_id === task.id) {
       await editTimeUnit({
@@ -73,20 +76,19 @@ const TaskGrid = ({ task, ...props }) => {
         startTime: timeUnit.start_time,
         endTime: now.toISOString(),
       });
+      dispatch(resetCount());
       await startTimeUnit({ taskId: task.id, startTime: now.toISOString() });
     }
   };
-
-  useEffect(() => {
-    dispatch(resetCount());
-  }, [task.duration, dispatch]);
 
   useEffect(() => {
     setCompleted(task.completed);
   }, [task.completed]);
 
   const getTime = () => {
-    if (task.id === timeUnitTaskId) {
+    if (task.id === timeUnit.task_id) {
+      return getDuration(task.duration + count);
+    } else if (isFetching && task.id === timeUnitTaskId) {
       return getDuration(task.duration + count);
     }
     return getDuration(task.duration);
@@ -107,42 +109,74 @@ const TaskGrid = ({ task, ...props }) => {
       <Paper className={classes.paper} variant='outlined'>
         <Grid container item className={classes.container} alignItems='center'>
           <Hidden lgUp>
-            <Grid item xs={2}>
-              {toggleIsLoading || completeRecurringIsLoading ? (
-                <CircularProgress className={classes.loader} />
-              ) : (
-                <Checkbox
-                  checked={completed}
-                  onChange={handleComplete}
-                  className={classes.checkbox}
-                  inputProps={{ 'aria-label': 'complete task' }}
-                />
-              )}
+            <Grid container item xs={12} alignItems='center'>
+              <Grid item xs={2}>
+                {toggleIsLoading || completeRecurringIsLoading ? (
+                  <CircularProgress className={classes.loader} />
+                ) : (
+                  <Checkbox
+                    checked={completed}
+                    onChange={handleComplete}
+                    className={classes.checkbox}
+                    inputProps={{ 'aria-label': 'complete task' }}
+                  />
+                )}
+              </Grid>
+              <Grid item xs={10}>
+                <Typography
+                  variant='body1'
+                  className={classes.name}
+                  onClick={() => history.push(`/tasks/${task.id}`)}
+                >
+                  {task.name}
+                </Typography>
+              </Grid>
             </Grid>
-            <Grid item xs={10}>
-              <Typography
-                variant='body1'
-                className={classes.name}
-                onClick={() => history.push(`/tasks/${task.id}`)}
-              >
-                {task.name}
-              </Typography>
+
+            <Grid container item xs={12} alignItems='center'>
+              <Grid item xs={2}>
+                {task.recurring && <LoopIcon className={classes.loop} />}
+              </Grid>
+              <Grid item xs={4}>
+                <Typography
+                  variant='body2'
+                  className={classes.bucket}
+                  onClick={() =>
+                    history.push(`/bucket/${task.area}/${task.bucket}`)
+                  }
+                >
+                  {task.bucket}
+                </Typography>
+              </Grid>
+              <Grid item xs={4}>
+                <Typography variant='body2' className={classes.date}>
+                  {getDate(task.scheduled_for)}
+                </Typography>
+              </Grid>
+              <Grid item xs={2}>
+                <Hidden smUp>
+                  <IconButton
+                    color='secondary'
+                    onClick={() => history.push(`/tasks/${task.id}`)}
+                  >
+                    <InfoIcon />
+                  </IconButton>
+                </Hidden>
+                <Hidden xsDown>
+                  <Button
+                    variant='contained'
+                    color='secondary'
+                    size='small'
+                    onClick={() => history.push(`/tasks/${task.id}`)}
+                  >
+                    SEE MORE
+                  </Button>
+                </Hidden>
+              </Grid>
             </Grid>
-            <Grid item xs={2}>
-              {task.recurring && <LoopIcon className={classes.loop} />}
-            </Grid>
-            <Grid item xs={5}>
-              <Typography variant='body2' className={classes.bucket}>
-                {task.bucket}
-              </Typography>
-            </Grid>
-            <Grid item xs={5}>
-              <Typography variant='body2' className={classes.date}>
-                {getDate(task.scheduled_for)}
-              </Typography>
-            </Grid>
+
             {task.tracked && (
-              <>
+              <Grid container item xs={12} alignItems='center'>
                 <Grid item xs={2}>
                   <IconButton className={classes.icon} onClick={handleTimeUnit}>
                     {task.id === timeUnitTaskId && timeUnit?.task_id ? (
@@ -157,7 +191,7 @@ const TaskGrid = ({ task, ...props }) => {
                     {getTime()}
                   </Typography>
                 </Grid>
-              </>
+              </Grid>
             )}
           </Hidden>
 
@@ -184,7 +218,13 @@ const TaskGrid = ({ task, ...props }) => {
                 {task.name}
               </Typography>
             </Grid>
-            <Grid item xs={2}>
+            <Grid
+              item
+              xs={2}
+              onClick={() =>
+                history.push(`/bucket/${task.area}/${task.bucket}`)
+              }
+            >
               <Typography variant='body2' className={classes.bucket}>
                 {task.bucket}
               </Typography>
@@ -214,6 +254,17 @@ const TaskGrid = ({ task, ...props }) => {
                     <Typography variant='body2' className={classes.duration}>
                       {getTime()}
                     </Typography>
+                  </Grid>
+
+                  <Grid item xs={5}>
+                    <Button
+                      variant='contained'
+                      color='secondary'
+                      size='small'
+                      onClick={() => history.push(`/tasks/${task.id}`)}
+                    >
+                      SEE MORE
+                    </Button>
                   </Grid>
                 </Grid>
               </>
@@ -270,6 +321,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.secondary.main,
     color: '#ffff',
     display: 'inline',
+    cursor: 'pointer',
   },
   loader: {
     width: '20px !important',

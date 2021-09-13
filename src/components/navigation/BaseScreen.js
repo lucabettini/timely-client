@@ -63,7 +63,7 @@ function BaseScreen(props) {
       </main>
       {data?.id && (
         <nav>
-          <TimeUnitBar timeUnit={data} />
+          <TimeUnitBar />
         </nav>
       )}
     </div>
