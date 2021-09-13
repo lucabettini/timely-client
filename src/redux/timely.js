@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 const baseQuery = fetchBaseQuery({
-  baseUrl: '/api',
+  baseUrl: `${process.env.REACT_APP_SERVER_URL}/api`,
   prepareHeaders: (headers) => {
     const token = sessionStorage.getItem('jwt');
     if (token) headers.set('jwt', token);

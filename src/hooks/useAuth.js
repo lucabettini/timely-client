@@ -15,7 +15,7 @@ const useAuth = () => {
   // Clear jwt from sessionStorage and send request
   // to server to add token to blacklist
   const logout = async () => {
-    await axios.post('/api/logout', null, {
+    await axios.post(`${process.env.REACT_APP_SERVER_URL}/api/logout`, null, {
       headers: { jwt: token },
     });
     sessionStorage.clear();

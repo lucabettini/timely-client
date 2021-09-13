@@ -44,10 +44,13 @@ const Login = () => {
     if (canSubmit) {
       try {
         setStatus('loading');
-        const res = await axios.post('/api/login', {
-          email: form.values.email,
-          password: form.values.password,
-        });
+        const res = await axios.post(
+          `${process.env.REACT_APP_SERVER_URL}/api/login`,
+          {
+            email: form.values.email,
+            password: form.values.password,
+          }
+        );
         auth.login(res.headers.jwt);
         history.push('/home');
       } catch (error) {
