@@ -12,6 +12,7 @@ import Loader from '../../global/Loader';
 import TaskGrid from './global/TaskGrid';
 import EditDialog from './global/EditDialog';
 import { useGetTasksByBucketQuery } from '../../../redux/endpoints/getTasks';
+import { useGetActiveTimeUnitQuery } from '../../../redux/endpoints/timeUnit';
 
 const BucketScreen = () => {
   const classes = useStyles();
@@ -24,6 +25,7 @@ const BucketScreen = () => {
     area: params.area,
     bucket: params.bucket,
   });
+  const { isSuccess: timeUnitIsLoaded } = useGetActiveTimeUnitQuery();
 
   const [choice, setChoice] = useState('notCompleted');
   const [openDialog, setOpenDialog] = useState(false);
@@ -47,7 +49,7 @@ const BucketScreen = () => {
     }
   };
 
-  if (!isSuccess) return <Loader />;
+  if (!isSuccess || !timeUnitIsLoaded) return <Loader />;
 
   return (
     <>

@@ -12,11 +12,10 @@ const OverdueScreen = () => {
   auth.authOnly();
 
   const { data: tasks, isSuccess: tasksAreLoaded } = useGetOverdueTasksQuery();
-  const { data: timeUnit, isSuccess: timeUnitIsLoaded } =
-    useGetActiveTimeUnitQuery();
+  const { isSuccess: timeUnitIsLoaded } = useGetActiveTimeUnitQuery();
 
   if (tasksAreLoaded && timeUnitIsLoaded) {
-    return <TasksScreen tasks={tasks} timeUnit={timeUnit} />;
+    return <TasksScreen tasks={tasks} />;
   }
   return <Loader />;
 };

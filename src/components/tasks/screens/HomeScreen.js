@@ -10,12 +10,11 @@ const HomeScreen = () => {
   const auth = useAuth();
   auth.authOnly();
 
+  const { isSuccess: timeUnitIsLoaded } = useGetActiveTimeUnitQuery();
   const { data: tasks, isSuccess: tasksAreLoaded } = useGetTasksByWeekQuery();
-  const { data: timeUnit, isSuccess: timeUnitIsLoaded } =
-    useGetActiveTimeUnitQuery();
 
   if (tasksAreLoaded && timeUnitIsLoaded) {
-    return <TasksScreen tasks={tasks} timeUnit={timeUnit} />;
+    return <TasksScreen tasks={tasks} />;
   }
   return <Loader />;
 };

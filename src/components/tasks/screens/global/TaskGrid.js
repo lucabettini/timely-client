@@ -25,12 +25,19 @@ import {
 } from '../../../../redux/timeUnitSlice';
 import { useToggleCompleteTaskMutation } from '../../../../redux/endpoints/editTasks';
 import { useCompleteRecurringTaskMutation } from '../../../../redux/endpoints/editRecurringTasks';
+import {
+  useEditTimeUnitMutation,
+  useGetActiveTimeUnitQuery,
+  useStartTimeUnitMutation,
+} from '../../../../redux/endpoints/timeUnit';
 
-const TaskGrid = ({ task, timeUnit, ...props }) => {
+const TaskGrid = ({ task, ...props }) => {
   const history = useHistory();
   const dispatch = useDispatch();
 
   const [completed, setCompleted] = useState(task.completed);
+
+  const { data: timeUnit } = useGetActiveTimeUnitQuery();
 
   const [toggleCompleteTask, { isLoading: toggleIsLoading }] =
     useToggleCompleteTaskMutation();
@@ -41,20 +48,42 @@ const TaskGrid = ({ task, timeUnit, ...props }) => {
   const timeUnitTaskId = useSelector(selectTaskId);
   const interval = useSelector(selectTimerId);
 
-  useEffect(() => {
-    setCompleted(task.completed);
-  }, [task.completed]);
+  const [startTimeUnit] = useStartTimeUnitMutation();
+  const [editTimeUnit] = useEditTimeUnitMutation();
+
+  const handleTimeUnit = async (taskId) => {
+    if (interval) {
+      clearInterval(interval);
+    }
+
+    const now = new Date();
+    if (!timeUnit?.task_id) {
+      await startTimeUnit({ taskId: task.id, startTime: now.toISOString() });
+    } else if (timeUnit.task_id === task.id) {
+      await editTimeUnit({
+        id: timeUnit.id,
+        startTime: timeUnit.start_time,
+        endTime: now.toISOString(),
+      });
+    } else {
+      // Another task was started while one was being tracked,
+      // stop the first before starting the second
+      await editTimeUnit({
+        id: timeUnit.id,
+        startTime: timeUnit.start_time,
+        endTime: now.toISOString(),
+      });
+      await startTimeUnit({ taskId: task.id, startTime: now.toISOString() });
+    }
+  };
 
   useEffect(() => {
     dispatch(resetCount());
   }, [task.duration, dispatch]);
 
-  const handleTimeUnit = () => {
-    if (interval) {
-      clearInterval(interval);
-    }
-    props.handleTimeUnit(task.id);
-  };
+  useEffect(() => {
+    setCompleted(task.completed);
+  }, [task.completed]);
 
   const getTime = () => {
     if (task.id === timeUnitTaskId) {
@@ -116,7 +145,7 @@ const TaskGrid = ({ task, timeUnit, ...props }) => {
               <>
                 <Grid item xs={2}>
                   <IconButton className={classes.icon} onClick={handleTimeUnit}>
-                    {timeUnit ? (
+                    {task.id === timeUnitTaskId && timeUnit?.task_id ? (
                       <PauseCircleFilledIcon color='secondary' />
                     ) : (
                       <PlayCircleFilledIcon color='primary' />
@@ -173,7 +202,7 @@ const TaskGrid = ({ task, timeUnit, ...props }) => {
                       className={classes.icon}
                       onClick={handleTimeUnit}
                     >
-                      {timeUnit ? (
+                      {task.id === timeUnitTaskId && timeUnit?.task_id ? (
                         <PauseCircleFilledIcon color='secondary' />
                       ) : (
                         <PlayCircleFilledIcon color='primary' />

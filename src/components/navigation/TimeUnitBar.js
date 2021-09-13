@@ -1,5 +1,6 @@
 import {
   AppBar,
+  Grid,
   IconButton,
   makeStyles,
   Toolbar,
@@ -9,10 +10,12 @@ import { PauseCircleFilled } from '@material-ui/icons';
 import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
+import { useGetTaskByIdQuery } from '../../redux/endpoints/getTasks';
 import { useEditTimeUnitMutation } from '../../redux/endpoints/timeUnit';
 
 import {
   incrementCount,
+  resetCount,
   selectCount,
   selectTimerId,
   setTimerId,
@@ -27,6 +30,8 @@ const TimeUnitBar = ({ timeUnit }) => {
   const [editTimeUnit] = useEditTimeUnitMutation();
   const count = useSelector(selectCount);
   const interval = useSelector(selectTimerId);
+
+  const { data: task, isSuccess } = useGetTaskByIdQuery(timeUnit.task_id);
 
   useEffect(() => {
     const initialTime =
@@ -49,19 +54,27 @@ const TimeUnitBar = ({ timeUnit }) => {
       startTime: timeUnit.start_time,
       endTime: now.toISOString(),
     });
+    dispatch(resetCount());
   };
+
+  if (!isSuccess) return null;
 
   return (
     <AppBar position='fixed' color='secondary' className={classes.appBar}>
-      <Toolbar>
-        <Typography>{getDuration(count)}</Typography>
-        <IconButton
-          color='primary'
-          className={classes.button}
-          onClick={handleStop}
-        >
-          <PauseCircleFilled className={classes.icon} />
-        </IconButton>
+      <Toolbar className={classes.toolbar}>
+        <Typography variant='h6'>{task.name.toUpperCase()}</Typography>
+        <div style={{ display: 'flex' }}>
+          <Typography className={classes.time} variant='h6'>
+            {getDuration(count)}
+          </Typography>
+          <IconButton
+            color='primary'
+            className={classes.button}
+            onClick={handleStop}
+          >
+            <PauseCircleFilled className={classes.icon} />
+          </IconButton>
+        </div>
       </Toolbar>
     </AppBar>
   );
@@ -83,6 +96,13 @@ const useStyles = makeStyles((theme) => ({
     },
     width: '40px',
     height: '40px',
+  },
+  toolbar: {
+    display: 'flex',
+    justifyContent: 'space-between',
+  },
+  time: {
+    alignSelf: 'center',
   },
 }));
 

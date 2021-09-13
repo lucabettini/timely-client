@@ -117,6 +117,7 @@ const Register = () => {
                   <CustomInput
                     schema={schema.email}
                     style={{ width: '100%' }}
+                    helperText='Verification is not required'
                     {...inputProps('email')}
                   />
                 </Grid>
@@ -125,6 +126,7 @@ const Register = () => {
                     schema={schema.password}
                     type='password'
                     style={{ width: '100%' }}
+                    helperText='Must have at least 8 characters, including numbers, upper and lowercase letters'
                     {...inputProps('password')}
                   />
                 </Grid>
@@ -137,9 +139,9 @@ const Register = () => {
                     label={'Confirm password'}
                   />
                   {/* TO DO: add forgot password link */}
-                  <a href='/' className={classes.forgot_password}>
+                  {/* <a href='/' className={classes.forgot_password}>
                     Forgot password?
-                  </a>
+                  </a> */}
                 </Grid>
                 <Grid container item xs={12} justifyContent='center'>
                   <Button

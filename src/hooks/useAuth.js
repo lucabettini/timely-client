@@ -1,3 +1,4 @@
+import axios from 'axios';
 import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
@@ -14,9 +15,11 @@ const useAuth = () => {
   // Clear jwt from sessionStorage and send request
   // to server to add token to blacklist
   const logout = async () => {
+    await axios.post('/api/logout', null, {
+      headers: { jwt: token },
+    });
     sessionStorage.clear();
     setToken(null);
-    // TO DO: send request to server
   };
 
   // Return token if present, otherwise redirect to
