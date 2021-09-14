@@ -1227,6 +1227,16 @@
     "minimatch" "^3.0.4"
     "strip-json-comments" "^3.1.1"
 
+"@fontsource/baloo-bhaina-2@^4.5.0":
+  "integrity" "sha512-UpiPQmOPT/uEZ3OuPPhLM7nP1cW6Co3ZTS4AG0W5mZXOZUxzKYuG0Z4TQTKP22sI19Esq4rXvqdIkH1I6ILCSQ=="
+  "resolved" "https://registry.npmjs.org/@fontsource/baloo-bhaina-2/-/baloo-bhaina-2-4.5.0.tgz"
+  "version" "4.5.0"
+
+"@fontsource/luckiest-guy@^4.5.0":
+  "integrity" "sha512-TxyV4v6F+KTf4XRPUthTfB5kyWcrwbLddKLQvmpUIFfZjC66qVhS75mONn4XQ6NFQAYwfLQ5OlEGwv5IWj/6wg=="
+  "resolved" "https://registry.npmjs.org/@fontsource/luckiest-guy/-/luckiest-guy-4.5.0.tgz"
+  "version" "4.5.0"
+
 "@hapi/address@2.x.x":
   "integrity" "sha512-QD1PhQk+s31P1ixsX0H0Suoupp3VMXzIVMSwobR3F3MSUO2YCV0B7xqLcUw/Bh8yuvd3LhpyqLQWTNcRmp6IdQ=="
   "resolved" "https://registry.npmjs.org/@hapi/address/-/address-2.1.4.tgz"

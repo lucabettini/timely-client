@@ -15,11 +15,15 @@ const useAuth = () => {
   // Clear jwt from sessionStorage and send request
   // to server to add token to blacklist
   const logout = async () => {
-    await axios.post(`${process.env.REACT_APP_SERVER_URL}/api/logout`, null, {
-      headers: { jwt: token },
-    });
     sessionStorage.clear();
     setToken(null);
+    const url =
+      process.env.NODE_ENV === 'production'
+        ? `${process.env.REACT_APP_SERVER_URL}/api/logout`
+        : '/api/logout';
+    await axios.post(url, null, {
+      headers: { jwt: token },
+    });
   };
 
   // Return token if present, otherwise redirect to
