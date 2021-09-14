@@ -51,7 +51,7 @@ const TaskGrid = ({ task }) => {
   const interval = useSelector(selectTimerId);
 
   const [startTimeUnit] = useStartTimeUnitMutation();
-  const [editTimeUnit] = useEditTimeUnitMutation();
+  const [editTimeUnit, { isSuccess: wasStopped }] = useEditTimeUnitMutation();
 
   const handleTimeUnit = async () => {
     if (interval) {
@@ -88,7 +88,7 @@ const TaskGrid = ({ task }) => {
   const getTime = () => {
     if (task.id === timeUnit.task_id) {
       return getDuration(task.duration + count);
-    } else if (isFetching && task.id === timeUnitTaskId) {
+    } else if (isFetching && wasStopped && task.id === timeUnitTaskId) {
       return getDuration(task.duration + count);
     }
     return getDuration(task.duration);
