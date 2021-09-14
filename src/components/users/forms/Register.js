@@ -60,7 +60,7 @@ const Register = () => {
             password_confirmation: form.values.password_confirmation,
           }
         );
-        auth.login(res.headers.jwt);
+        auth.login(res.headers.Jwt);
         history.push('/home');
       } catch (error) {
         // Name or email already been taken
@@ -70,8 +70,9 @@ const Register = () => {
         } else if (error.response?.data?.errors?.email) {
           setStatus('error');
           setInvalid('email');
+        } else {
+          history.push('/error');
         }
-        history.push('/error');
       }
     }
   };
