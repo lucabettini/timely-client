@@ -14,6 +14,7 @@ import HomeRoundedIcon from '@material-ui/icons/HomeRounded';
 import CategoryRoundedIcon from '@material-ui/icons/CategoryRounded';
 import TodayRoundedIcon from '@material-ui/icons/TodayRounded';
 import NextWeekRoundedIcon from '@material-ui/icons/NextWeekRounded';
+import HelpIcon from '@material-ui/icons/Help';
 import { makeStyles } from '@material-ui/styles';
 
 import Loader from '../global/Loader';
@@ -43,6 +44,11 @@ const SideNav = (props) => {
       <div className={props.classes} />
       <Divider />
       <List>
+        <ListItem button component='a' onClick={() => history.push('/about')}>
+          <HelpIcon className={classes.icons} />
+          <ListItemText primary='About Timely' className={classes.text} />
+        </ListItem>
+        <Divider />
         <ListItem
           button
           component='a'

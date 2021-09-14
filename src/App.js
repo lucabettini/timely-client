@@ -22,6 +22,7 @@ import EditTaskForm from './components/tasks/forms/EditTaskForm';
 import AddTaskForm from './components/tasks/forms/AddTaskForm';
 
 import ErrorScreen from './components/global/ErrorScreen';
+import AboutScreen from './components/guests/screens/AboutScreen';
 
 const theme = createTheme({
   palette: {
@@ -50,6 +51,9 @@ function App() {
           </Route>
           <Route exact path='/error'>
             <ErrorScreen />
+          </Route>
+          <Route exact path='/about'>
+            <AboutScreen />
           </Route>
           {/* PROTECTED ROUTES */}
           {/* SCREENS */}
