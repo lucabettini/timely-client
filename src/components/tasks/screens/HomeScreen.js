@@ -6,7 +6,7 @@ import TasksScreen from './global/TasksScreen';
 import { useGetTodayTasksQuery } from '../../../redux/endpoints/getTasks';
 import { useGetActiveTimeUnitQuery } from '../../../redux/endpoints/timeUnit';
 
-const HomeScreen = () => {
+const TodayScreen = () => {
   const auth = useAuth();
   auth.authOnly();
 
@@ -27,4 +27,4 @@ const HomeScreen = () => {
   return <Loader />;
 };
 
-export default HomeScreen;
+export default TodayScreen;

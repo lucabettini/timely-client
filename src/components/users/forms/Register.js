@@ -51,15 +51,16 @@ const Register = () => {
     if (canSubmit) {
       try {
         setStatus('loading');
-        const res = await axios.post(
-          `${process.env.REACT_APP_SERVER_URL}/api/register`,
-          {
-            name: form.values.username,
-            email: form.values.email,
-            password: form.values.password,
-            password_confirmation: form.values.password_confirmation,
-          }
-        );
+        const url =
+          process.env.NODE_ENV === 'production'
+            ? `${process.env.REACT_APP_SERVER_URL}/api/register`
+            : '/api/register';
+        const res = await axios.post(url, {
+          name: form.values.username,
+          email: form.values.email,
+          password: form.values.password,
+          password_confirmation: form.values.password_confirmation,
+        });
         auth.login(res.headers.jwt);
         history.push('/home');
       } catch (error) {

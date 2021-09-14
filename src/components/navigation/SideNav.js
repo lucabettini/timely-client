@@ -1,5 +1,5 @@
 import React from 'react';
-import { useHistory, Redirect } from 'react-router-dom';
+import { useHistory, Redirect, useLocation } from 'react-router-dom';
 
 import {
   Badge,
@@ -24,6 +24,7 @@ import {
 
 const SideNav = (props) => {
   const history = useHistory();
+  const location = useLocation();
   const classes = useStyles();
 
   const { data: areas, isSuccess, isError } = useGetAreasQuery();
@@ -42,7 +43,12 @@ const SideNav = (props) => {
       <div className={props.classes} />
       <Divider />
       <List>
-        <ListItem button component='a' onClick={() => history.push('/overdue')}>
+        <ListItem
+          button
+          component='a'
+          selected={location.pathname === '/overdue'}
+          onClick={() => history.push('/overdue')}
+        >
           {overdueAreLoaded ? (
             <Badge
               badgeContent={overdue.length}
@@ -65,6 +71,7 @@ const SideNav = (props) => {
         <ListItem
           button
           component='a'
+          selected={location.pathname === '/tracking'}
           onClick={() => history.push('/tracking')}
         >
           <BallotIcon className={classes.icons} />
@@ -72,29 +79,43 @@ const SideNav = (props) => {
         </ListItem>
 
         <Divider />
-        <ListItem button component='a' onClick={() => history.push('/home')}>
+        <ListItem
+          button
+          component='a'
+          selected={location.pathname === '/home'}
+          onClick={() => history.push('/home')}
+        >
           <HomeRoundedIcon className={classes.icons} />
           <ListItemText primary='Today' className={classes.text} />
         </ListItem>
         <ListItem
           button
           component='a'
+          selected={location.pathname === '/tomorrow'}
           onClick={() => history.push('/tomorrow')}
         >
           <TodayRoundedIcon className={classes.icons} />
           <ListItemText primary='Tomorrow' className={classes.text} />
         </ListItem>
-        <ListItem button component='a' onClick={() => history.push('/week')}>
+        <ListItem
+          button
+          component='a'
+          selected={location.pathname === '/week'}
+          onClick={() => history.push('/week')}
+        >
           <NextWeekRoundedIcon className={classes.icons} />
           <ListItemText primary='This week' className={classes.text} />
         </ListItem>
         <Divider />
         {areas.map((area) => {
+          const pattern = new RegExp(`^/area/${area}|/bucket/${area}`);
+
           return (
             <ListItem
               button
               component='a'
               key={area}
+              selected={pattern.test(location.pathname)}
               onClick={() => history.push(`/area/${area}`)}
             >
               <CategoryRoundedIcon className={classes.icons} />
