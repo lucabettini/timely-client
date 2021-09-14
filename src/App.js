@@ -3,20 +3,25 @@ import { Provider } from 'react-redux';
 import React from 'react';
 import { Route, BrowserRouter as Router, Switch } from 'react-router-dom';
 import store from './redux/store';
-import Login from './components/users/forms/Login';
-import Register from './components/users/forms/Register';
+
+import Login from './components/guests/forms/Login';
+import Register from './components/guests/forms/Register';
+import HomeScreen from './components/guests/screens/HomeScreen';
+
 import BaseScreen from './components/navigation/BaseScreen';
-import AddTaskForm from './components/tasks/forms/AddTaskForm';
-import HomeScreen from './components/tasks/screens/HomeScreen';
+import TomorrowScreen from './components/tasks/screens/TomorrowScreen';
+import WeekScreen from './components/tasks/screens/WeekScreen';
+import TodayScreen from './components/tasks/screens/TodayScreen';
 import BucketScreen from './components/tasks/screens/BucketScreen';
 import AreaScreen from './components/tasks/screens/AreaScreen';
 import TaskScreen from './components/tasks/screens/TaskScreen';
-import EditTaskForm from './components/tasks/forms/EditTaskForm';
 import TrackingScreen from './components/tasks/screens/TrackingScreen';
 import OverdueScreen from './components/tasks/screens/OverdueScreen';
+
+import EditTaskForm from './components/tasks/forms/EditTaskForm';
+import AddTaskForm from './components/tasks/forms/AddTaskForm';
+
 import ErrorScreen from './components/global/ErrorScreen';
-import TomorrowScreen from './components/tasks/screens/TomorrowScreen';
-import WeekScreen from './components/tasks/screens/WeekScreen';
 
 const theme = createTheme({
   palette: {
@@ -35,7 +40,7 @@ function App() {
         <Switch>
           {/* GUESTS ROUTES */}
           <Route exact path='/'>
-            <div>Slash</div>
+            <HomeScreen />
           </Route>
           <Route exact path='/login'>
             <Login />
@@ -51,7 +56,7 @@ function App() {
           <Provider store={store}>
             <BaseScreen>
               <Route exact path='/home'>
-                <HomeScreen />
+                <TodayScreen />
               </Route>
               <Route exact path='/tomorrow'>
                 <TomorrowScreen />

@@ -23,7 +23,6 @@ import useAuth from '../../hooks/useAuth';
 const theme = createTheme({
   typography: {
     fontFamily: '"Luckiest Guy", serif',
-    // fontSize: '1.5rem',
   },
 });
 
