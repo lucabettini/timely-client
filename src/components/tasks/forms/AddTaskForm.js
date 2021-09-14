@@ -37,9 +37,10 @@ const AddTaskForm = () => {
     history.goBack();
   };
 
-  if (isLoading || addRecurringIsLoading) return <Loader />;
+  if (!isLoading && !addRecurringIsLoading)
+    return <TaskForm handleSubmit={handleSubmit} />;
 
-  return <TaskForm handleSubmit={handleSubmit} />;
+  return <Loader />;
 };
 
 export default AddTaskForm;
