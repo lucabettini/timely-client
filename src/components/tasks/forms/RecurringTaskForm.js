@@ -94,14 +94,14 @@ const RecurringTaskForm = ({
               <Typography variant='subtitle1'>times</Typography>
             </Grid>
             <Grid container justifyContent='flex-start'>
-              <Grid item xs={3}>
+              <Grid item xs={4}>
                 <FormControlLabel
                   value='end_date'
                   control={<Radio />}
                   label='Until'
                 />
               </Grid>
-              <Grid item xs={9}>
+              <Grid item xs={8}>
                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
                   <Grid container justifyContent='space-around'>
                     <KeyboardDatePicker

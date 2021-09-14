@@ -76,7 +76,7 @@ const HomeScreen = () => {
             <Typography
               variant='h5'
               className={classes.subtitle}
-              textAlign='center'
+              style={{ textAlign: 'center' }}
             >
               TIME TRACKER AND DIGITAL SCHEDULE
             </Typography>
