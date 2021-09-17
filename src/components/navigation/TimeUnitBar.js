@@ -73,7 +73,9 @@ const TimeUnitBar = () => {
   return (
     <AppBar position='fixed' color='secondary' className={classes.appBar}>
       <Toolbar className={classes.toolbar}>
-        <Typography variant='h6'>{task.name.toUpperCase()}</Typography>
+        <Typography variant='h6' className={classes.name}>
+          {task.name.toUpperCase()}
+        </Typography>
         <div style={{ display: 'flex' }}>
           <Typography className={classes.time} variant='h6'>
             {getDuration(count)}
@@ -114,6 +116,14 @@ const useStyles = makeStyles((theme) => ({
   },
   time: {
     alignSelf: 'center',
+    [theme.breakpoints.down('sm')]: {
+      fontSize: '1rem',
+    },
+  },
+  name: {
+    [theme.breakpoints.down('sm')]: {
+      fontSize: '1rem',
+    },
   },
 }));
 

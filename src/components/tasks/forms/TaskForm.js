@@ -64,10 +64,7 @@ const TaskForm = (props) => {
       ? new Date(Date.parse(props.initialValues?.scheduled_for))
       : new Date(),
     tracked: props.initialValues?.tracked ?? true,
-    repeat:
-      props.initialValues && props.initialValues?.recurring === null
-        ? false
-        : true,
+    repeat: props?.initialValues?.recurring ? true : false,
   });
 
   const handleFieldsChange = (name, value) => {
@@ -120,6 +117,10 @@ const TaskForm = (props) => {
         [e.target.name]: true,
       });
     } else {
+      setError({
+        ...error,
+        [e.target.name]: false,
+      });
       setRecurringFields({
         ...fields,
         [e.target.name]: e.target.value,
@@ -163,142 +164,143 @@ const TaskForm = (props) => {
       justifyContent='center'
       className={classes.container}
     >
-      <Grid item xs={10} sm={6} lg={3} className={classes.item}>
-        <form
-          noValidate
-          autoComplete='off'
-          onSubmit={(e) => {
-            e.preventDefault();
-            handleSubmit();
-          }}
-        >
-          <Paper className={classes.form}>
-            <Grid container direction='column' spacing={3}>
-              <Grid item xs={12}>
-                <CustomInput
-                  schema={schema.name}
-                  style={{ width: '100%' }}
-                  {...inputProps('name')}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <CustomInput
-                  schema={schema.bucket}
-                  style={{ width: '100%' }}
-                  {...inputProps('bucket')}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <CustomInput
-                  schema={schema.area}
-                  style={{ width: '100%' }}
-                  {...inputProps('area')}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                  <Grid container justifyContent='space-around'>
-                    <KeyboardDatePicker
-                      disableToolbar
-                      name='date'
-                      variant='inline'
-                      format='dd/MM/yyyy'
-                      margin='normal'
-                      label='Date'
-                      value={fields.date}
-                      style={{ width: '100%' }}
-                      onChange={(date) => handleFieldsChange('date', date)}
-                      KeyboardButtonProps={{
-                        'aria-label': 'change date',
-                      }}
-                    />
-                  </Grid>
-                </MuiPickersUtilsProvider>
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  style={{ width: '100%', resize: 'vertical' }}
-                  multiline
-                  inputProps={{ className: classes.textarea }}
-                  label='Description (optional)'
-                  onChange={(e) =>
-                    handleFieldsChange('description', e.target.value)
-                  }
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      checked={fields.tracked}
-                      onChange={() =>
-                        handleFieldsChange('tracked', !fields.tracked)
-                      }
-                      name='tracked'
-                      color='secondary'
-                    />
-                  }
-                  label='Track the time of this task'
-                  className={fields.tracked ? null : classes.trackedLabelOff}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      checked={fields.repeat}
-                      onChange={() =>
-                        handleFieldsChange('repeat', !fields.repeat)
-                      }
-                      name='tracked'
-                      color='secondary'
-                    />
-                  }
-                  label='Repeat this task'
-                  className={fields.repeat ? null : classes.trackedLabelOn}
-                />
-              </Grid>
-              {fields.repeat && (
-                <RecurringTaskForm
-                  choice={choice}
-                  setChoice={setChoice}
-                  frequency={frequency}
-                  setFrequency={setFrequency}
-                  setDate={setDate}
-                  fields={recurringFields}
-                  handleChange={handleRecurringFieldsChange}
-                  error={error}
-                />
-              )}
-
-              <Grid
-                container
-                item
-                xs={12}
-                justifyContent='space-between'
-                className={classes.buttons}
-              >
-                <Button
-                  variant='contained'
-                  color='secondary'
-                  size='large'
-                  onClick={() => history.goBack()}
-                >
-                  CANCEL
-                </Button>
-                <Button
-                  type='submit'
-                  variant='contained'
-                  color='primary'
-                  size='large'
-                >
-                  {props.initialValues ? 'EDIT TASK' : 'ADD TASK'}
-                </Button>
-              </Grid>
+      {/* <Grid item xs={10} sm={6} lg={3} className={classes.item}> */}
+      <form
+        noValidate
+        autoComplete='off'
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleSubmit();
+        }}
+        className={classes.form}
+      >
+        <Paper className={classes.paper}>
+          <Grid container direction='column' spacing={3}>
+            <Grid item xs={12}>
+              <CustomInput
+                schema={schema.name}
+                style={{ width: '100%' }}
+                {...inputProps('name')}
+              />
             </Grid>
-          </Paper>
-        </form>
-      </Grid>
+            <Grid item xs={12}>
+              <CustomInput
+                schema={schema.bucket}
+                style={{ width: '100%' }}
+                {...inputProps('bucket')}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <CustomInput
+                schema={schema.area}
+                style={{ width: '100%' }}
+                {...inputProps('area')}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                <Grid container justifyContent='space-around'>
+                  <KeyboardDatePicker
+                    disableToolbar
+                    name='date'
+                    variant='inline'
+                    format='dd/MM/yyyy'
+                    margin='normal'
+                    label='Date'
+                    value={fields.date}
+                    style={{ width: '100%' }}
+                    onChange={(date) => handleFieldsChange('date', date)}
+                    KeyboardButtonProps={{
+                      'aria-label': 'change date',
+                    }}
+                  />
+                </Grid>
+              </MuiPickersUtilsProvider>
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                style={{ width: '100%', resize: 'vertical' }}
+                multiline
+                inputProps={{ className: classes.textarea }}
+                label='Description (optional)'
+                onChange={(e) =>
+                  handleFieldsChange('description', e.target.value)
+                }
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={fields.tracked}
+                    onChange={() =>
+                      handleFieldsChange('tracked', !fields.tracked)
+                    }
+                    name='tracked'
+                    color='secondary'
+                  />
+                }
+                label='Track the time of this task'
+                className={fields.tracked ? null : classes.trackedLabelOff}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={fields.repeat}
+                    onChange={() =>
+                      handleFieldsChange('repeat', !fields.repeat)
+                    }
+                    name='tracked'
+                    color='secondary'
+                  />
+                }
+                label='Repeat this task'
+                className={fields.repeat ? null : classes.trackedLabelOn}
+              />
+            </Grid>
+            {fields.repeat && (
+              <RecurringTaskForm
+                choice={choice}
+                setChoice={setChoice}
+                frequency={frequency}
+                setFrequency={setFrequency}
+                setDate={setDate}
+                fields={recurringFields}
+                handleChange={handleRecurringFieldsChange}
+                error={error}
+              />
+            )}
+
+            <Grid
+              container
+              item
+              xs={12}
+              justifyContent='space-between'
+              className={classes.buttons}
+            >
+              <Button
+                variant='contained'
+                color='secondary'
+                size='large'
+                onClick={() => history.goBack()}
+              >
+                CANCEL
+              </Button>
+              <Button
+                type='submit'
+                variant='contained'
+                color='primary'
+                size='large'
+              >
+                {props.initialValues ? 'EDIT TASK' : 'ADD TASK'}
+              </Button>
+            </Grid>
+          </Grid>
+        </Paper>
+      </form>
+      {/* </Grid> */}
     </Grid>
   );
 };
@@ -308,11 +310,16 @@ const useStyles = makeStyles((theme) => ({
     minHeight: '100vh',
     paddingBottom: '10vh',
     flexGrow: 1,
-    marginTop: '10vh',
+    margin: '10vh 10vw 10vw 0',
   },
-  form: {
+  paper: {
     border: `1px solid ${theme.palette.primary.main}`,
     padding: '5%',
+
+    margin: 0,
+  },
+  form: {
+    minWidth: '40%',
   },
   textarea: {
     resize: 'vertical',

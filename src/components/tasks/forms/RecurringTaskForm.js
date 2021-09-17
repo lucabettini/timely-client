@@ -94,29 +94,27 @@ const RecurringTaskForm = ({
               <Typography variant='subtitle1'>times</Typography>
             </Grid>
             <Grid container justifyContent='flex-start'>
-              <Grid item xs={4}>
+              <Grid item xs={4} sm={3}>
                 <FormControlLabel
                   value='end_date'
                   control={<Radio />}
                   label='Until'
                 />
               </Grid>
-              <Grid item xs={8}>
+              <Grid item xs={8} sm={9}>
                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                  <Grid container justifyContent='space-around'>
-                    <KeyboardDatePicker
-                      disableToolbar
-                      disabled={choice !== 'end_date'}
-                      name='end_date'
-                      variant='inline'
-                      format='dd/MM/yyyy'
-                      value={fields.end_date}
-                      onChange={(date) => setDate(date)}
-                      KeyboardButtonProps={{
-                        'aria-label': 'change date',
-                      }}
-                    />
-                  </Grid>
+                  <KeyboardDatePicker
+                    disableToolbar
+                    disabled={choice !== 'end_date'}
+                    name='end_date'
+                    variant='inline'
+                    format='dd/MM/yyyy'
+                    value={fields.end_date}
+                    onChange={(date) => setDate(date)}
+                    KeyboardButtonProps={{
+                      'aria-label': 'change date',
+                    }}
+                  />
                 </MuiPickersUtilsProvider>
               </Grid>
             </Grid>

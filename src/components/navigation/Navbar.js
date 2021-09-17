@@ -11,6 +11,7 @@ import {
   Grid,
   MenuItem,
   Menu,
+  Link,
 } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
@@ -73,14 +74,16 @@ const Navbar = (props) => {
             <MenuIcon />
           </IconButton>
           <ThemeProvider theme={theme}>
-            <Typography
+            <Link
+              href='/'
               variant='h6'
               noWrap
+              underline='none'
               className={classes.title}
               fontWeight={700}
             >
               TIMELY
-            </Typography>
+            </Link>
           </ThemeProvider>
           <div>
             <IconButton

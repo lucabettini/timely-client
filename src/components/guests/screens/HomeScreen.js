@@ -87,7 +87,7 @@ const HomeScreen = () => {
               color='secondary'
               size='large'
               className={classes.button}
-              onClick={() => history.push('/login')}
+              onClick={() => history.push('/register')}
             >
               TRY IT NOW
             </Button>
