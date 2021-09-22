@@ -1,15 +1,18 @@
+import React, { useState } from 'react';
+import { Redirect, useHistory, useParams } from 'react-router-dom';
+import useAuth from '../../../../hooks/useAuth';
+import { getDate, getDuration } from '../../../../utils';
+
+import { useGetTaskByIdQuery } from '../../../../redux/endpoints/getTasks';
+
+import Loader from '../../../global/Loader';
+import TaskInfo from '../global/TaskInfo';
+import TimeUnitGrid from './TimeUnitGrid';
+import DeleteTaskDialog from './DeleteTaskDialog';
+
 import { Grid, IconButton, makeStyles, Typography } from '@material-ui/core';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
-import React, { useState } from 'react';
-import { Redirect, useHistory, useParams } from 'react-router-dom';
-import useAuth from '../../../hooks/useAuth';
-import Loader from '../../global/Loader';
-import TaskInfo from './global/TaskInfo';
-import { getDate, getDuration } from '../../../utils';
-import TimeUnitGrid from './TaskScreen/TimeUnitGrid';
-import { useGetTaskByIdQuery } from '../../../redux/endpoints/getTasks';
-import DeleteTaskDialog from './TaskScreen/DeleteTaskDialog';
 
 const TaskScreen = () => {
   const classes = useStyles();
@@ -89,18 +92,20 @@ const TaskScreen = () => {
           {task.recurring && (
             <TaskInfo label='Repeat' info={recurringInfos()} />
           )}
-          <Grid container className={classes.timeUnits}>
-            {task.timeUnitsCount > 0 &&
-              task.time_units
-                .filter((timeUnit) => !timeUnit.end_date)
-                .map((timeUnit) => {
-                  return (
-                    <Grid item xs={12} lg={6}>
-                      <TimeUnitGrid timeUnit={timeUnit} />
-                    </Grid>
-                  );
-                })}
-          </Grid>
+          {task.tracked && (
+            <Grid container className={classes.timeUnits}>
+              {task.timeUnitsCount > 0 &&
+                task.time_units
+                  .filter((timeUnit) => !timeUnit.end_date)
+                  .map((timeUnit) => {
+                    return (
+                      <Grid item xs={12} lg={6}>
+                        <TimeUnitGrid timeUnit={timeUnit} />
+                      </Grid>
+                    );
+                  })}
+            </Grid>
+          )}
         </Grid>
         <DeleteTaskDialog open={openDialog} setOpen={setOpenDialog} />
       </>

@@ -238,42 +238,39 @@ const TaskRow = ({ task }) => {
                 {getDate(task.scheduled_for)}
               </Typography>
             </Grid>
-            {task.tracked && (
-              <>
-                <Grid item container alignItems='center' xs={3}>
-                  <Grid item xs={2}>
-                    <IconButton
-                      className={classes.icon}
-                      onClick={handleTimeUnit}
-                    >
-                      {task.id === timeUnitTaskId &&
-                      runningTimeUnit?.task_id ? (
-                        <PauseCircleFilledIcon color='secondary' />
-                      ) : (
-                        <PlayCircleFilledIcon color='primary' />
-                      )}
-                    </IconButton>
-                  </Grid>
 
-                  <Grid item xs={5}>
-                    <Typography variant='body2' className={classes.duration}>
-                      {getTime()}
-                    </Typography>
-                  </Grid>
+            <Grid item container alignItems='center' xs={3}>
+              <Grid item xs={2}>
+                {task.tracked && (
+                  <IconButton className={classes.icon} onClick={handleTimeUnit}>
+                    {task.id === timeUnitTaskId && runningTimeUnit?.task_id ? (
+                      <PauseCircleFilledIcon color='secondary' />
+                    ) : (
+                      <PlayCircleFilledIcon color='primary' />
+                    )}
+                  </IconButton>
+                )}
+              </Grid>
 
-                  <Grid item xs={5}>
-                    <Button
-                      variant='contained'
-                      color='secondary'
-                      size='small'
-                      onClick={() => history.push(`/tasks/${task.id}`)}
-                    >
-                      SEE MORE
-                    </Button>
-                  </Grid>
+              {task.tracked && (
+                <Grid item xs={5}>
+                  <Typography variant='body2' className={classes.duration}>
+                    {getTime()}
+                  </Typography>
                 </Grid>
-              </>
-            )}
+              )}
+
+              <Grid item xs={5}>
+                <Button
+                  variant='contained'
+                  color='secondary'
+                  size='small'
+                  onClick={() => history.push(`/tasks/${task.id}`)}
+                >
+                  SEE MORE
+                </Button>
+              </Grid>
+            </Grid>
           </Hidden>
         </Grid>
       </Paper>

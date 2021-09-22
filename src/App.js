@@ -14,7 +14,7 @@ import WeekScreen from './components/tasks/screens/WeekScreen';
 import TodayScreen from './components/tasks/screens/TodayScreen';
 import BucketScreen from './components/tasks/screens/BucketScreen';
 import AreaScreen from './components/tasks/screens/AreaScreen';
-import TaskScreen from './components/tasks/screens/TaskScreen';
+import TaskScreen from './components/tasks/screens/TaskScreen/TaskScreen';
 import TrackingScreen from './components/tasks/screens/TrackingScreen';
 import OverdueScreen from './components/tasks/screens/OverdueScreen';
 
