@@ -100,13 +100,16 @@ const Login = () => {
                     {...inputProps('email')}
                   />
                 </Grid>
-                <Grid item xs={12}>
+                <Grid item xs={12} container direction='column'>
                   <CustomInput
                     schema={schema.password}
                     type='password'
                     style={{ width: '100%' }}
                     {...inputProps('password')}
                   />
+                  <a href='/forgotPassword' className={classes.forgot_password}>
+                    Forgot password?
+                  </a>
                 </Grid>
                 <Grid container item xs={12} justifyContent='center'>
                   <Button
@@ -148,6 +151,14 @@ const useStyles = makeStyles((theme) => ({
     textDecoration: 'none',
     color: theme.palette.primary.main,
     paddingTop: '25px',
+    fontWeight: '500',
+  },
+  forgot_password: {
+    textDecoration: 'none',
+    color: theme.palette.primary.main,
+    marginRight: '0px',
+    paddingTop: '5px',
+    alignSelf: 'end',
     fontWeight: '500',
   },
 }));

@@ -23,6 +23,8 @@ import AddTaskForm from './components/tasks/forms/AddTaskForm';
 
 import ErrorScreen from './components/global/ErrorScreen';
 import AboutScreen from './components/guests/screens/AboutScreen';
+import ForgotPassword from './components/guests/forms/ForgotPassword';
+import ResetPassword from './components/guests/forms/ResetPassword';
 
 const theme = createTheme({
   palette: {
@@ -30,6 +32,7 @@ const theme = createTheme({
     secondary: { main: '#0b486c' },
     error: { main: '#c83e4d' },
     warning: { main: '#ffa62b' },
+    success: { main: '#68ba9f' },
   },
 });
 
@@ -40,14 +43,9 @@ function App() {
         <CssBaseline />
         <Switch>
           {/* GUESTS ROUTES */}
+          {/* SCREENS */}
           <Route exact path='/'>
             <HomeScreen />
-          </Route>
-          <Route exact path='/login'>
-            <Login />
-          </Route>
-          <Route exact path='/register'>
-            <Register />
           </Route>
           <Route exact path='/error'>
             <ErrorScreen />
@@ -55,6 +53,20 @@ function App() {
           <Route exact path='/about'>
             <AboutScreen />
           </Route>
+          {/* FORMS */}
+          <Route exact path='/login'>
+            <Login />
+          </Route>
+          <Route exact path='/register'>
+            <Register />
+          </Route>
+          <Route exact path='/forgotPassword'>
+            <ForgotPassword />
+          </Route>
+          <Route exact path='/resetPassword'>
+            <ResetPassword />
+          </Route>
+
           {/* PROTECTED ROUTES */}
           {/* SCREENS */}
           <Provider store={store}>

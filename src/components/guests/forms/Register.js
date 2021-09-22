@@ -140,10 +140,9 @@ const Register = () => {
                     {...inputProps('password_confirmation')}
                     label={'Confirm password'}
                   />
-                  {/* TO DO: add forgot password link */}
-                  {/* <a href='/' className={classes.forgot_password}>
+                  <a href='/forgotPassword' className={classes.forgot_password}>
                     Forgot password?
-                  </a> */}
+                  </a>
                 </Grid>
                 <Grid container item xs={12} justifyContent='center'>
                   <Button
