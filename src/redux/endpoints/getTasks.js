@@ -47,7 +47,7 @@ const getTasks = timelyApi.injectEndpoints({
           bucket
         )}`,
       transformResponse: (response) => response.data,
-      providesTags: ['Bucket', 'Tasks'],
+      providesTags: ['Bucket', 'Tasks', 'TimeUnit'],
     }),
   }),
   overrideExisting: false,

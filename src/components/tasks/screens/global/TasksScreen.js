@@ -2,7 +2,7 @@ import { makeStyles } from '@material-ui/styles';
 import React from 'react';
 
 import AddTaskInput from './AddTaskInput';
-import TaskGrid from './TaskGrid';
+import TaskRow from './TaskRow';
 
 const TasksScreen = ({ tasks }) => {
   const classes = useStyles();
@@ -16,7 +16,7 @@ const TasksScreen = ({ tasks }) => {
             return a.completed ? 1 : -1;
           })
           .map((task) => {
-            return <TaskGrid task={task} key={task.id} />;
+            return <TaskRow task={task} key={task.id} />;
           })}
       </div>
     </>

@@ -14,11 +14,12 @@ const timeUnitSlice = createSlice({
     start(state, action) {
       state.taskId = action.payload.id;
       state.count = action.payload.count;
+      state.duration = action.payload.duration;
     },
     incrementCount(state) {
       state.count = state.count + 1;
     },
-    resetCount(state) {
+    stop(state, action) {
       state.count = 0;
     },
     setTimerId(state, action) {
@@ -27,7 +28,7 @@ const timeUnitSlice = createSlice({
   },
 });
 
-export const { start, incrementCount, setTimerId, resetCount } =
+export const { start, incrementCount, setTimerId, stop } =
   timeUnitSlice.actions;
 
 export default timeUnitSlice.reducer;

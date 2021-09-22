@@ -9,7 +9,7 @@ import { makeStyles } from '@material-ui/styles';
 import useAuth from '../../../hooks/useAuth';
 import AddTaskInput from './global/AddTaskInput';
 import Loader from '../../global/Loader';
-import TaskGrid from './global/TaskGrid';
+import TaskRow from './global/TaskRow';
 import EditDialog from './global/EditDialog';
 import { useGetTasksByBucketQuery } from '../../../redux/endpoints/getTasks';
 import { useGetActiveTimeUnitQuery } from '../../../redux/endpoints/timeUnit';
@@ -96,7 +96,7 @@ const BucketScreen = () => {
         </ToggleButtonGroup>
       </Grid>
       {getTasks(choice).map((task) => (
-        <TaskGrid task={task} key={task.id} />
+        <TaskRow task={task} key={task.id} />
       ))}
       <EditDialog
         open={openDialog}
