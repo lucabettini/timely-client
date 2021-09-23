@@ -15,6 +15,7 @@ import {
 } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import AccountBoxOutlinedIcon from '@material-ui/icons/AccountBoxOutlined';
 import '@fontsource/luckiest-guy';
 import { AccountCircle } from '@material-ui/icons';
 import { withStyles } from '@material-ui/styles';
@@ -102,7 +103,11 @@ const Navbar = (props) => {
               open={open}
               onClose={() => setAnchorEl(null)}
             >
-              <MenuItem onClick={onLogout} className={classes.menuItem}>
+              <MenuItem onClick={() => history.push('/profile')}>
+                <AccountBoxOutlinedIcon className={classes.internalMenuIcon} />
+                <Typography>Profile</Typography>
+              </MenuItem>
+              <MenuItem onClick={onLogout}>
                 <ExitToAppIcon className={classes.internalMenuIcon} />
                 <Typography>Logout</Typography>
               </MenuItem>
@@ -136,12 +141,6 @@ const useStyles = makeStyles((theme) => ({
   toolbar: {
     display: 'flex',
     alignItems: 'center',
-  },
-  menuItem: {
-    backgroundColor: theme.palette.primary.light,
-    '&:focus': {
-      backgroundColor: theme.palette.primary.main,
-    },
   },
   menu: {
     backgroundColor: theme.palette.primary.light,

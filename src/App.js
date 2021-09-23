@@ -25,6 +25,7 @@ import ErrorScreen from './components/global/ErrorScreen';
 import AboutScreen from './components/guests/screens/AboutScreen';
 import ForgotPassword from './components/guests/forms/ForgotPassword';
 import ResetPassword from './components/guests/forms/ResetPassword';
+import ProfileScreen from './components/users/screens/ProfileScreen';
 
 const theme = createTheme({
   palette: {
@@ -94,6 +95,9 @@ function App() {
               </Route>
               <Route exact path='/tasks/:id'>
                 <TaskScreen />
+              </Route>
+              <Route exact path='/profile'>
+                <ProfileScreen />
               </Route>
               {/* FORMS */}
               <Route exact path='/addTask'>

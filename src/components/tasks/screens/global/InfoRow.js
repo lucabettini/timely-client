@@ -1,7 +1,7 @@
 import { Grid, makeStyles, Typography } from '@material-ui/core';
 import React from 'react';
 
-const TaskInfo = ({ label, info }) => {
+const InfoRow = ({ label, info }) => {
   const classes = useStyles();
   return (
     <Grid container item xs={12} className={classes.root}>
@@ -39,4 +39,4 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.secondary.main,
   },
 }));
-export default TaskInfo;
+export default InfoRow;

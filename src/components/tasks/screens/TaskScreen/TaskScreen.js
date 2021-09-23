@@ -6,7 +6,7 @@ import { getDate, getDuration } from '../../../../utils';
 import { useGetTaskByIdQuery } from '../../../../redux/endpoints/getTasks';
 
 import Loader from '../../../global/Loader';
-import TaskInfo from '../global/TaskInfo';
+import InfoRow from '../global/InfoRow';
 import TimeUnitGrid from './TimeUnitGrid';
 import DeleteTaskDialog from './DeleteTaskDialog';
 
@@ -70,28 +70,26 @@ const TaskScreen = () => {
               <DeleteForeverIcon color='error' />
             </IconButton>
           </div>
-          <TaskInfo label='Due date' info={getDate(task.scheduled_for)} />
-          <TaskInfo label='Area' info={task.area} />
-          <TaskInfo label='Bucket' info={task.bucket} />
-          <TaskInfo
+          <InfoRow label='Due date' info={getDate(task.scheduled_for)} />
+          <InfoRow label='Area' info={task.area} />
+          <InfoRow label='Bucket' info={task.bucket} />
+          <InfoRow
             label='Status'
             info={task.completed ? 'Active' : 'Completed'}
           />
           {task.description && (
-            <TaskInfo label='Description' info={task.description} />
+            <InfoRow label='Description' info={task.description} />
           )}
           {task.tracked && (
             <>
-              <TaskInfo label='Tracked' info={task.timeUnitsCount + ' times'} />
-              <TaskInfo
+              <InfoRow label='Tracked' info={task.timeUnitsCount + ' times'} />
+              <InfoRow
                 label='Total time tracked'
                 info={getDuration(task.duration)}
               />
             </>
           )}
-          {task.recurring && (
-            <TaskInfo label='Repeat' info={recurringInfos()} />
-          )}
+          {task.recurring && <InfoRow label='Repeat' info={recurringInfos()} />}
           {task.tracked && (
             <Grid container className={classes.timeUnits}>
               {task.timeUnitsCount > 0 &&
