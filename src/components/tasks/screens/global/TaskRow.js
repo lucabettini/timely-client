@@ -55,11 +55,6 @@ const TaskRow = ({ task }) => {
   const classes = useStyles({ completed: completed });
 
   // TIME UNIT LOGIC
-  useEffect(() => {
-    // Reset the counter when task is refetched
-    dispatch(stop(task.duration));
-  }, [task.duration, dispatch]);
-
   const handleTimeUnit = async () => {
     const now = new Date();
     if (!runningTimeUnit?.task_id) {
@@ -73,6 +68,7 @@ const TaskRow = ({ task }) => {
         startTime: runningTimeUnit.start_time,
         endTime: now.toISOString(),
       });
+      dispatch(stop(task.duration));
     } else {
       // Another task was being tracked, stop it before
       // starting this one
@@ -82,6 +78,7 @@ const TaskRow = ({ task }) => {
         startTime: runningTimeUnit.start_time,
         endTime: now.toISOString(),
       });
+      dispatch(stop(task.duration));
       await startTimeUnit({ taskId: task.id, startTime: now.toISOString() });
     }
   };
@@ -252,13 +249,13 @@ const TaskRow = ({ task }) => {
                 )}
               </Grid>
 
-              {task.tracked && (
-                <Grid item xs={5}>
+              <Grid item xs={5}>
+                {task.tracked && (
                   <Typography variant='body2' className={classes.duration}>
                     {getTime()}
                   </Typography>
-                </Grid>
-              )}
+                )}
+              </Grid>
 
               <Grid item xs={5}>
                 <Button
