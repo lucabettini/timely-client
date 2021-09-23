@@ -26,8 +26,7 @@ const useAuth = () => {
     });
   };
 
-  // Return token if present, otherwise redirect to
-  // error page
+  // Return token if present, otherwise redirect to login
   const getToken = () => {
     if (!token) {
       history.push('/login');
