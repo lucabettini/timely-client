@@ -19,7 +19,7 @@ const timeUnitSlice = createSlice({
     incrementCount(state) {
       state.count = state.count + 1;
     },
-    stop(state, action) {
+    stop(state) {
       state.count = 0;
     },
     setTimerId(state, action) {

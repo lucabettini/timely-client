@@ -37,40 +37,50 @@ const TaskRow = ({ task }) => {
   const history = useHistory();
   const dispatch = useDispatch();
 
-  // Completed state
+  // COMPLETED STATE
   const [completed, setCompleted] = useState(task.completed);
   const [toggleCompleteTask, { isLoading: toggleIsLoading }] =
     useToggleCompleteTaskMutation();
   const [completeRecurringTask, { isLoading: completeRecurringIsLoading }] =
     useCompleteRecurringTaskMutation();
 
-  // Time unit state
+  // TIME UNIT STATE
+  // Data from the server
   const { data: runningTimeUnit, isError } = useGetActiveTimeUnitQuery();
   const [startTimeUnit] = useStartTimeUnitMutation();
   const [editTimeUnit] = useEditTimeUnitMutation();
+  // Data from the redux store (infos about last running timeUnit)
   const count = useSelector(selectCount);
   const timeUnitTaskId = useSelector(selectTaskId);
   const interval = useSelector(selectTimerId);
+  const [initialTaskDuration, setInitialTaskDuration] = useState(task.duration);
 
   const classes = useStyles({ completed: completed });
 
   // TIME UNIT LOGIC
+  // Reset the counter when the task is refetched, after a time unit is blocked
+  useEffect(() => {
+    if (task.id === timeUnitTaskId && task.duration !== initialTaskDuration) {
+      dispatch(stop());
+      setInitialTaskDuration(task.duration);
+    }
+  }, [task.duration, initialTaskDuration, task.id, timeUnitTaskId, dispatch]);
+
   const handleTimeUnit = async () => {
     const now = new Date();
     if (!runningTimeUnit?.task_id) {
       // No tasks are being tracked, start immediately
       await startTimeUnit({ taskId: task.id, startTime: now.toISOString() });
     } else if (runningTimeUnit.task_id === task.id) {
-      // This task was being tracked, stop immediately
+      // This task was being tracked, stop the counter immediately
       clearInterval(interval);
       await editTimeUnit({
         id: runningTimeUnit.id,
         startTime: runningTimeUnit.start_time,
         endTime: now.toISOString(),
       });
-      dispatch(stop(task.duration));
     } else {
-      // Another task was being tracked, stop it before
+      // Another task was being tracked, stop the counter before
       // starting this one
       clearInterval(interval);
       await editTimeUnit({
@@ -78,13 +88,12 @@ const TaskRow = ({ task }) => {
         startTime: runningTimeUnit.start_time,
         endTime: now.toISOString(),
       });
-      dispatch(stop(task.duration));
       await startTimeUnit({ taskId: task.id, startTime: now.toISOString() });
     }
   };
 
   const getTime = () => {
-    if (task.id === timeUnitTaskId) {
+    if (task.id === timeUnitTaskId && initialTaskDuration === task.duration) {
       return getDuration(task.duration + count);
     }
     return getDuration(task.duration);
