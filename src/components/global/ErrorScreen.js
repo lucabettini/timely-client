@@ -13,7 +13,7 @@ const ErrorScreen = () => {
       </Typography>
       <Typography variant='body1' style={{ paddingTop: '15px' }}>
         While we send our oompa-loompas squad to check, you can{' '}
-        <a href='/home' style={{ color: '#0b486c' }}>
+        <a href='/' style={{ color: '#0b486c' }}>
           go back and try something else
         </a>
         .
@@ -21,7 +21,7 @@ const ErrorScreen = () => {
       <Typography variant='body1' style={{ paddingTop: '15px' }}>
         If the problem persists, please{' '}
         <a
-          href='https://lucabettini.github.io/contacts.html'
+          href='https://lucabettini.com'
           rel='noopener noreferrer'
           target='_blank'
           style={{ color: '#0b486c' }}
