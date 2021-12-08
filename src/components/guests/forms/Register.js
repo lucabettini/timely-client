@@ -60,7 +60,9 @@ const Register = () => {
           email: form.values.email,
           password: form.values.password,
           password_confirmation: form.values.password_confirmation,
+          timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
         });
+
         auth.login(res.headers.jwt);
         history.push('/home');
       } catch (error) {
